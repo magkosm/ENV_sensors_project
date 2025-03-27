@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire réseau</title>
+</head>
+<style>
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.container {
+    position: relative;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+      
+}
+
+.box {
+   
+    display: flex;
+    flex-direction: column;        
+    justify-content: space-between; 
+    align-items:left; 
+    position: relative; 
+    height : 300px;     
+    border: 2px solid #cc5500;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    border-radius: 1.2vw;
+    overflow-x: auto;
+    white-space: nowrap  
+    
+}
+
+.boxTitle{
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: 30px; /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    margin: auto; 
+    margin-top : 10px;
+    margin-bottom: 0px;
+
+}
+
+.titre{
+    width: 100%;
+    height: 60px;
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: 50px; /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    background-color: #005EB8;    /* Couleur de fond */
+    color: white;
+    padding: 5px;
+    margin-bottom: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    font-family: "Roboto", "sans-serif";
+    
+}
+
+.bas_page{
+    width: 100%;
+    height: 30px;
+    position: fixed;
+    bottom: 0;
+    background-color: #005EB8; /*#5ba12b;    /* Couleur de fond */
+    margin-top: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.bnt{ 
+    padding: 10px;           /* Espacement interne du bouton */
+    background-color: #cc5500;    /* Couleur de fond */
+    color: white;                  /* Couleur du texte */
+    border: none;                  /* Pas de bordure */
+    border-radius: 0 0 1vw 1vw;           /* Coins arrondis */
+    cursor: pointer;               /* Curseur pointer sur hover */
+    text-align: center;            /* Centre le texte */
+    position: relative;
+    width: 100%;
+    font-size: 17px;
+}
+
+.txt{ 
+    font-size:18px;
+    color: black;
+    margin: 0px;
+}
+
+.check{ 
+    width: 20px; 
+    height: 20px; 
+    margin-left: auto;
+  }
+
+ul {
+    list-style: none;      /* Enlève les marqueurs par défaut */
+    padding-left: 0;       /* Enlève l'indentation par défaut */
+    margin: 0;            
+}
+
+li {
+    display: flex;         /* Utilise Flexbox pour l'alignement */
+    justify-content: space-between; /* Espace entre le texte et la checkbox */
+    align-items: center;   /* Centre verticalement le texte et la checkbox */
+    margin-bottom: 5px;   /* Espace entre les éléments */
+    margin-top: 0px;
+    position: relative;
+    width: 90%;           /* Largeur de chaque élément de la liste */
+    font-size:18px;
+    color: black; 
+    font-family: "Roboto", "sans-serif";
+}
+
+.scroll{
+    border-bottom: 1px dotted black;
+}
+.scrollable-list {
+    position: relative;
+    width: 90%;          /* Largeur du conteneur de la liste */
+    height: 50%;         /* Hauteur fixe pour afficher 4 éléments */
+    overflow-y: auto;      /* Activer le défilement vertical */
+    padding: 5%;         /* Padding interne */
+    
+}
+
+.table{ 
+    margin:auto; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.inputs{ 
+    position: relative;
+    width: 60%; 
+    padding: 2px 2px; 
+    margin: 2px 2px; 
+    font-size:18px; 
+    color: black;
+ }
+
+.bottom{
+    background-color: #cc5500;
+    width: 100%;
+    height: 37px;
+    border-radius: 0 0 1vw 1vw;
+}
+
+.sensor-grid{
+    width: 90%;
+    height: 60%;
+    margin: 0 auto;
+    display: grid;
+    grid-gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 110px ));
+    align-items:center; 
+    justify-content: space-between;
+}
+
+.sensor {
+    background-color: white;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    border-radius: .7vw;
+}
+.dataType {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #034078;
+    margin-top: 5px;
+}
+.reading {
+    text-align: center;
+    font-size: 17px;
+    color: #1282A2;
+}
+
+</style>
+
+<script>
+    function remplirSpans() {
+    // Créer un tableau d'objets avec des données
+    const donnees = {
+        temp: 23, // Exemple de valeur de température
+        lum:259878,
+        hum: 65,    // Exemple de valeur d'humidité
+        press: 1013,    // Exemple de valeur de pression
+        CO2: 458
+    };
+
+    // Remplir chaque span avec la valeur correspondante
+    document.getElementById("temp").textContent = donnees.temp;
+    document.getElementById("hum").textContent = donnees.hum;
+    document.getElementById("press").textContent = donnees.press;
+    document.getElementById("lum").textContent = donnees.lum;
+    document.getElementById("CO2").textContent = donnees.CO2;
+}
+
+// Événement pour remplir les données lorsque le bouton est cliqué
+document.addEventListener("DOMContentLoaded", remplirSpans);
+</script>
+<body>
+    <div class = "titre"> Gestionnaire réseaux </div>
+    <div class="container">
+        <div class="box">
+            <p class = "boxTitle"> Réseaux enregistrés </p>
+            <div class="scrollable-list">
+                <ol>
+                    <li class = "li scroll">Livebox-4B3C <input type =   "checkbox"   name='r2' class =  "check"   value =   "true"  ></li>
+                    <li class = "li scroll">ISAE-EDU <input type =   "checkbox"   name='r2' class =  "check"   value =   "true"  ></li>
+                    <li class = "li scroll">RG <input type =   "checkbox"   name='r2' class =  "check"   value =   "true"  ></li>
+                    <li class = "li scroll">MDRS <input type =   "checkbox"   name='r2' class =  "check"   value =   "true"  ></li>
+                </ol>
+            </div>
+            <button type='submit' class =  "bnt"  > Supprimer </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> Réseaux disponibles </p>
+            <div class="scrollable-list">
+                <ol>
+                    <li class = "li scroll">Livebox-4B3C <p class = "txt">(-45)</p></li>
+                    <li class = "li scroll">ISAE-EDU <p class = "txt">(-80)</p></li>
+                    <li class = "li scroll">RG <p class = "txt">(-60)</p></li>
+                    <li class = "li scroll">MDRS <p class = "txt">(-18)</p></li>
+                    <li class = "li scroll">Livebox-7M3C <p class = "txt">(-45)</p></li>
+                    <li class = "li scroll">eduroam <p class = "txt">(-12)</p></li>
+                    <li class = "li scroll">WifiFirst <p class = "txt">(-4)</p></li>
+                    <li class = "li scroll">SoftAP <p class = "txt">(-128)</p></li>
+                </ol>
+            </div>
+            <button type='submit' class =  "bnt"  > Scanner </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> Connexion </p>
+            <ol>
+                <li>Nom du réseau:  <input name='ssid' length = 32 required class =   "inputs"  ></li>
+                <li>Mot de passe: <input type =   "password"   name='pass' length = 64 required class =   "inputs"  ></li>
+                    
+            </ol>
+            <button type='submit' class =  "bnt"  > Connect </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle "> Informations </p>
+            <ol>
+                <li>Nom du capteur:  <input name='name' length = 32 required class =   "inputs" value = "Capteur RAM"  ></li>
+                <li>Hot spot SSID: <input   name='hot_spot_ssid' length = 64 required class =   "inputs" value = "RAM config" ></li>
+                <li>Hot spot Pass: <input type =   "hot_spot_password"   name='pass' length = 64 required class =   "inputs" value = "#RAM311" ></li>
+                
+            </ol>
+            <button type='submit' class =  "bnt"  > Enregistrer </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> Données des capteurs </p>
+            <div class = "sensor-grid">
+                <div class = "sensor">
+                    <p class = "dataType">Température</p>
+                    <p class="reading"><span id="temp"></span> &deg;C</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Humidité</p>
+                    <p class="reading"><span id="hum"></span> &percnt;</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Luminosité</p>
+                    <p class="reading"><span id="lum"></span> SSU</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Pression</p>
+                    <p class="reading"><span id="press"></span> hPa</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">CO2</p>
+                    <p class="reading"><span id="CO2"></span> ppm</p>
+                </div>
+            </div>
+           <div class = "bottom"></div>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> À propos </p>
+            <div class = "sensor-grid">
+                <div class = "sensor">
+                    <p class = "dataType">Version</p>
+                    <p class="reading"> 1.0 </p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Sortie le</p>
+                    <p class="reading">29/09/2024</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Auteur</p>
+                    <p class="reading">Robin Gorius</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Ville</p>
+                    <p class="reading">Toulouse</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Planète</p>
+                    <p class="reading">Terre</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Équipage</p>
+                    <p class="reading">311</p>
+                </div>
+            </div>
+            <div class = "bottom"></div>
+        </div>
+    </div>
+    <div class = "bas_page"> </div>
+</body>
+</html>

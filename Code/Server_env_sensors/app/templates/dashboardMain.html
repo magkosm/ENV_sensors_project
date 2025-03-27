@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styleMain.css">
+    <link rel="icon" href="/static/Images/logo1.png">
+    <title>Dashboard capteurs</title>
+</head>
+<body>
+    <div class="titreContainer" id="titreContainer">
+        <div class="bntContainer">
+            <button id="bnt-details" class="hamburger-btn big" aria-label="Menu" onclick="toggleSensorListOverlay('sensorListOverlay')">
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+            </button>
+        </div>
+        <div class="titre" id="titre">
+            Dashboard capteurs
+        </div>
+        <div class="toggleBnt" onclick="openGraphPage()">
+            📈
+        </div>
+    </div>
+
+    <!-- Overlay pour afficher la liste des capteurs enregistrés -->
+    <div id="sensorListOverlay" class="sensorListoverlay">
+        <div class="sensorListoverlay_container">
+            <div class="sensorListFormTitle">
+                <span class="sensorListoverlayTitle">Capteurs enregistrés</span>
+                <span id="closeSensorListBtn" class="sensorMesclose" onclick="toggleSensorListOverlay('sensorListOverlay')">&times;</span>
+            </div>
+            <div id="sensorListContent" class="sensor-list">
+                <!-- Le contenu sera généré dynamiquement par JavaScript -->
+            </div>
+            <div class = "center">
+                <div class="bntBox hide-config" id="bntBox" style = "display: none;">
+                    <button type='submit' class="add" id="plus_bnt">
+                        <span class="plus-symbol">+</span>
+                    </button>
+                </div>
+            </div>
+            <div class="password-container">
+                <button id="togglePasswordBtn" onclick="togglePasswordField()">
+                    <span id="lockIcon" class="lock-icon">🔒</span>
+                </button>
+                <div class="password-field-container" id="passwordFieldContainer" style="display: none;">
+                    <input type="password" id="passwordField" name="password" >
+                  <!--  <button type="button" id="togglePassword" onclick="togglePasswordVisibility('passwordField', 'togglePassword')">👁️</button>-->
+                </div>
+                <button class="lock-icon" id="checkPasswordBtn" onclick="checkPassword()" style="display: none;">➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Zone contenant les div pour chaque capteur -->
+
+    <div class="container" id="container">
+        <!-- Le contenu sera généré dynamiquement par JavaScript -->
+    </div>
+    
+    <!-- Overlay pour ajouter un capteur -->
+    <div id="overlay" class="overlay size1">
+        <div class="overlay_container">
+            <div class="FormTitle">
+                <div></div>
+                <span class="overlayTitle">Ajouter un capteur</span>
+                <span id="closeOverlayBtn" class="croix" onclick="closeOverlay()">&times;</span>
+            </div>
+    
+            <div class="overlay-content">
+                <!-- Type de capteur -->
+                <div class="form-group">
+                    <label class="FormsubTitle">Type de Capteur :</label>
+                    <select id="sensorType" onchange="updateConfigFields()">
+                        <!-- Les options seront générées dynamiquement par JavaScript -->
+                    </select>
+                </div>
+    
+                <!-- Champs de configuration dynamiques -->
+                <div id="configFields"></div>
+                 
+                <button id="saveBtn" class="bnt_pop_up save" onclick="saveSensor()">Enregistrer</button>
+                
+            </div>
+        </div>
+    </div>
+
+
+    <div class="bas_page">Build by Robin Gorius for MDRS</div>
+    <script src="/static/js/scriptMain.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+node_modules
+.venv
+.vscode
+*.db
+config.json

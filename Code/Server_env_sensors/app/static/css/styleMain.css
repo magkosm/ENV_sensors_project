@@ -1,0 +1,788 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.add{
+    height: 80px;
+    width: 80px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, .5);
+    border-radius: 40%;
+    border: 1px solid white;
+    font-size: 60px;
+    font-weight: bold;
+    color: #034078;
+    background-color: white;
+    transition: background-color 0.3s ease;
+    padding: 0px;
+
+}
+
+.add:hover {
+    background-color: #e6e0dd; /* Couleur plus foncée lors du survol */
+    border: 1px solid #e6e0dd;
+    transform: scale(1.05); /* Un léger effet de zoom au survol */
+}
+
+.plus-symbol {
+    display: inline-block;
+    position: relative;
+}
+
+/* Styles spécifiques à Firefox */
+@-moz-document url-prefix() {
+    .plus-symbol {
+        top: -5px;
+    }
+}
+
+.bntBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+.container {
+    position: relative;
+    width: 95%;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    margin-bottom: 80px;
+}
+
+.box {
+    display: block;
+    flex-direction: column;        
+    justify-content: space-between; 
+    align-items:center; 
+    min-height : 290px;
+    height:auto;
+    /*border: 2px solid #cc5500;*/
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    border-radius: 20px;
+    position: relative;
+    max-width: 500px;
+}
+
+.titreContainer{
+    display: flex;
+    height: 65px;        
+    justify-content: space-between;
+    background-color: #005EB8;    /* Couleur de fond */
+    align-items: center;
+    color: white;
+    padding: 5px;
+    margin-bottom: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.filed{
+    font-size: calc(min(40px, 7vw));
+    margin-right: min(20px, 4vw);
+}
+
+.big{
+    width: calc(min(40px, 7vw)) ;  /* Largeur du bouton */
+    height: calc(min(35px, 6.8vw)); /* Hauteur du bouton */
+    margin-left: 20px;
+}
+
+.small{
+    width: 20px;  /* Largeur du bouton */
+    height: 17.5px; /* Hauteur du bouton */
+    margin-left: 0px;
+    position: absolute;
+    left: 25px; /* Place le bouton à gauche */
+    top : 25px;
+}
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    align-self: left;
+}
+/* Styles des barres */
+.hamburger-btn .bar {
+    width: 100%;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+}
+
+.big-bar{
+    height: 4px; /* Épaisseur de chaque barre */
+    /*margin-top: 3px; /* Espacement vertical entre les barres */
+    background-color: white; /* Couleur des barres */
+}
+
+.small-bar{
+    height: 2px; /* Épaisseur de chaque barre */
+    /*margin-top: 3px; /* Espacement vertical entre les barres */
+    background-color: black; /* Couleur des barres */
+}
+
+.adaptMargin{
+    margin-left: 25px;
+}
+/* Changement de couleur au survol */
+.hamburger-btn:hover .bar {
+    scale:1.2;
+}
+
+.toggleBnt{
+    background: none;
+    border: none;
+    font-size: 35px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.toggleBnt:hover {
+    scale:1.2;
+}
+
+.titre{
+    width: auto;
+    height: auto;
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: min(40px, calc(15px + 3vw));
+    font-family: "Roboto", "sans-serif";
+    align-self: center;
+
+}
+
+/* SENSOR DETAILS AFFICHAGE OVERLAY  */
+.sensorListoverlay {
+    position: absolute; /* Changez 'fixed' à 'absolute' pour le positionnement relatif au parent */
+    top: 85px; /* Ajustez ceci en fonction de la hauteur de votre barre de titre pour qu'il apparaisse juste en dessous */
+    left: 10px; /* Positionné sur le côté gauche de la page */
+    height: 80%; /* Hauteur de la popup */
+    width: 330px; /* Largeur fixe de 350px */
+    background-color: rgba(255, 255, 255, 0.212); /* Fond semi-transparent */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4); 
+    display: none; /* Masquer l'overlay initialement */
+    z-index: 1000;
+    border-radius: 10px;
+}
+
+.sensorListoverlay_container {
+    background-color: white;
+    width: calc(100% - 20px); /* Utiliser toute la largeur disponible */
+    height: 100%; /* Utiliser toute la hauteur disponible */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.8); /* Fond semi-transparent */
+    overflow: hidden; /* Cache le débordement */
+    border-radius: 10px;
+    padding: 0 10px; /* Ajoute du padding pour inclure les bords */
+}
+
+.sensorListFormTitle {
+    display: flex;
+    align-items: center; /* Aligne verticalement les éléments au centre */
+    justify-content: space-between;
+    font-size: min(20px, calc(15px + 1.5vw));;
+    font-family: "Roboto", "sans-serif";
+    background-color: #005EB8;
+    width: 100%; /* Largeur ajustée pour inclure le padding */
+    padding: 10px;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    margin: 0 -10px; /* Ajuste la marge pour compenser le padding du conteneur */
+}
+
+.sensor-list {
+    flex-grow: 1; /* Permet à cette div de prendre tout l'espace disponible */
+    overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse */
+    padding: 15px;
+    margin: 5px;
+}
+
+.center {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    align-items: center; /* Centre verticalement */
+    height: auto; /* Assure que la div prend toute la hauteur du conteneur parent */
+    width: 100%; /* Assure que la div prend toute la largeur du conteneur parent */
+    margin: 0 -10px;
+    border:none;
+    background-color: transparent;
+}
+.sensor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc; /* Bordure inférieure grise */
+}
+
+.close {
+    position: relative;
+    /*top: 5px;
+    right: -25px;*/
+    font-size: 20px;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    border: none;
+
+}
+
+.close:hover {
+    color: #ff0000;
+}
+
+.password-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius: 0 0 10px 10px;
+    width:calc(100% + 10px);
+    margin: 0 -10px;
+
+}
+
+.password-container input[type="password"] {
+    flex-grow: 1;
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.password-container button {
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+.password-container button:hover {
+    background-color: #005EB8;
+    color: white;
+}
+
+.lock-icon {
+    font-size: 1em;
+    background-color: transparent; /* Fond transparent */
+    border: none;
+    cursor: pointer;
+}
+
+.password-field-container {
+    display: flex;
+    align-items: center;
+    width: 57%;
+    padding: 0px;
+}
+
+.inputs{ 
+    
+    width: 100%; 
+    padding: 2px 2px; 
+    margin-right: 0px;
+    font-style: italic;
+    color: black;
+}
+
+
+/* OVERLAY SENSOR*/
+/* Style pour l'overlay de la liste des capteurs */
+.sensorMesOverlay {
+    position: absolute; /* Utiliser 'absolute' pour un positionnement par rapport au parent */
+    top: 55px; /* Positionner en haut de la box */
+    left: 15px; /* Alignement à gauche */
+    height: auto; /* Hauteur dynamique en fonction du contenu */
+    width: 180px; /* Largeur fixe de 300px */
+    background-color: rgba(255, 255, 255, 0.9); /* Fond légèrement transparent */
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); /* Ombre pour le relief */
+    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+    overflow-x: hidden;
+    z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
+    display: none; /* Masqué par défaut */
+    border-radius: 5px;
+}
+
+/* Style pour le titre de la popup */
+.sensorMesFormTitle {
+    display: flex;
+    align-items: center; /* Aligne verticalement les éléments au centre */
+    justify-content: space-between; /* Espace entre les éléments */
+    font-size: 20px; /* Taille de police */
+    font-family: "Roboto", "sans-serif"; /* Police */
+    background-color: #005fb8b6; /* Couleur de fond */
+    width: 100%; /* Prend toute la largeur de l'overlay */
+    padding: 10px; /* Espacement intérieur */
+    color: white; /* Couleur du texte */
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+/* Style pour le contenu des mesures */
+.sensorMesContent {
+    padding-right: 10px; 
+    padding-left: 10px;
+    padding-bottom: 0px;
+}
+
+/* Style pour le bouton de basculement */
+.toggle-btn {
+    cursor: pointer; /* Changement du curseur en pointeur */
+    background: none; /* Pas de fond */
+    border: none; /* Pas de bordure */
+    color: #007BFF; /* Couleur du texte */
+    font-size: 14px; /* Taille de police */
+    padding: 5px; /* Espacement intérieur */
+}
+
+/* Style pour le bouton de fermeture */
+.sensorMesclose {
+    position: absolute; /* Position absolue pour le placer en haut à droite */
+    top: 10px; /* Distance du haut */
+    right: 15px; /* Distance de la droite */
+    font-size: 24px; /* Taille de police */
+    font-weight: bold; /* Gras */
+    cursor: pointer; /* Changement du curseur en pointeur */
+    color: white; /* Couleur du texte */
+}
+
+/* Changement de couleur au survol */
+.sensorMesclose:hover {
+    color: #ff0000; /* Couleur au survol */
+}
+
+/*BOX STYLE*/
+.boxTitle{
+    display: flex;
+    align-items: center;        /* Aligne verticalement les éléments au centre */
+    justify-content: center;     /* Centre le contenu horizontalement */
+    position: reative;
+    width: 90%;
+    height: auto;
+    padding: 10px;
+    padding-bottom: 0px;
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: min(30px, calc(10px + 2.5vw)); /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    margin: auto; 
+    margin-top : 10px;
+    margin-bottom: 0px;
+
+}
+
+
+.smalladapt{
+    width: 20px;
+    margin-left: 20px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 30px rgba(255, 0, 0, 0.5);
+        
+    }
+    50% {
+        box-shadow: 0px 0px 70px rgba(255, 0, 0, 0.8); /* Ombre plus grande à la moitié de l'animation */
+    }
+    100% {
+        box-shadow: 0px 0px 30px rgba(255, 0, 0, 0.5);
+    }
+}
+
+.bas_page{
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    background-color: #005EB8; /*#5ba12b;    /* Couleur de fond */
+    margin-top: 70px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    color : white;
+    text-align: center;
+    padding: 10px;
+    font-family: "Roboto", "sans-serif";
+}
+
+.bnt{ 
+    padding: 10px;           /* Espacement interne du bouton */
+    background-color: #cc5500e5;    /* Couleur de fond */
+    color: white;                  /* Couleur du texte */
+    border: none;                  /* Pas de bordure */
+    border-radius: 0 0 20px 20px;           /* Coins arrondis */
+    cursor: pointer;               /* Curseur pointer sur hover */
+    text-align: center;            /* Centre le texte */
+    /*position: relative;*/
+    width: 100%;
+    font-size: 17px;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+}
+
+.bnt:hover {
+    background-color:#cc5500ac; /* Couleur plus foncée lors du survol */
+}
+
+.txt{ 
+    font-size:18px;
+    color: black;
+    margin: 0px;
+}
+
+.check{ 
+    width: 20px; 
+    height: 20px; 
+    margin-left: auto;
+}
+
+li {
+    display: flex;         /* Utilise Flexbox pour l'alignement */
+    justify-content: space-between; /* Espace entre le texte et la checkbox */
+    align-items: center;   /* Centre verticalement le texte et la checkbox */
+    margin-bottom: 5px;   /* Espace entre les éléments */
+    margin-top: 0px;
+    position: relative;
+    width: 90%;           /* Largeur de chaque élément de la liste */
+    font-size:18px;
+    color: black; 
+    font-family: "Roboto", "sans-serif";
+}
+
+.scroll{
+    border-bottom: 1px dotted black;
+}
+.scrollable-list {
+    position: relative;
+    width: 90%;          /* Largeur du conteneur de la liste */
+    height: 50%;         /* Hauteur fixe pour afficher 4 éléments */
+    overflow-y: auto;      /* Activer le défilement vertical */
+    padding: 5%;         /* Padding interne */
+    
+}
+
+.table{ 
+    margin:auto; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.inputs{ 
+    position: relative;
+    width: 60%; 
+    padding: 2px 2px; 
+    margin: 2px 2px; 
+    font-size:18px; 
+    color: black;
+ }
+
+.bottom{
+    background-color: #cc5500;
+    width: 100%;
+    height: 40px;
+    border-radius: 0 0 20px 20px;
+}
+
+.sensor-grid{
+    margin-top: 5px;
+    max-width: 100%; /* Empêche de dépasser en largeur */
+    min-height: 200px;
+    height:auto;
+    align-self: center;
+    padding: 20px;
+    display: grid;
+    grid-gap: 0.8rem;
+    grid-template-columns: repeat(3, 1fr); /* 3 colonnes de taille égale */
+    grid-template-rows: repeat(2, 1fr);    /* 2 lignes de taille égale */
+    align-items:center; 
+    justify-content: space-between;
+    overflow-x: auto;
+    white-space: nowrap;  
+}
+
+.sensor {
+    display: block;
+    background-color: white;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    border-radius: 10px;
+    font-size: clamp(10px, 5vw, 15px); /* Ajuster dynamiquement la taille de la police */;
+    overflow-x: auto;
+}
+.dataType {
+    text-align: center;
+    font-weight: bold;
+    color: #034078;
+    margin-top: 5px;
+    
+}
+.reading {
+    text-align: center;
+    font-size: 17px;
+    color: #1282A2;
+}
+
+form{
+    margin-top: 20px;
+}
+
+.error{
+    background-color :"red";
+    width : "auto";
+    padding : "2px";
+    opacity : "0.5";
+    font-size : "16px";
+    color : "white";
+    text-align : "center";
+}
+.fade-out {
+    /*transition: opacity 1s; /* Transition douce sur 1 seconde */
+    opacity: 0;
+}
+
+
+/* OVERLAY ajout capteur*/
+
+#openOverlayBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    overflow-x: scroll;
+}
+.overlay_container{
+    background-color: white;
+    border-radius: 10px;
+    width: 350px; /* largeur ajustée pour mieux correspondre à tout */
+    max-height: 80%;
+    position: fixed;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+
+}
+.overlay-content {
+    background-color: white;
+    padding: 20px; /* Ajout d'un padding pour ne pas coller les bords */
+    padding-top: 10px;
+    text-align: left;
+    width: 350px;
+    max-height: 65vh; /* Limite la hauteur à 80% de la hauteur de l'écran */
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto; /* Ajoute un défilement vertical si le contenu dépasse */
+}
+
+.newSensorTypeForm {
+    position: relative;
+    max-height: 100%;
+}
+
+.form-group {
+    margin-bottom: 0px;
+}
+
+.form-group label {
+    display: block;
+}
+
+.FormTitle{
+    background-color: #005EB8;
+    text-align: center;
+    width: 370px;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    font-family: "Roboto", "sans-serif";
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.croix {
+    font-size: min(30px, 10px + 2.5vw);
+    cursor: pointer;
+    color: white;
+    background-color: transparent;
+    border: none;
+}
+
+.croix:hover {
+    color: #ff0000;
+}
+
+.overlayTitle{
+    font-size: min(30px, 10px + 2.5vw);
+    color : white;
+}
+
+.FormsubTitle{
+    font-size: 18px;
+    font-weight: bold;
+    color: black; /*#034078;*/
+    margin-bottom: 5px;
+    margin-top: 10px;
+
+}
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px; /* Ajout de padding à l'intérieur des inputs */
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Assure que le padding ne dépasse pas la largeur des inputs */
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Grille pour les checkbox */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-items: start;
+    margin-bottom: 15px;
+}
+
+
+.bnt_pop_up {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save {
+    background-color: #005EB8;
+    color: white;
+    width: auto;
+    margin-left: 0px;
+    margin-top: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.save:hover {
+    background-color: #004494; /* Couleur de fond plus foncée au survol */
+    transform: scale(1.05); /* Légère augmentation de la taille au survol */
+}
+
+.save:active {
+    background-color: #003366; /* Couleur de fond encore plus foncée lors du clic */
+    transform: scale(1); /* Réinitialisation de la taille lors du clic */
+}
+
+.inline-group {
+    display: flex;
+    align-items: center;
+}
+
+.inline-group .configField {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.inline-group .remove-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.remove-btn:hover{
+    color:red;
+}
+
+.measurement-group {
+    position: relative;
+    padding-top: 15px;
+}
+
+.measurement-group .remove-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.measurement-group .measurementKey,
+.measurement-group .measurementName,
+.measurement-group .measurementUnit {
+    display: block;
+    width: calc(100% - 20px); /* Adjust width to account for padding */
+    margin-bottom: 10px;
+}
+
+select {
+    background-color: white;
+    color: black; /* Optionnel : pour s'assurer que le texte est lisible */
+    border: 1px solid #ccc; /* Optionnel : pour ajouter une bordure */
+    padding: 5px; /* Optionnel : pour ajouter du padding */
+    border-radius: 4px; /* Optionnel : pour arrondir les coins */
+}
+
+/* Styles pour les boutons d'ajout */
+.add-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #005EB8; /* Couleur de fond */
+    color: white; /* Couleur du texte */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition pour le survol */
+    margin-top: 10px; /* Espacement au-dessus du bouton */
+}
+
+.add-btn:hover {
+    background-color: #004494; /* Couleur de fond plus foncée au survol */
+    transform: scale(1.05); /* Légère augmentation de la taille au survol */
+}
+
+.add-btn:active {
+    background-color: #003366; /* Couleur de fond encore plus foncée lors du clic */
+    transform: scale(1); /* Réinitialisation de la taille lors du clic */
+}

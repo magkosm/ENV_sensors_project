@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/styleGraphs.css">
+    <link rel="icon" href="/static/Images/logo1.png">
+    <title>Graphs capteurs</title>
+</head>
+<body>
+    <div class="titreContainer" id="titreContainer">
+        <div class="bntContainer">
+            <button id="bnt-details" class="hamburger-btn big" aria-label="Menu" onclick="toggleSensorListOverlay('addGraphFormContainer')">
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+            </button>
+        </div>
+        <div class="titre" id="titre">
+            Graphs capteurs
+        </div>
+        <div class="big">
+        </div>
+    </div>
+    
+    <div id ="addGraphFormContainer" class="sensorListoverlay   left">
+        
+        <div class="sensorListFormTitle">
+            <span class="sensorListoverlayTitle">Ajouter un nouveau graphique</span>
+            <span id="closeSensorListBtn" class="close-btn" onclick="toggleSensorListOverlay('addGraphFormContainer')">&times;</span>
+        </div>
+
+        <form id="addGraphForm" class = "form_container">
+            <div class ="setting">
+                <div class = "inline">
+                    <span class = "bold" >Titre :</span>
+                    <input class = "inputs" type="text" id="graphTitle" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphStartDate">Date de début :</span>
+                    <input class = "inputs" type="datetime-local" id="graphStartDate" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphEndDate">Date de fin :</span>
+                    <input class = "inputs" type="datetime-local" id="graphEndDate" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphLive">Live :</span>
+                    <input type="checkbox" id="graphLive">
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphLive">Grandeurs :</span>
+                </div>
+            </div>
+            <div id="grandeursContainer" class = "sensor-list1"></div>
+            <button class="save" type="submit">Ajouter</button>
+        </form>
+        
+    </div>
+
+
+    <div id="configModal" class="sensorListoverlay   left">
+            
+        <div class="sensorListFormTitle">
+            <span class="sensorListoverlayTitle">Configurer le graphique</span>
+            <span class="close-btn" onclick="toggleSensorListOverlay('configModal')">&times;</span>
+        </div>
+            
+        <form id="configForm" class = "form_container">
+            <div class ="setting">
+                <div class = "inline">
+                    <input type="hidden" id="configChartId">
+                    <span class = "bold" >Titre :</span>
+                    <input class = "inputs" type="text" id="configTitle" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphStartDate">Date de début :</span>
+                    <input class = "inputs" type="datetime-local" id="configStartDate" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphEndDate">Date de fin :</span>
+                    <input class = "inputs" type="datetime-local" id="configEndDate" required>
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphLive">Live :</span>
+                    <input type="checkbox" id="configLive">
+                </div>
+                <div class = "inline">
+                    <span class = "bold" for="graphLive">Grandeurs :</span>
+                </div>
+            </div>
+            <div id="configGrandeursContainer" class = "sensor-list1"></div>
+            <button class="save" type="submit">Appliquer</button>
+        </form>
+    </div>
+
+    <div class="container">
+        <div class="chart-container" id="chart-container">
+            <!-- Graphique pour chaque capteur -->
+        </div>
+    </div>
+
+    <div class="bas_page">Build by Robin Gorius for MDRS</div>
+    <script src="/static/js/scriptGraphs.js"></script>
+</body>
+</html>
