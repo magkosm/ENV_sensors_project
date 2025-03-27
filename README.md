@@ -2,19 +2,24 @@
 **Author**: Robin GORIUS 
 
 This sensors were initially created to measure environnemental variables in the Mars Desert Reseach Station in Utah for the CoreData set.
-THe development was done by Robin GORIUS over the course of 4 months. THe sensors are far from perfect but could be considered as advanced fonctionning prototypes.
+As meant to be used by french students from the futur MDRS crews, a lot of documentation and code comments are in french.
+
+The development was done by Robin GORIUS over the course of 4 months. The sensors are far from perfect but could be considered as advanced fonctionning prototypes.
 The main issues is the electrical assembly that should be reduced to pcb soldering. 
 Another improvment for easier use would be to shift the data exchange protocol from HTTP to MQTT and make the sensors go to sleep when not measuring.
 This change could enable the sensors to run on a battery for easier installation and integration to Home assistant.
 
 The sensors are equipped with 5 sensors and are able to measure the following variables :
 
-Temperature 
-Humidity
-Luminosity (Infrared, visible, Total)
-Pressure
-CO2 levels
-VOC level 
+```
+Temperature in °C
+Humidity in %
+Luminosity (Infrared, visible, Total) in Lux
+Pressure in Pa
+CO2 levels in ppm
+VOC level without units
+```
+The sensors are programmed to collect data every seconds and are asked by the collecting server to send their data every 30 seconds.
 
 The code for the sensor is quite versatile as it's written with well separated classes.
 WARING : Please note that the network manager implemented in the sensors isn't the most secured as the SSID's and Passwords are stored directly in the ESP32 file system in a .txt file.
