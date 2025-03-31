@@ -23,7 +23,7 @@ function formatDate(date) {
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
-// Fonction pour charger et mettre à jour les graphiques avec une plage de dates
+/// Function to load and update charts with a date range
 async function getData(startDate, endDate, sensors) {
     const response = await fetch('/getDatagraphs', {
         method: 'POST',
