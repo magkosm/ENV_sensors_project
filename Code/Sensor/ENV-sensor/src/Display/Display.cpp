@@ -20,15 +20,15 @@ uint8_t Display::getAddr(){
   return this->addr;
 }
 
-bool Display::begin() {//Initialisation de l'écran
+bool Display::begin() {//Screen initialization
   if (!Adafruit_SSD1306::begin(SSD1306_SWITCHCAPVCC, addr)) {
     return false;
   }
-  clearDisplay(); // Effacer l'écran après initialisation
+  clearDisplay(); // Clear screen after initialization
   return true;
 }
 
-void Display::disp2Lines(String L1, IPAddress Ip, int size1, int size2) {//Affichage de deux lignes, la seconde contenant une adresse IP
+void Display::disp2Lines(String L1, IPAddress Ip, int size1, int size2) {//Display two lines, the second containing an IP address
   disp2Lines(L1, Ip.toString(), size1, size2);
 }
 
@@ -36,7 +36,7 @@ void Display::disp2Lines(const char* L1, const char* L2, int size1, int size2){
   disp2Lines(String(L1), String(L2), size1, size2);
 }
 
-void Display::disp2Lines(String L1, String L2, int size1, int size2) {//Affichage de deux lignes personnalisées 
+void Display::disp2Lines(String L1, String L2, int size1, int size2) {//Display two custom lines 
   clearDisplay();
   setTextSize(size1);
   setTextColor(SSD1306_WHITE);
@@ -52,48 +52,48 @@ void Display::disp2Lines(String L1, String L2, int size1, int size2) {//Affichag
   display();
 }
 
-void Display::drawTruncatedText(String text, int maxWidth, int xOffset, int yOffset, int textSize) {//coupe le texte s'il est trop long pour la largeur spécifiée
-  int totalWidth = 0;                  // Largeur accumulée
-  uint16_t charWidth = 0, charHeight = 0; // Largeur et hauteur du caractère
-  int16_t x1, y1;                      // Coordonnées du rectangle (non utilisées ici)
+void Display::drawTruncatedText(String text, int maxWidth, int xOffset, int yOffset, int textSize) {//cuts the text if it's too long for the specified width
+  int totalWidth = 0;                  // Accumulated width
+  uint16_t charWidth = 0, charHeight = 0; // Character width and height
+  int16_t x1, y1;                      // Rectangle coordinates (not used here)
 
   for (int i = 0; i < text.length(); i++) {
     char currentChar = text[i];
-    char charArray[2] = {currentChar, '\0'}; // Convertir le caractère en const char*
+    char charArray[2] = {currentChar, '\0'}; // Convert character to const char*
 
-    // Obtenir les dimensions du caractère
+    // Get character dimensions
     getTextBounds(charArray, 0, 0, &x1, &y1, &charWidth, &charHeight);
 
-    // Si le caractère dépasse la largeur autorisée
+    // If character exceeds allowed width
     if (totalWidth + charWidth > maxWidth) {
       int remainingWidth = maxWidth - totalWidth;
 
-      // Si l'espace restant est suffisant pour une partie du caractère
+      // If remaining space is sufficient for part of the character
       if (remainingWidth > 0) {
         drawPartialCharacter(currentChar, remainingWidth, xOffset + totalWidth, yOffset, textSize);
       }
       break;
     }
 
-    // Dessiner le caractère complet
+    // Draw complete character
     setCursor(xOffset + totalWidth, yOffset);
     print(currentChar);
-    totalWidth += charWidth; // Ajouter la largeur du caractère
+    totalWidth += charWidth; // Add character width
   }
 }
 
-void Display::drawPartialCharacter(char character, int width, int x, int y, int textSize) {//Affiche partiellement un caractère
-  // Taille des caractères actuels
+void Display::drawPartialCharacter(char character, int width, int x, int y, int textSize) {//Display a partial character
+  // Current character size
   //int textSize = 2;
-  int charWidth = 6 * textSize; // Largeur d'un caractère avec taille
-  int charHeight = 8 * textSize; // Hauteur d'un caractère avec taille
+  int charWidth = 6 * textSize; // Character width with size
+  int charHeight = 8 * textSize; // Character height with size
 
-  // Dessiner le caractère dans un rectangle limité
-  fillRect(x, y, width, charHeight, SSD1306_BLACK); // Effacer la zone
+  // Draw character in limited rectangle
+  fillRect(x, y, width, charHeight, SSD1306_BLACK); // Clear area
   setCursor(x, y);
   drawChar(x, y, character, SSD1306_WHITE, SSD1306_BLACK, textSize);
 
-  // Dessiner un rectangle noir pour masquer la partie excédentaire
+  // Draw black rectangle to mask excess part
   if (width < charWidth) {
     fillRect(x + width, y, charWidth - width, charHeight, SSD1306_BLACK);
   }

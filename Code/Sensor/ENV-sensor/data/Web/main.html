@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <link rel="icon" href="logo.png" type="image/png">
     
     <script src="scriptMain.js"></script>
-    <title>Gestionnaire %NOM%</title>
+    <title>Manager %NOM%</title>
 </head>
 <body>
     <div class = "titreContainer"> 
@@ -21,7 +21,7 @@
         
 
         <div class = "titre" id = "titre">
-            Gestionnaire %NOM%
+            Manager %NOM%
         </div>
 
         <div class = "big"></div>
@@ -30,47 +30,47 @@
 
     <div class="container">
         <div class="box" id = "delForm">
-            <p class = "boxTitle"> Réseaux enregistrés </p>
+            <p class = "boxTitle"> Saved Networks </p>
             <div class="scrollable-list" id="savedNetworks"></div>
-            <button type='submit' id = "Suppr" class =  "bnt"  > Supprimer </button>
+            <button type='submit' id = "Suppr" class =  "bnt"  > Delete </button>
         </div>
         <div class="box" id = "scanBox">
-            <p class = "boxTitle"> Réseaux disponibles </p>
+            <p class = "boxTitle"> Available Networks </p>
             <div class="scrollable-list" id="networks"></div>
-            <button class =  "bnt scan-btn"  id = "Scanner"> Scanner </button>
+            <button class =  "bnt scan-btn"  id = "Scanner"> Scan </button>
         </div>
         <div class="box" id = "paramForm">
-            <p class = "boxTitle "> Informations </p>
+            <p class = "boxTitle "> Information </p>
             <div class = "scrollable-list setting">
-                <div class = "list-item"><span>Nom du capteur:</span>  <input name='name' minlength="2" required class = "inputs" id = "Name"  ></div>
-                <div class = "list-item"><span>Nom du hot spot:</span> <input   name='hot_spot_ssid' minlength="2" required class =  "inputs" id = "AP_SSID" ></div>
+                <div class = "list-item"><span>Sensor name:</span>  <input name='name' minlength="2" required class = "inputs" id = "Name"  ></div>
+                <div class = "list-item"><span>Hotspot name:</span> <input   name='hot_spot_ssid' minlength="2" required class =  "inputs" id = "AP_SSID" ></div>
                 <div class = "list-item">
-                    <span>Mot de passe:</span>
+                    <span>Password:</span>
                     <div class="password-container reduce">
                         <input type =   "hot_spot_password"   name='pass' minlength="8" required class = "inputs max" id = "AP_Pass" >
                         <button type="button" id="togglePassword" onclick="togglePasswordVisibility('AP_Pass', 'togglePassword')">👁️</button>
                     </div>
                 </div>
             </div>
-            <button type='submit' class =  "bnt"  id = "enregistrer"> Enregistrer </button>
+            <button type='submit' class =  "bnt"  id = "enregistrer"> Save </button>
         </div>
         <div class="box">
-            <p class = "boxTitle"> Données des capteurs </p>
+            <p class = "boxTitle"> Sensor Data </p>
             <div class = "sensor-grid">
                 <div class = "sensor">
-                    <p class = "dataType">Température</p>
+                    <p class = "dataType">Temperature</p>
                     <p class="reading"><span id="temp">-</span> &deg;C</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Humidité</p>
+                    <p class = "dataType">Humidity</p>
                     <p class="reading"><span id="hum">-</span> &percnt;</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Luminosité</p>
+                    <p class = "dataType">Luminosity</p>
                     <p class="reading"><span id="lum">-</span> lx</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Pression</p>
+                    <p class = "dataType">Pressure</p>
                     <p class="reading"><span id="press">-</span> hPa</p>
                 </div>
                 <div class = "sensor">
@@ -85,55 +85,55 @@
             <div class = "bottom"></div>
         </div>
         <div class="box">
-            <p class = "boxTitle"> À propos </p>
+            <p class = "boxTitle"> About </p>
             <div class = "sensor-grid">
                 <div class = "sensor">
                     <p class = "dataType">Version</p>
                     <p class="reading"> 2.2.2 </p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Sortie le</p>
+                    <p class = "dataType">Released on</p>
                     <p class="reading">27/12/2024</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Auteur</p>
+                    <p class = "dataType">Author</p>
                     <p class="reading">Robin Gorius</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Ville</p>
+                    <p class = "dataType">City</p>
                     <p class="reading">Toulouse</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Planète</p>
-                    <p class="reading">Terre</p>
+                    <p class = "dataType">Planet</p>
+                    <p class="reading">Earth</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Équipage</p>
+                    <p class = "dataType">Crew</p>
                     <p class="reading">311</p>
                 </div>
             </div>
             <div class = "bottom"></div>
         </div>
     </div>
-    <!-- Popup pour la connexion à un réseau WiFi-->
+    <!-- Popup for WiFi network connection -->
     <div class="popup-overlay" id="popupOverlay">
         <div class="popup">
             <span class="close-btn" onclick="closePopup()">&#10005;</span>
-            <h3 id="popupTitle">Connexion</h3>
+            <h3 id="popupTitle">Connection</h3>
             <input type="text" id="Secu_input" style="display: none;">
             <input type="text" id="SSID_input" style="display: none;">
     
-            <input type="text" id="User_input" placeholder="Nom d'utilisateur"  class = "Net_input">
+            <input type="text" id="User_input" placeholder="Username"  class = "Net_input">
             
             <div class="password-container">
-                <input type="password" id="Pass_input" class = "Net_input" placeholder="Mot de passe" >
+                <input type="password" id="Pass_input" class = "Net_input" placeholder="Password" >
                 <button type="button" id="togglePassword" onclick="togglePasswordVisibility('Pass_input', this)">👁️</button>
             </div>
-            <button class="connect-btn mainConnectBnt" id="connect">Se connecter</button>
+            <button class="connect-btn mainConnectBnt" id="connect">Connect</button>
         </div>
     </div>
 
-    <!-- Overlay pour afficher les options de connexion -->
+    <!-- Overlay to display connection options -->
     <div id="sensorListOverlay" class="sensorListoverlay">
         <div class="sensorListoverlay_container">
             <div class="sensorListFormTitle">
@@ -143,19 +143,19 @@
             
             <div id="sensorListContent" class="sensor-list">
                 <div class="sensor-item">
-                    <span>Réseaux enregistrés</span>
+                    <span>Saved Networks</span>
                 
                     <button class="toggle-btn" id="toggleBnt_RE" onclick="toggleSensor('delForm', 'toggleBnt_RE')">👁️</button>
                 </div>
 
                 <div class="sensor-item">
-                    <span>Réseaux disponibles</span>
+                    <span>Available Networks</span>
                 
                     <button class="toggle-btn" id="toggleBnt_RD" onclick="toggleSensor('scanBox', 'toggleBnt_RD')">👁️</button>
                 </div>
 
                 <div class="sensor-item">
-                    <span>Info capteur</span>
+                    <span>Sensor Info</span>
                 
                     <button class="toggle-btn" id="toggleBnt_IC" onclick="toggleSensor('paramForm', 'toggleBnt_IC')">👁️</button>
                 </div>

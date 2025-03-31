@@ -2,22 +2,22 @@
 #define SENSORS_H
 
 /*
-Cette classe permet de gérer l'ensemble des capteurs contenue dans les capteurs environnementaux de la MDRS.
-Les grandeurs mesurées sont : 
--Température
--Humidité
--Pression
--Concentration en CO2
--Indice VOC
--Luminosité Visible, Infrarouge, Totale, Lux
+This class manages all sensors contained in the MDRS environmental sensors.
+The measured quantities are:
+-Temperature
+-Humidity
+-Pressure
+-CO2 Concentration
+-VOC Index
+-Visible, Infrared, Total Luminosity, Lux
 
-Cette classe s'appuie sur la classe Grandeur ainsi que sur les bibliothèques (= classes) spécifiques à chaque capteur
+This class relies on the Grandeur class and on specific libraries (= classes) for each sensor
 
-@Auteur : Robin Gorius
-@Date : 12/24
+@Author: Robin Gorius
+@Date: 12/24
 */
 
-#include <Wire.h>//I2C sur l'ESP
+#include <Wire.h>//I2C on ESP
 #include "SparkFun_SCD4x_Arduino_Library.h" // SCD40
 #include <Adafruit_Sensor.h> 
 #include <Adafruit_BME280.h> 
@@ -30,7 +30,7 @@ Cette classe s'appuie sur la classe Grandeur ainsi que sur les bibliothèques (=
 #define SEALEVELPRESSURE_HPA (1013.25)
 #define SCD40_ADDR
 #define SGP40_ADDR
-#define BME280_ADDR 0x76//adresse I2C du BME280
+#define BME280_ADDR 0x76//I2C address of BME280
 
 class Sensors {
   private:
@@ -40,7 +40,7 @@ class Sensors {
     Adafruit_SGP40 sgp;
     Display* display;
 
-    // Objets de type Grandeur pour chaque grandeur mesurées par les capteurs
+    // Objects of type Grandeur for each quantity measured by the sensors
     Grandeur temp;
     Grandeur hum;
     Grandeur pres;
@@ -58,10 +58,10 @@ class Sensors {
     volatile int index = 0;
     volatile unsigned long last_disp = 0;
     
-    Sensors(Display* oledDisplay, float dt, float dh, float dp, float dco, float dvoc);  // Constructeur de la classe permettant aussi un étalonage grosssier des grandeurs
-    void begin();  // Initialisation des capteurs
-    void readSensors();  // Lecture des valeurs des capteurs
-    void displayMeasurements();  // Affichage des mesures sur l'écran OLED
+    Sensors(Display* oledDisplay, float dt, float dh, float dp, float dco, float dvoc);  // Class constructor that also allows rough calibration of quantities
+    void begin();  // Initialize sensors
+    void readSensors();  // Read sensor values
+    void displayMeasurements();  // Display measurements on OLED screen
     void printTSLValues();
     void printSCDValues();
     void printBMEValues();
@@ -69,7 +69,7 @@ class Sensors {
     /*void drawTruncatedText(String text, int maxWidth, int xOffset, int yOffset);
     void drawPartialCharacter(char character, int width, int x, int y);*/
     
-    // Getters pour chaque grandeur
+    // Getters for each quantity
     Grandeur& getTemperature();
     Grandeur& getHumidity();
     Grandeur& getPressure();
@@ -88,7 +88,7 @@ class Sensors {
     bool getSCDValues(float &co2);
     void getBMEValues(float &t, float &p, float &h, float &a, float seaLevel = SEALEVELPRESSURE_HPA);
     void getSGPValues(float t, float h, float &sraw, float &voc_index);
-    void afficheGrandeur(String grandeur, float valeur, String unite, int space = 3);
+    void displayMeasurement(String measurement, float value, String unit, int space = 3);
     
 };
 

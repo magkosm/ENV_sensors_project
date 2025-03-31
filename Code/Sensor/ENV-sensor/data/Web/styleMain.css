@@ -1,4 +1,3 @@
-
 body {
     margin: 0;
     padding: 0;
@@ -16,7 +15,7 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(380px, max(380px, calc((100% - 3 * 1.8rem) / 4)))); 
     /*grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));*/
     margin-bottom: 80px;
-    justify-content: center; /* Centrage horizontal des éléments */
+    justify-content: center; /* Center elements horizontally */
 }
 
 .box {
@@ -36,20 +35,20 @@ body {
 }
 
 .boxTitle{
-    text-align: center;          /* Centrer le texte horizontalement */
-    font-size: min(30px, calc(15px + 2vw)); /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    text-align: center;          /* Center text horizontally */
+    font-size: min(30px, calc(15px + 2vw)); /*clamp(1rem, 5vw, 3rem); /* Adjust text size based on screen */
     margin: auto; 
     margin-top : 10px;
     margin-bottom: 0px;
 }
 
-/*FONCTIONS POUR LA DIV TITRE*/
+/*FUNCTIONS FOR THE TITLE DIV*/
 
 .titreContainer{
     display: flex;
     height: auto;    
     justify-content: space-between;
-    background-color: #005EB8;    /* Couleur de fond */
+    background-color: #005EB8;    /* Background color */
     align-items: center;
     color: white;
     padding: auto;
@@ -65,17 +64,17 @@ body {
 }
 
 .big{
-    width: calc(min(40px, 7vw)) ;  /* Largeur du bouton */
-    height: calc(min(35px, 6.8vw)); /* Hauteur du bouton */
+    width: calc(min(40px, 7vw)) ;  /* Button width */
+    height: calc(min(35px, 6.8vw)); /* Button height */
     margin-left: min(1.5%, 20px);
 }
 
 .small{
-    width: 20px;  /* Largeur du bouton */
-    height: 17.5px; /* Hauteur du bouton */
+    width: 20px;  /* Button width */
+    height: 17.5px; /* Button height */
     margin-left: 0px;
     position: absolute;
-    left: 25px; /* Place le bouton à gauche */
+    left: 25px; /* Place button on the left */
     top : 25px;
 }
 
@@ -89,7 +88,7 @@ body {
     padding: 0;
     align-self: left;
 }
-/* Styles des barres */
+/* Bar styles */
 .hamburger-btn .bnt-bar {
     width: 100%;
     border-radius: 2px;
@@ -97,22 +96,22 @@ body {
 }
 
 .big-bar{
-    height: 4px; /* Épaisseur de chaque barre */
-    /*margin-top: 3px; /* Espacement vertical entre les barres */
-    background-color: white; /* Couleur des barres */
+    height: 4px; /* Bar thickness */
+    /*margin-top: 3px; /* Vertical spacing between bars */
+    background-color: white; /* Bar color */
 }
 
 .small-bar{
-    height: 2px; /* Épaisseur de chaque barre */
-    /*margin-top: 3px; /* Espacement vertical entre les barres */
-    background-color: black; /* Couleur des barres */
+    height: 2px; /* Bar thickness */
+    /*margin-top: 3px; /* Vertical spacing between bars */
+    background-color: black; /* Bar color */
 }
 
 .adaptMargin{
     margin-left: 25px;
 }
 
-/* Changement de couleur au survol */
+/* Color change on hover */
 .hamburger-btn:hover .bnt-bar {
     background-color: grey;
 }
@@ -120,30 +119,30 @@ body {
 .titre{
     width: auto;
     height: auto;
-    text-align: center;          /* Centrer le texte horizontalement */
+    text-align: center;          /* Center text horizontally */
     font-size: calc(20px + 2vw);
     font-family: "Roboto", "sans-serif";
     align-self: center;
 
 }
-/*FONCTION POUR L'OVERLAY*/
+/*FUNCTIONS FOR THE OVERLAY*/
 #sensorListOverlay {
-    position: absolute; /* Changez 'fixed' à 'absolute' pour le positionnement relatif au parent */
-    top: calc(calc(20px + 2vw) + 40px); /* Ajustez ceci en fonction de la hauteur de votre barre de titre pour qu'il apparaisse juste en dessous */
-    left: max(1%, 10px); /* Positionné sur le côté gauche de la page */
-    height: 80%; /* Hauteur de la popup */
-    width: 300px; /* Largeur fixe de 300px */
-    background-color: rgba(255, 255, 255, 0.9); /* Fond légèrement transparent */
-    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); /* Ombre pour le relief */
-    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
-    z-index: 1000; /* S'assurer qu'il est au-dessus des autres éléments */
-    display: none; /* Masqué par défaut */
+    position: absolute; /* Change 'fixed' to 'absolute' for positioning relative to parent */
+    top: calc(calc(20px + 2vw) + 40px); /* Adjust this based on your title bar height to appear just below */
+    left: max(1%, 10px); /* Positioned on the left side of the page */
+    height: 80%; /* Popup height */
+    width: 300px; /* Fixed width of 300px */
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    z-index: 1000; /* Ensure it's above other elements */
+    display: none; /* Hidden by default */
     border-radius: 5px;
 }
 
 .sensorListFormTitle{
     display: flex;
-    align-items: center;        /* Aligne verticalement les éléments au centre */
+    align-items: center;        /* Vertically align elements in center */
     justify-content: space-between;
     font-size: 20px;
     font-family: "Roboto", "sans-serif";
@@ -208,13 +207,13 @@ body {
 }
 
 .bnt{ 
-    padding: 10px;           /* Espacement interne du bouton */
-    background-color: #f19151;    /* Couleur de fond */
-    color: white;                  /* Couleur du texte */
-    border: none;                  /* Pas de bordure */
-    border-radius: 0 0 20px 20px;           /* Coins arrondis */
-    cursor: pointer;               /* Curseur pointer sur hover */
-    text-align: center;            /* Centre le texte */
+    padding: 10px;           /* Button internal spacing */
+    background-color: #f19151;    /* Background color */
+    color: white;                  /* Text color */
+    border: none;                  /* No border */
+    border-radius: 0 0 20px 20px;           /* Rounded corners */
+    cursor: pointer;               /* Pointer cursor on hover */
+    text-align: center;            /* Center text */
     position: relative;
     width: 100%;
     font-size: 17px;
@@ -222,7 +221,7 @@ body {
 }
 
 .bnt:hover {
-    background-color: #e78747; /* Couleur plus foncée lors du survol */
+    background-color: #e78747; /* Darker color on hover */
 }
 
 .txt{ 
@@ -352,14 +351,14 @@ form{
     text-align : "center";
 }
 .fade-out {
-    /*transition: opacity 1s; /* Transition douce sur 1 seconde */
+    /*transition: opacity 1s; /* Smooth transition over 1 second */
     opacity: 0;
 }
 
 
-/* FONCTION POUR LE SCAN RESEAU*/
+/* FUNCTIONS FOR NETWORK SCAN*/
 
-
+/* Network item */
 .network-item {
     display: flex;
     align-items: center;
@@ -385,9 +384,9 @@ form{
 }
 
 .network-name-saved {
-    display: flex; /* Utilise flexbox pour aligner les éléments */
-    align-items: center; /* Centre verticalement les éléments */
-    gap: 10px; /* Espace entre le texte et le bouton */
+    display: flex; /* Use flexbox to align elements */
+    align-items: center; /* Center elements vertically */
+    gap: 10px; /* Space between text and button */
 }
 
 .network-name {
@@ -401,12 +400,12 @@ form{
     font-size: 12px;
 }
 
-/* Styles des barres de signal avec tailles décroissantes */
-/* Styles des barres de signal, alignées en bas */
+/* Signal bar styles with decreasing sizes */
+/* Signal bars, aligned at bottom */
 .signal-bars {
     display: flex;
     gap: 2px;
-    align-items: flex-end; /* Aligne les barres de signal en bas */
+    align-items: flex-end; /* Align signal bars at bottom */
     margin-left: 5px;
 }
 
@@ -416,14 +415,14 @@ form{
     border-radius: 2px;
 }
 
-/* Couleur des barres actives */
+/* Color for active bars */
 .bar.active {
     background-color: #4CAF50;
 }
 
-/* Hauteur spécifique pour chaque barre */
+/* Specific height for each bar */
 .bar:nth-child(1) {
-    height: 4px; /* La plus petite barre, en bas */
+    height: 4px; /* Smallest bar, at bottom */
 }
 .bar:nth-child(2) {
     height: 8px;
@@ -435,14 +434,14 @@ form{
     height: 16px;
 }
 .bar:nth-child(5) {
-    height: 20px; /* La plus grande barre, en haut */
+    height: 20px; /* Tallest bar, at top */
 }
 
 .bar.active {
     background-color: #4CAF50;
 }
 
-/* Bouton connecter */
+/* Connect button */
 .connect-btn {
     display: none;
     margin-top: 5px;
@@ -484,7 +483,7 @@ form{
     font-weight: bold;
 }
 
-/* DIV DETAILS RESEAUX ENREGISTRES*/
+/* SAVED NETWORKS DETAILS DIV*/
 .details-button {
     display: block;
     background: none;
@@ -570,7 +569,7 @@ form{
     font-family: inherit;
   }
 
-  /*POP UP*/
+  /*POPUP*/
 
 .popup-overlay {
     position: fixed;
@@ -578,14 +577,14 @@ form{
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.6); /* Fond sombre et semi-transparent */
+    background: rgba(0, 0, 0, 0.6); /* Dark semi-transparent background */
     display: none;
     align-items: center;
     justify-content: center;
     z-index: 1000;
   }
   
-  /* Pop-up */
+  /* Popup */
   .popup {
     background: #ffffff;
     border-radius: 20px;
@@ -599,7 +598,7 @@ form{
     gap: 15px;
   }
   
-  /* Titre de la pop-up */
+  /* Popup title */
   .popup h3 {
     margin: 0;
     font-size: 1.2em;
@@ -607,7 +606,7 @@ form{
     text-align: center;
   }
   
-  /* Bouton de fermeture */
+  /* Close button */
   .close-btn {
     position: absolute;
     top: 10px;
@@ -619,7 +618,7 @@ form{
     border: none;
   }
   
-  /* Conteneur du champ de mot de passe et du bouton */
+  /* Password field and button container */
   .password-container {
     position: relative;
     width: 100%;
@@ -629,25 +628,25 @@ form{
     width: 57%;
     padding: 0px;
   }
-  /* Champ de mot de passe */
+  /* Password field */
   .Net_input {
     width: 100%;
-    padding-right: 50px; /* Espace pour le bouton Afficher/Masquer */
+    padding-right: 50px; /* Space for Show/Hide button */
     padding-left: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    height: 40px; /* Ajustement de la hauteur */
+    height: 40px; /* Height adjustment */
     box-sizing: border-box;
     font-size: 0.9em;
     color: #333;
   }
   
-  /* Bouton Afficher/Masquer */
+  /* Show/Hide button */
   #togglePassword {
     position: absolute;
     right: 10px;
     top: 50%;
-    transform: translateY(-50%); /* Centrer verticalement */
+    transform: translateY(-50%); /* Center vertically */
     background: none;
     border: none;
     color: #007bff;
@@ -655,14 +654,14 @@ form{
     cursor: pointer;
   }
   
-  /* Champs d'entrée de texte */
+  /* Text input fields */
   .popup input[type="text"],
   .popup input[type="password"] {
     font-size: 0.9em;
     color: #333;
   }
   
-  /* Bouton principal "Se connecter" */
+  /* Main "Connect" button */
   .mainConnectBnt{
     transition: background 0.3s;
     width: 100%;
@@ -676,7 +675,7 @@ form{
     background: #0056b3;
   }
   
-  /* Check-box et label */
+  /* Checkbox and label */
   .popup div {
     display: flex;
     align-items: center;

@@ -1,69 +1,61 @@
 /*
-Ce code permet de faire fonctionner les capteurs environnementaux destiné à la MDRS.
-Ces capteurs mesures les grandeurs suivantes:
+This code operates the environmental sensors designed for the MDRS.
+These sensors measure the following variables:
+-Temperature
+-Humidity
+-Pressure
+-CO2 concentration
+-VOC index
+-Luminosity
 
--Température
--Humidité
--Pression
--Concentration en CO2
--Indice VOC
--Luminosité Visible, Infrarouge, Totale, Lux
-
-Ces grandeurs sont ensuites exporté vers une base de donnée centrale au travers d'un serveurs HTTP.
-
-@Auteur : Robin Gorius
-@Date : 12/2024
+@Author : Robin Gorius
+@Date : 12/24
 */
+
 #include <Arduino.h>
-#include "Display.h"
+#include <SPIFFS.h>
+#include <ESPmDNS.h>
+#include <Wire.h>
+#include <HTTPClient.h>
+#include <ArduinoJson.h>
+
 #include "Sensors.h"
+#include "Display.h"
 #include "ConfigWifi.h"
 #include "ConfigServer.h"
 
-#define OLED_ADDR 0x3C
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
+#define BUTTON_PIN 18
+#define LED_PIN 2
+ 
+Display display;
+Sensors sensors(&display, 7, 0, 0, 0, 0);//class that manages all sensors
+ConfigWifi SPIFFSWifi;//class that manages internal storage and wifi connection from internal storage
+ConfigServer server(&sensors, &SPIFFSWifi, 80);//class that manages the configuration server
 
-#define BUTTON_PIN  26 // Pin du bouton (connecté à D1)
+volatile unsigned long lastDisplayChange = 0;
+const unsigned long debounceDelay = 200;  // Debounce delay in milliseconds
+volatile int buttonPresses = 0;
+volatile int displaysNumber = 5;
+unsigned long last_read = 0;//time of the last sensor read
+boolean dispOK = true;//flag to know if displaying measurements is available
+//bool sensorStatus = true;
 
-Display display(SCREEN_WIDTH, SCREEN_HEIGHT, OLED_ADDR);//classe qui gère l'affichage sur l'écran et qui hérite de la classe display d'ardafruit
-Sensors sensors(&display, 7, 0, 0, 0, 0);//classe qui gère tout les capteurs
-ConfigWifi SPIFFSWifi;//classe qui gère le stockage interne et la connexion au wifi depuis le stockage interne
-ConfigServer server(&sensors, &SPIFFSWifi, 80);// classe qui gère le serveur local
-
-unsigned long last_read = 0;
-volatile unsigned long last_disp = 0;
-
-volatile unsigned long last_press = 0;
-volatile bool disp_stat = 0;//0 sensors, 1 wifi infos
-volatile int nb_press = 0;
-
-unsigned long startLow = 0;
-volatile bool start = false;
-
-void changeDisplay() {//Vecteur d'interrupt, appélé à chaque fois qu'une interrupt est généré. Permet de gérer les différents affichage sur l'écran
-  // Fonction appelée lors de l'interruption
-  unsigned long dt = millis() - last_press;
-  
-  if(dt > 200){
-    if(disp_stat){
-      nb_press = (nb_press + 1)%5;
-    }
-    else{
-      sensors.index = (sensors.index + 1) % 7;  // Incrémente l'index et le remet à 0 après 7
-    }
-
-    start = false;
-    last_disp = 0;
-    last_press = millis();
-  } 
+void IRAM_ATTR changeDisplay() {
+  unsigned long currentMillis = millis();
+  // Debounce
+  if (currentMillis - lastDisplayChange > debounceDelay) {
+    lastDisplayChange = currentMillis;
+    buttonPresses++;
+    sensors.index = buttonPresses % displaysNumber;
+    //Serial.println("Button pressed, new display mode: " + String(sensors.index));
+  }
 }
 
 void displayNetInfos(int index){
   switch(index){
     
     case 0:
-    display.disp2Lines("Nom capteur", SPIFFSWifi.nomCapteur, 2,2);
+    display.disp2Lines("Sensor name", SPIFFSWifi.nomCapteur, 2,2);
     break;
 
     case 1:
@@ -72,7 +64,7 @@ void displayNetInfos(int index){
 
     case 2:
     if(SPIFFSWifi.WifiMode == 1){
-      display.disp2Lines("Reseau :", WiFi.SSID() ,2, 1);
+      display.disp2Lines("Network :", WiFi.SSID() ,2, 1);
     }
     else if(SPIFFSWifi.WifiMode == 2){
       display.disp2Lines("AP SSID :", WiFi.softAPSSID() ,2, 1);
@@ -81,7 +73,7 @@ void displayNetInfos(int index){
     break;
 
     case 3:
-    if(SPIFFSWifi.WifiMode == 2){//si la condition n'est pas rempli, le programme passe tout seul à la suite (Message de warning tatement may fall through à la compilation normal)
+    if(SPIFFSWifi.WifiMode == 2){//if the condition is not met, the program automatically continues (Warning message "statement may fall through" at compilation is normal)
       display.disp2Lines("AP Pass :", SPIFFSWifi.ApPass ,2, 1);
       break;
     }
@@ -108,6 +100,33 @@ void displayNetInfos(int index){
   }
 }
 
+void displayInfos(int index){
+
+  switch(index){
+    
+    case 0:
+    displayNetInfos(0);
+    break;
+
+    case 1:
+    displayNetInfos(1);
+    break;
+
+    case 2:
+    displayNetInfos(2);
+    break;
+
+    case 3:
+    displayNetInfos(3);
+    break;
+
+    case 4:
+    displayNetInfos(4);
+    break;
+
+  }
+}
+
 void setup() {
 
   Serial.begin(115200);
@@ -118,131 +137,101 @@ void setup() {
   display.disp2Lines("    MDRS", "Env sensor", 2, 2);
   delay(1500);
 
-  // Initialisation des capteurs
+  // Initialize sensors
   sensors.begin();
   sensors.readSensors();
 
   pinMode(2, OUTPUT);
-  pinMode(BUTTON_PIN, INPUT_PULLUP);  // Déclaration du pin du bouton comme un entrée
-  attachInterrupt(digitalPinToInterrupt(BUTTON_PIN), changeDisplay, FALLING);  // Déclenchement lors de l'appui (niveau bas)
+  pinMode(BUTTON_PIN, INPUT_PULLUP);  // Declare button pin as input
+  attachInterrupt(digitalPinToInterrupt(BUTTON_PIN), changeDisplay, FALLING);  // Trigger on button press (low level)
   
-  SPIFFSWifi.begin();//démarre le SPIFFS, vérifie si les fichiers par défauts sont là et les créer sinon
+  SPIFFSWifi.begin();//start SPIFFS, check if default files exist and create them if not
   SPIFFSWifi.printSPIFFS();
+  
+  display.clearDisplay();
+  display.disp2Lines("Testing", "connections", 2, 2);
+  delay(1500);
 
-  if(digitalRead(BUTTON_PIN) == LOW){
-    display.disp2Lines("Launching", "   AP", 2, 2);
-    delay(1500);//laisser du temps à l'utilisateur pour voir le message
-    SPIFFSWifi.configureAP();
+  Serial.println("Trying to connect to a known wifi");
+  if(SPIFFSWifi.StationConnect()){//trying to connect to a known network
+    Serial.println("Connection to a known network succeeded");
+    for(int i = 0; i < 5; i++){
+      digitalWrite(2, HIGH);
+      delay(100);
+      digitalWrite(2, LOW);
+      delay(100);
+    } 
   }
-  else{
-    display.disp2Lines("Connecting", "...", 2, 2);
-    if(SPIFFSWifi.initWifiFromSPIFFS() != 0){//Si on arrive pas à se connecter à un réseau connu
-      display.disp2Lines("Launching", "   AP", 2, 2);
-      delay(1500);//laisser du temps à l'utilisateur pour voir le message
-      SPIFFSWifi.configureAP();
-      Serial.println(WiFi.softAPIP());
+  //If connection fails or if no network is saved, start in AP mode
+  else{//if the connection to a known network fails, create an AP
+    Serial.println("No network saved or connection failed.");
+    Serial.println("Starting in AP mode");
+    Serial.println("Creating access point");
+    dispOK = SPIFFSWifi.APConnect(); 
+    
+    displayInfos(sensors.index);//display the right info according to the index
+  }  
 
-    }
-  }
-  server.startConfigServer();//création du serveu HTTP peux importe sur le mode WiFi
+  //Configure and start the captive server
+  server.startConfigServer();// create the web route and start server
+  last_read = millis();//save the starting time to measure time between readings
+
+  // Set up built-in LED (optional)
+  pinMode(LED_PIN, OUTPUT);  // Set the pin as output
+  digitalWrite(LED_PIN, HIGH);  // Turn on LED to indicate successful setup
 }
 
 void loop() {
-
-  if(digitalRead(BUTTON_PIN) == LOW){//détection des appuis long sur le bnt
-    if(!start){
-      startLow = millis();
-      start = true;
-      //Serial.println("Long press starting");
-    }
-    else if(millis() - startLow > 500){
-      disp_stat = !disp_stat;
-      nb_press = 0;
-      sensors.index = 0;
-      Serial.println("Long press detected");
-      start = false;
-      last_press = millis();
-      last_disp = 0;//display the change
-    }
-  }
-  else if(start){
-    start = false;
-    if(millis() - startLow > 500){
-      disp_stat = !disp_stat;
-      Serial.println("Long press detected");
-      start = false;
-      last_press = millis();
-      last_disp = 0;//display the change
+  if(SPIFFSWifi.WifiMode == 1){//at each loop check if we're still connected to a local network
+    if(WiFi.status() != WL_CONNECTED){//connection lost
+      Serial.println("Wifi connection lost");
+      SPIFFSWifi.WifiMode = 0;//no connection
+      dispOK = SPIFFSWifi.APConnect();
+      displayInfos(sensors.index);
     }
   }
 
-  if(server.getConnecting()){//si on a reçu sur le serveur une demande de connexion à un nouveau réseau
-    server.setConnecting(false);
-    Serial.println("restarting esp now");
-    display.disp2Lines("New Infos", "Restarting",2,2);
-    delay(2000);
-    MDNS.end();
-    WiFi.disconnect();
-    digitalWrite(2, LOW);
-    esp_restart();
+  if(server.getConnecting()){//if we received a connection request for a new network on the server
+    delay(3000);
+    Serial.println("ESP will reset for new connection");
+    ESP.restart();
   }
-    yield();  // Laissez le CPU respirer (= le laisser aller voir ce qu'il se passe sur l'autre corps)
+  
+  if(millis() - sensors.last_disp > 1000){
+    sensors.last_disp = millis();
 
-
-    if(millis() - last_read > 3000){//lecture des capteurs
-      last_read = millis();
-      sensors.readSensors();
-      /*
-      sensors.printBMEValues();
-      sensors.printSCDValues();
-      yield();  // Laissez le CPU respirer
-      sensors.printTSLValues();
-      sensors.printSGPValues();*/
+    if(sensors.index >= 0 && sensors.index <= 4)
+    {
+      displayInfos(sensors.index);
     }
-
-    if(millis() - last_disp > 1000){//Affichage sur l'écran
-      last_disp = millis();
-
-      if (WiFi.status() != WL_CONNECTED) {
-        digitalWrite(2, LOW);
-        if(!(WiFi.getMode() == WIFI_AP || WiFi.getMode() == WIFI_AP_STA)){//si on est pas en mode point d'accès
-          SPIFFSWifi.WifiMode = 0; //not connected
-        }
-      }
-      else {
-        digitalWrite(2, HIGH);
-        SPIFFSWifi.WifiMode = 1; // connected
-        
-      }
-
-      if(disp_stat == 0){
+    else{//if index is out of range, display measurements
+      if(dispOK){
         sensors.displayMeasurements();
       }
       else{
-        displayNetInfos(nb_press);
+        display.clearDisplay();
       }
-    }
+    }   
+  }
 
-    if((millis() - server.getLast_send() )> 60000){//reset des min, max et moy si jamais une minute passe sans envoyé les données
-      server.setLast_send(millis());
-
-      sensors.getTemperature().reset();
-      sensors.getHumidity().reset();
-      sensors.getPressure().reset();
-      sensors.getAltitude().reset();
-
-      sensors.getCO2().reset();
-
-      sensors.getVocIndex().reset();
-      sensors.getSraw().reset();
-
-      sensors.getIR().reset();
-      sensors.getFullLuminosity().reset();
-      sensors.getVisibleLuminosity().reset();
-      sensors.getLux().reset();
-
-      sensors.readSensors();
-    }
+  if(millis() - last_read > 3000){//read sensors
+    sensors.readSensors();
+    last_read = millis();
+  }
   
-  yield();  // Laissez le CPU respirer
+  //if 60s passed without sending the data, reset min, max and average
+  if((millis() - server.getLast_send() )> 60000){//reset min, max and avg if a minute passes without sending data
+    Serial.println("Resetting min, max and average as no server asked for data");
+    sensors.getTemperature().reset();
+    sensors.getHumidity().reset();
+    sensors.getPressure().reset();
+    sensors.getCO2().reset();
+    sensors.getIR().reset();
+    sensors.getVisibleLuminosity().reset();
+    sensors.getFullLuminosity().reset();
+    sensors.getLux().reset();
+    sensors.getVocIndex().reset();
+    sensors.getSraw().reset();
+    server.setLast_send(millis());
+  }
 }

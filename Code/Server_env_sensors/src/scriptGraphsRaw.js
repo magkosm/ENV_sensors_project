@@ -43,18 +43,18 @@ async function getData(startDate, endDate, sensors) {
 function getToday() {
     const today = new Date();
 
-    // Mettre les secondes et millisecondes à zéro
+    // Set seconds and milliseconds to zero
     today.setSeconds(0);
     today.setMilliseconds(0);
 
-    // Récupérer l'année, mois, jour, heure, minute et formater en fonction de la machine locale
+    // Get year, month, day, hour, minute and format according to local machine
     const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, '0');  // Mois de 01 à 12
-    const day = String(today.getDate()).padStart(2, '0');  // Jour du mois
+    const month = String(today.getMonth() + 1).padStart(2, '0');  // Month from 01 to 12
+    const day = String(today.getDate()).padStart(2, '0');  // Day of month
     const hours = String(today.getHours()).padStart(2, '0');
     const minutes = String(today.getMinutes()).padStart(2, '0');
 
-    // Créer la chaîne sans secondes ni millisecondes, au format local
+    // Create string without seconds or milliseconds, in local format
     const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:00`;
 
     return formattedDate;

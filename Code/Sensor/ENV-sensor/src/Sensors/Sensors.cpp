@@ -1,20 +1,21 @@
 #include "Sensors.h"
 
-Sensors::Sensors(Display* oledDisplay, float dt, float dh, float dp, float dco, float dvoc):
-  temp("Température", dt),
-  hum("Humidité", dh),
-  pres("Pression", dp),
-  alt("Altitude", 0),
-  CO2("CO2 level", dco), 
-  IR("IR lum level", 0),
-  Full("Full lum level", 0),
-  Visible("Visible lum level", 0),
-  lux("Intensité lum (lux)", 0),
-  sraw("Sraw", 0),
-  Voc_Index("VOC index", dvoc),
-  display(oledDisplay)
-  //display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET)
-{}
+Sensors::Sensors(Display* oledDisplay, float dt, float dh, float dp, float dco, float dvoc) :
+  display(oledDisplay),
+  temp("Temperature", dt),
+  hum("Humidity", dh),
+  pres("Pressure", dp),
+  alt("Altitude", 0.0),
+  CO2("CO2", dco),
+  IR("IR", 0.0),
+  Full("Full", 0.0),
+  Visible("Visible", 0.0),
+  lux("Lux", 0.0),
+  sraw("Raw_VOC", 0.0),
+  Voc_Index("VOC Index", dvoc)
+{
+  Serial.println(F("Sensors class created"));
+}
 
 void Sensors::begin() {
   Wire.begin();
@@ -96,39 +97,49 @@ void Sensors::readSensors() {
 }
 
 void Sensors::displayMeasurements() {
-  const char* names[] = {"Temperature", "Humidite", "Pression", "Altitude", "CO2 level", "Luminosite", "VOC Index"};
-  const char* units[] = {"C", "%", "hPa", "m", "ppm", "lux",""};
-
-  //display->clearDisplay();
-
-  switch(index) {
-    case 0:  
-      afficheGrandeur(names[index], temp.getLastVal(), units[index]);
+  // Define which measurement to display based on index
+  const char* names[] = {"Temperature", "Humidity", "Pressure", "Altitude", "CO2 level", "Luminosity", "VOC Index"};
+  
+  switch (index % 7) {
+    case 0: // Temperature & Humidity
+      display->clearDisplay();
+      displayMeasurement("Temperature", temp.getLastVal(), "C", 2);
+      displayMeasurement("Humidity", hum.getLastVal(), "%", 2, 16);
       break;
-    case 1:  
-      afficheGrandeur(names[index], hum.getLastVal(), units[index]);
+    
+    case 1: // Pressure & Altitude
+      display->clearDisplay();
+      displayMeasurement("Pressure", pres.getLastVal() / 100.0, "hPa", 2);  // Convert Pa to hPa
+      displayMeasurement("Altitude", alt.getLastVal(), "m", 2, 16);
       break;
-    case 2:  
-      afficheGrandeur(names[index], (pres.getLastVal()) / 100.0F, units[index]);
+    
+    case 2: // CO2
+      display->clearDisplay();
+      displayMeasurement("CO2", CO2.getLastVal(), "ppm", 2);
       break;
-    case 3:  
-      afficheGrandeur(names[index], alt.getLastVal(), units[index]);
+    
+    case 3: // VOC
+      display->clearDisplay();
+      displayMeasurement("VOC Index", Voc_Index.getLastVal(), "", 2);
+      displayMeasurement("Raw VOC", sraw.getLastVal(), "", 2, 16);
       break;
-    case 4:  
-      afficheGrandeur(names[index], CO2.getLastVal(), units[index]);
+    
+    case 4: // Lux
+      display->clearDisplay();
+      displayMeasurement("Luminosity", lux.getLastVal(), "lx", 2);
       break;
-    case 5:  
-      afficheGrandeur(names[index], lux.getLastVal(), units[index]);
+    
+    case 5: // Luminosity components
+      display->clearDisplay();
+      displayMeasurement("Full", Full.getLastVal(), "c", 2);
+      displayMeasurement("IR", IR.getLastVal(), "c", 2, 16);
       break;
-    case 6:  
-      afficheGrandeur(names[index], Voc_Index.getLastVal(), "");
-      break;
-    default:
-      afficheGrandeur("Erreur", 0.0, "Index inconnu");
+    
+    case 6: // Visible
+      display->clearDisplay();
+      displayMeasurement("Visible", Visible.getLastVal(), "c", 2);
       break;
   }
-
-  display->display();
 }
 
 void Sensors::getTSLValues(float &ir, float &full, float &visible, float &lux) {

@@ -185,21 +185,19 @@ li {
 
 <script>
     function remplirSpans() {
-    // Créer un tableau d'objets avec des données
-    const donnees = {
-        temp: 23, // Exemple de valeur de température
-        lum:259878,
-        hum: 65,    // Exemple de valeur d'humidité
-        press: 1013,    // Exemple de valeur de pression
-        CO2: 458
+    // Create an array of objects with data
+    const data = {
+        temp: 23, // Example temperature value
+        date: new Date().toLocaleTimeString(),
+        hum: 65,    // Example humidity value
+        press: 1013,    // Example pressure value
     };
 
     // Remplir chaque span avec la valeur correspondante
-    document.getElementById("temp").textContent = donnees.temp;
-    document.getElementById("hum").textContent = donnees.hum;
-    document.getElementById("press").textContent = donnees.press;
-    document.getElementById("lum").textContent = donnees.lum;
-    document.getElementById("CO2").textContent = donnees.CO2;
+    document.getElementById("temp").textContent = data.temp;
+    document.getElementById("hum").textContent = data.hum;
+    document.getElementById("press").textContent = data.press;
+    document.getElementById("date").textContent = data.date;
 }
 
 // Événement pour remplir les données lorsque le bouton est cliqué
@@ -275,37 +273,37 @@ document.addEventListener("DOMContentLoaded", remplirSpans);
                     <p class="reading"><span id="press"></span> hPa</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">CO2</p>
-                    <p class="reading"><span id="CO2"></span> ppm</p>
+                    <p class = "dataType">Date</p>
+                    <p class="reading"><span id="date"></span></p>
                 </div>
             </div>
            <div class = "bottom"></div>
         </div>
         <div class="box">
-            <p class = "boxTitle"> À propos </p>
+            <p class = "boxTitle"> About </p>
             <div class = "sensor-grid">
                 <div class = "sensor">
                     <p class = "dataType">Version</p>
                     <p class="reading"> 1.0 </p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Sortie le</p>
+                    <p class = "dataType">Released on</p>
                     <p class="reading">29/09/2024</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Auteur</p>
+                    <p class = "dataType">Author</p>
                     <p class="reading">Robin Gorius</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Ville</p>
+                    <p class = "dataType">City</p>
                     <p class="reading">Toulouse</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Planète</p>
-                    <p class="reading">Terre</p>
+                    <p class = "dataType">Planet</p>
+                    <p class="reading">Earth</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Équipage</p>
+                    <p class = "dataType">Crew</p>
                     <p class="reading">311</p>
                 </div>
             </div>

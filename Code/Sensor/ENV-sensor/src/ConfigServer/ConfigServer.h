@@ -2,17 +2,17 @@
 #define CONFIGSERVER_H
 
 /*
-Cette classe permet de mettre en place un serveur captif.
-Ce serveur permet :
--Consulter et supprimer les réseaux enregitré dans le SPIFF de l'ESP
--Connecter l'ESP à un nouveau réseau
--Lire et Modifier les informations propre au capteur (Nom, SSID du point d'accès, Mot de passe du point d'accès)
+This class allows setting up a captive server.
+This server allows:
+-Consulting and deleting networks registered in the ESP's SPIFF
+-Connecting the ESP to a new network
+-Reading and Modifying sensor-specific information (Name, AP SSID, AP Password)
 
- /!\ cette classe ne permet pas d'assurer la sécurité des mots de passes et des informations transmises sur le réseaux local
- /!\ Ce serveur est un serveur HTTP et les mots de passe sont stocké tel quel dans des fichier texte dans la mémoire interne de l'ESP
+ /!\ This class cannot ensure the security of passwords and information transmitted on the local network
+ /!\ This server is an HTTP server and passwords are stored as-is in text files in the ESP's internal memory
 
-@Auteur : Robin Gorius
-@Date : 12/24
+@Author: Robin Gorius
+@Date: 12/24
 
 */
 
@@ -27,26 +27,26 @@ Ce serveur permet :
 
 class ConfigServer {
   private:
-    AsyncWebServer *server;  // Déclaration du serveur
+    AsyncWebServer *server;  // Server declaration
     
-    static bool scanning;   // État du scan réseau (static car utilisée dans les fonctions static du serveur Async)
-    static bool connecting; //etat de la connection
+    static bool scanning;   // Network scan state (static because used in Async server's static functions)
+    static bool connecting; //connection state
     static unsigned long last_send;
     static unsigned long netScanStartTps;
 
   public:
     static Sensors *sensors;
-    static ConfigWifi *SPIFFSWifi;//besoin d'être publique car accéder dans un contexte asynchrone par le serveur
+    static ConfigWifi *SPIFFSWifi;//needs to be public because accessed in asynchronous context by the server
 
-    // Constructeur qui initialise le serveur
-    ConfigServer(Sensors* snrs, ConfigWifi* SpiffWifi, uint16_t port = 80);//Constructeur qui initialise les variables internes, notament les pointeurs vers les autres fonctionnalitées ( capteurs, écran et Wifi/SPIFFS)
+    // Constructor that initializes the server
+    ConfigServer(Sensors* snrs, ConfigWifi* SpiffWifi, uint16_t port = 80);//Constructor that initializes internal variables, notably pointers to other functionalities (sensors, display and Wifi/SPIFFS)
 
-    void startConfigServer();//COnfigure les routes et démarre le serveur HTTP
+    void startConfigServer();//Configure routes and start HTTP server
 
     static String processor(const String& var);
-    static void handleRoot(AsyncWebServerRequest *request);//sert la page html principale
-    static void handleHotspotDetect(AsyncWebServerRequest *request);//répond à la requête envoyé par IOS pour idetifier un hot spot sans internet
-    static void handleGenerate204(AsyncWebServerRequest *request);//répond à la requête envoyé par android pour idetifier un hot spot sans internet
+    static void handleRoot(AsyncWebServerRequest *request);//serves the main html page
+    static void handleHotspotDetect(AsyncWebServerRequest *request);//responds to the request sent by IOS to identify a hotspot without internet
+    static void handleGenerate204(AsyncWebServerRequest *request);//responds to the request sent by android to identify a hotspot without internet
     static void handleStyleMain(AsyncWebServerRequest *request);//envoi le CSS
     static void handleScriptMain(AsyncWebServerRequest *request);//envoi le JavaScript
     static void handleLogo(AsyncWebServerRequest *request);//envoi le logo

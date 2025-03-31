@@ -29,8 +29,8 @@ class MeasurementType(db.Model):
     __tablename__ = 'MeasurementTypes'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    unité = db.Column(db.String(255), nullable=True)  # Nouveau champ unité
-    clef = db.Column(db.String(255), nullable=False)  # Nouveau champ clef
+    unit = db.Column(db.String(255), nullable=True)  # New unit field
+    key = db.Column(db.String(255), nullable=False)  # New key field
 
 class Measurement(db.Model):
     __tablename__ = 'Measurements'
@@ -95,10 +95,10 @@ class SensorThread(threading.Thread):
                 print(f"Initialisation: Capteur {self.name} déjà présent dans la base de données.")
 
             for measurement_key, measurement_info in self.measurements.items():
-                measurement_type = db.session.query(MeasurementType).filter_by(clef=measurement_key).first()
+                measurement_type = db.session.query(MeasurementType).filter_by(key=measurement_key).first()
                 if not measurement_type:
                     print(f"Initialisation: Type de mesure {measurement_info['name']} non trouvé. Ajout du type de mesure.")
-                    measurement_type = MeasurementType(name=measurement_info['name'], unité=measurement_info['unit'], clef=measurement_key)
+                    measurement_type = MeasurementType(name=measurement_info['name'], unit=measurement_info['unit'], key=measurement_key)
                     db.session.add(measurement_type)
                     db.session.commit()
                     print(f"Initialisation: Type de mesure {measurement_info['name']} ajouté avec succès.")
@@ -155,9 +155,9 @@ class SensorThread(threading.Thread):
                     raise ValueError(f"Capteur {self.name} non trouvé dans la base de données.")
 
                 for measurement_key, values in self.data['measurements'].items():
-                    measurement_type = db.session.query(MeasurementType).filter_by(clef=measurement_key).first()
+                    measurement_type = db.session.query(MeasurementType).filter_by(key=measurement_key).first()
                     if not measurement_type:
-                        measurement_type = MeasurementType(name=measurement_key, clef=measurement_key)
+                        measurement_type = MeasurementType(name=measurement_key, key=measurement_key)
                         db.session.add(measurement_type)
                         db.session.commit()
                     
@@ -218,7 +218,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
                 Measurement.sensor_id == sensor.id,
                 Measurement.timestamp_start >= start_date,
                 Measurement.timestamp_start <= end_date,
-                MeasurementType.clef.in_(data_types)
+                MeasurementType.key.in_(data_types)
             )
             .order_by(Measurement.timestamp_start)
             .all()
@@ -235,8 +235,8 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             if timestamp not in data["timestamps"]:
                 data["timestamps"].append(timestamp)
 
-            if measure.measurement_type.clef in data_types:
-                data[measure.measurement_type.clef].append(measure.value_avg)
+            if measure.measurement_type.key in data_types:
+                data[measure.measurement_type.key].append(measure.value_avg)
 
         # Appliquer le facteur d'échantillonnage
         data["timestamps"] = data["timestamps"][::sampling_factor]
@@ -261,9 +261,9 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             db.session.query(
                 Measurement.timestamp_start,
                 Measurement.value_avg,
-                MeasurementType.clef,
+                MeasurementType.key,
                 db.func.row_number().over(
-                    partition_by=MeasurementType.clef,
+                    partition_by=MeasurementType.key,
                     order_by=Measurement.timestamp_start
                 ).label("row_num")
             )
@@ -272,7 +272,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
                 Measurement.sensor_id == sensor.id,
                 Measurement.timestamp_start >= start_date,
                 Measurement.timestamp_start <= end_date,
-                MeasurementType.clef.in_(data_types)
+                MeasurementType.key.in_(data_types)
             )
             .subquery()
         )
@@ -282,7 +282,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             db.session.query(
                 measurements_query.c.timestamp_start,
                 measurements_query.c.value_avg,
-                measurements_query.c.clef
+                measurements_query.c.key
             )
             .filter(measurements_query.c.row_num % sampling_factor == 0)
             .order_by(measurements_query.c.timestamp_start)
@@ -300,8 +300,8 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             if timestamp not in data["timestamps"]:
                 data["timestamps"].append(timestamp)
 
-            if measure.clef in data_types:
-                data[measure.clef].append(measure.value_avg)
+            if measure.key in data_types:
+                data[measure.key].append(measure.value_avg)
 
         db.session.close()
 
@@ -464,9 +464,9 @@ def new_sensor():
                 db.session.commit()
 
                 for measurement_key, measurement_info in sensor_config['measurements'].items():
-                    measurement_type = db.session.query(MeasurementType).filter_by(clef=measurement_key).first()
+                    measurement_type = db.session.query(MeasurementType).filter_by(key=measurement_key).first()
                     if not measurement_type:
-                        measurement_type = MeasurementType(name=measurement_info['name'], unité=measurement_info['unit'], clef=measurement_key)
+                        measurement_type = MeasurementType(name=measurement_info['name'], unit=measurement_info['unit'], key=measurement_key)
                         db.session.add(measurement_type)
                         db.session.commit()
             
@@ -620,8 +620,8 @@ def get_data1():
                     # Récupérer le type de mesure à partir de la table MeasurementType
                     measurement_type = MeasurementType.query.filter_by(id=measurement.measurement_type_id).first()
                     
-                    if measurement_type and measurement_type.clef not in sensor_info['measurements']:
-                        sensor_info['measurements'][measurement_type.clef] = {
+                    if measurement_type and measurement_type.key not in sensor_info['measurements']:
+                        sensor_info['measurements'][measurement_type.key] = {
                             'LastVal': measurement.value_avg
                         }
                         sensor_info['timestamp'] = measurement.timestamp_end.isoformat()
@@ -653,8 +653,8 @@ def get_data():
                 measurements = Measurement.query.filter_by(sensor_id=sensor.id).order_by(Measurement.timestamp_end.desc()).all()
                 for measurement in measurements:
                     measurement_type = MeasurementType.query.filter_by(id=measurement.measurement_type_id).first()
-                    if measurement_type.clef not in sensor_info['measurements']:
-                        sensor_info['measurements'][measurement_type.clef] = {
+                    if measurement_type.key not in sensor_info['measurements']:
+                        sensor_info['measurements'][measurement_type.key] = {
                             'LastVal': measurement.value_avg
                         }
                         sensor_info['timestamp'] = measurement.timestamp_end.isoformat()

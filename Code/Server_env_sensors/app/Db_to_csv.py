@@ -28,8 +28,8 @@ class MeasurementType(db.Model):
     __tablename__ = 'MeasurementTypes'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
-    unité = db.Column(db.String(255), nullable=True)  # Nouveau champ unité
-    clef = db.Column(db.String(255), nullable=False)  # Nouveau champ clef
+    unit = db.Column(db.String(255), nullable=True)  # New unit field
+    key = db.Column(db.String(255), nullable=False)  # New key field
 
 class Measurement(db.Model):
     __tablename__ = 'Measurements'
@@ -60,9 +60,9 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             db.session.query(
                 Measurement.timestamp_start,
                 Measurement.value_avg,
-                MeasurementType.clef,
+                MeasurementType.key,
                 db.func.row_number().over(
-                    partition_by=MeasurementType.clef,
+                    partition_by=MeasurementType.key,
                     order_by=Measurement.timestamp_start
                 ).label("row_num")
             )
@@ -71,7 +71,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
                 Measurement.sensor_id == sensor.id,
                 Measurement.timestamp_start >= start_date,
                 Measurement.timestamp_start <= end_date,
-                MeasurementType.clef.in_(data_types)
+                MeasurementType.key.in_(data_types)
             )
             .subquery()
         )
@@ -81,7 +81,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             db.session.query(
                 measurements_query.c.timestamp_start,
                 measurements_query.c.value_avg,
-                measurements_query.c.clef
+                measurements_query.c.key
             )
             .filter(measurements_query.c.row_num % sampling_factor == 0)
             .order_by(measurements_query.c.timestamp_start)
@@ -99,8 +99,8 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             if timestamp not in data["timestamps"]:
                 data["timestamps"].append(timestamp)
 
-            if measure.clef in data_types:
-                data[measure.clef].append(measure.value_avg)
+            if measure.key in data_types:
+                data[measure.key].append(measure.value_avg)
 
         db.session.close()
 
@@ -169,7 +169,7 @@ def main():
     date_fin = "2025-03-14 16:48:06.728912"
     sampling_factor = 1
 
-    #Faire un fichier par Lieu, une colonne par grandeur, une ligne par timestamp
+    #Create one file per Location, one column per measurement, one row per timestamp
     for sensor in sensor_list:
         data = getSensorDataFromDB(sensor, date_debut, date_fin, data_types, sampling_factor)
 
@@ -178,7 +178,7 @@ def main():
 
         for i in range(len(data["timestamps"])):
             
-            if(data["Lum"][i] == None):#correction d'un petit bug de calcul des lux quand la luminosité est quasi nulle. 
+            if(data["Lum"][i] == None):#fix a small bug in lux calculation when luminosity is almost zero
                 data["Lum"][i] = 0
             try:
                 file.write(data["timestamps"][i] + "," + ",".join([str(data[dt][i]) for dt in data_types]) + "\n")

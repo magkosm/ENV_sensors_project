@@ -3,104 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/styleGraphs.css">
-    <link rel="icon" href="/static/Images/logo1.png">
-    <title>Graphs capteurs</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMain.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='Images/logo1.png') }}">
+    <title>Sensor Graphs</title>
 </head>
 <body>
     <div class="titreContainer" id="titreContainer">
         <div class="bntContainer">
-            <button id="bnt-details" class="hamburger-btn big" aria-label="Menu" onclick="toggleSensorListOverlay('addGraphFormContainer')">
-                <div class="bar big-bar"></div>
-                <div class="bar big-bar"></div>
-                <div class="bar big-bar"></div>
-            </button>
+            <a href="/" class="nav-button">Dashboard</a>
         </div>
-        <div class="titre" id="titre">
-            Graphs capteurs
+        <div class="titre">
+            Sensor Graphs
         </div>
-        <div class="big">
+        <div class="bntContainer">
+            <button class="nav-button" onclick="toggleSensorListOverlay('MeasurementListOverlay')">Show/Hide Datasets</button>
         </div>
     </div>
+
+    <div class="graphs-overlay" id="MeasurementListOverlay">
+        <div class="sensorListoverlay_container">
+            <div class="sensorListFormTitle">
+                <span class="sensorListoverlayTitle">Select Datasets</span>
+                <span id="closeMeasurementListBtn" class="sensorMesclose" onclick="toggleSensorListOverlay('MeasurementListOverlay')">&times;</span>
+            </div>
+            <div id="datasetSelection" class="dataset-selection">
+                <!-- This will be populated dynamically -->
+            </div>
+            <div class="buttons-row">
+                <button class="bnt_pop_up" onclick="applyDatasetSelection()">Apply</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="date-filter-container">
+        <div class="date-inputs">
+            <label for="startDate">Start Date:</label>
+            <input type="datetime-local" id="startDate" name="startDate">
+        </div>
+        <div class="date-inputs">
+            <label for="endDate">End Date:</label>
+            <input type="datetime-local" id="endDate" name="endDate">
+        </div>
+        <div class="date-button-container">
+            <button class="date-filter-button" onclick="applyDateFilter()">Apply</button>
+            <button class="date-filter-button" onclick="downloadData()">Download Data</button>
+        </div>
+    </div>
+
+    <div class="graph-container">
+        <div class="graph-panel">
+            <div class="graph-heading">
+                <span>Global View</span>
+                <div class="graph-tools">
+                    <button id="btn-global-download" onclick="downloadChart('global')" title="Download as image"><img src="{{ url_for('static', filename='Images/download.png') }}" alt="Download"></button>
+                    <button id="btn-global-reload" onclick="updateGlobalView()" title="Reload chart"><img src="{{ url_for('static', filename='Images/refresh.png') }}" alt="Reload"></button>
+                </div>
+            </div>
+            <div class="graph-wrapper">
+                <canvas id="globalChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="graph-container">
+        <div class="graph-row" id="detailChartsRow">
+            <!-- Graphs for each sensor -->
+            <div class="graph-panel detail-chart">
+                <div class="graph-heading">
+                    <span>Temperature</span>
+                    <div class="graph-tools">
+                        <button onclick="downloadChart('temperature')" title="Download as image"><img src="{{ url_for('static', filename='Images/download.png') }}" alt="Download"></button>
+                        <button onclick="updateDetailChart('temperature')" title="Reload chart"><img src="{{ url_for('static', filename='Images/refresh.png') }}" alt="Reload"></button>
+                    </div>
+                </div>
+                <div class="graph-wrapper">
+                    <canvas id="temperatureChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="graph-panel detail-chart">
+                <div class="graph-heading">
+                    <span>Humidity</span>
+                    <div class="graph-tools">
+                        <button onclick="downloadChart('humidity')" title="Download as image"><img src="{{ url_for('static', filename='Images/download.png') }}" alt="Download"></button>
+                        <button onclick="updateDetailChart('humidity')" title="Reload chart"><img src="{{ url_for('static', filename='Images/refresh.png') }}" alt="Reload"></button>
+                    </div>
+                </div>
+                <div class="graph-wrapper">
+                    <canvas id="humidityChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="graph-container">
+        <div class="graph-row">
+            <div class="graph-panel detail-chart">
+                <div class="graph-heading">
+                    <span>Pressure</span>
+                    <div class="graph-tools">
+                        <button onclick="downloadChart('pressure')" title="Download as image"><img src="{{ url_for('static', filename='Images/download.png') }}" alt="Download"></button>
+                        <button onclick="updateDetailChart('pressure')" title="Reload chart"><img src="{{ url_for('static', filename='Images/refresh.png') }}" alt="Reload"></button>
+                    </div>
+                </div>
+                <div class="graph-wrapper">
+                    <canvas id="pressureChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="graph-panel detail-chart">
+                <div class="graph-heading">
+                    <span>CO2</span>
+                    <div class="graph-tools">
+                        <button onclick="downloadChart('co2')" title="Download as image"><img src="{{ url_for('static', filename='Images/download.png') }}" alt="Download"></button>
+                        <button onclick="updateDetailChart('co2')" title="Reload chart"><img src="{{ url_for('static', filename='Images/refresh.png') }}" alt="Reload"></button>
+                    </div>
+                </div>
+                <div class="graph-wrapper">
+                    <canvas id="co2Chart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bas_page">
+        <div class="legend-container">
+            <div id="legendContainer" class="legends-wrapper">
+                <!-- Legends will be dynamically inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/scriptGraphs.js') }}"></script>
     
-    <div id ="addGraphFormContainer" class="sensorListoverlay   left">
-        
-        <div class="sensorListFormTitle">
-            <span class="sensorListoverlayTitle">Ajouter un nouveau graphique</span>
-            <span id="closeSensorListBtn" class="close-btn" onclick="toggleSensorListOverlay('addGraphFormContainer')">&times;</span>
-        </div>
-
-        <form id="addGraphForm" class = "form_container">
-            <div class ="setting">
-                <div class = "inline">
-                    <span class = "bold" >Titre :</span>
-                    <input class = "inputs" type="text" id="graphTitle" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphStartDate">Date de début :</span>
-                    <input class = "inputs" type="datetime-local" id="graphStartDate" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphEndDate">Date de fin :</span>
-                    <input class = "inputs" type="datetime-local" id="graphEndDate" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphLive">Live :</span>
-                    <input type="checkbox" id="graphLive">
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphLive">Grandeurs :</span>
-                </div>
-            </div>
-            <div id="grandeursContainer" class = "sensor-list1"></div>
-            <button class="save" type="submit">Ajouter</button>
-        </form>
-        
-    </div>
-
-
-    <div id="configModal" class="sensorListoverlay   left">
-            
-        <div class="sensorListFormTitle">
-            <span class="sensorListoverlayTitle">Configurer le graphique</span>
-            <span class="close-btn" onclick="toggleSensorListOverlay('configModal')">&times;</span>
-        </div>
-            
-        <form id="configForm" class = "form_container">
-            <div class ="setting">
-                <div class = "inline">
-                    <input type="hidden" id="configChartId">
-                    <span class = "bold" >Titre :</span>
-                    <input class = "inputs" type="text" id="configTitle" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphStartDate">Date de début :</span>
-                    <input class = "inputs" type="datetime-local" id="configStartDate" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphEndDate">Date de fin :</span>
-                    <input class = "inputs" type="datetime-local" id="configEndDate" required>
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphLive">Live :</span>
-                    <input type="checkbox" id="configLive">
-                </div>
-                <div class = "inline">
-                    <span class = "bold" for="graphLive">Grandeurs :</span>
-                </div>
-            </div>
-            <div id="configGrandeursContainer" class = "sensor-list1"></div>
-            <button class="save" type="submit">Appliquer</button>
-        </form>
-    </div>
-
-    <div class="container">
-        <div class="chart-container" id="chart-container">
-            <!-- Graphique pour chaque capteur -->
-        </div>
-    </div>
-
-    <div class="bas_page">Build by Robin Gorius for MDRS</div>
-    <script src="/static/js/scriptGraphs.js"></script>
 </body>
 </html>

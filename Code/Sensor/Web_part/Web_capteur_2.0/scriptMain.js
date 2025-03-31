@@ -1,4 +1,3 @@
-
 function mettreAJourSpans() {
    /* const donnees = {
         temp: (Math.floor(Math.random() * 20) + 15).toFixed(1), // Exemple de valeur de température
@@ -40,7 +39,7 @@ function deleteNetwork() {
             checkBox.checked = false;
             const ssid = txt.textContent; // Récupérer l'ID de l'élément
             SSIDToDelete[i] = ssid;
-            //txt.textContent = "Non enregistré";
+            //txt.textContent = "Not registered";
             item.remove();//remove the line from the list
         }
     });
@@ -189,7 +188,7 @@ function AddNetwork(){
         }
 
         if(!exist("success")){
-            const success = createMsg("Réseaux enregistré, le capteur va redémarrer", "success", "green");
+            const success = createMsg("Network registered, the sensor will restart", "success", "green");
             document.getElementById("passForm").insertBefore(success, document.getElementById("Connect"));
             deleteMessage("success", 2,3000);
         }
@@ -211,7 +210,7 @@ function AddNetwork(){
             document.getElementById('SSID_input').style.borderColor= "red"; 
 
             if(!exist("error_ssid")){
-                const msg = createMsg("Le nom du réseau doit contenir au moins 2 caractères", "error_ssid", "red");
+                const msg = createMsg("The network name must contain at least 2 characters", "error_ssid", "red");
                 document.getElementById("passForm").insertBefore(msg, document.getElementById("Connect"));
             }
         }
@@ -228,7 +227,7 @@ function AddNetwork(){
 
             if(!exist("error_pass")){
 
-                const msg = createMsg("Le mot de passe doit contenir au moins 8 caractères", "error_pass", "red");
+                const msg = createMsg("The password must contain at least 8 characters", "error_pass", "red");
                 document.getElementById("passForm").insertBefore(msg, document.getElementById("Connect"));
             }
         }
@@ -257,7 +256,7 @@ function ChangeInfos(){
         deleteMessage("fail_ssid",0,0);
         deleteMessage("fail_pass",0,0);
 
-        const msg = createMsg("Changements enregistrés", "success_param", "green");
+        const msg = createMsg("Changes saved", "success_param", "green");
         document.getElementById("paramForm").insertBefore(msg, document.getElementById("enregistrer"));
 
         deleteMessage("success_param",2, 3000);
@@ -269,7 +268,7 @@ function ChangeInfos(){
 
         if(!checkLenght(Name,2)){
             if(!exist("fail_name")){
-                const msg1 = createMsg("Le nom doit contenir au moins 2 caractères", "fail_name", "red");
+                const msg1 = createMsg("The name must contain at least 2 characters", "fail_name", "red");
                 document.getElementById("paramForm").insertBefore(msg1, document.getElementById("enregistrer"));
             }
         }
@@ -279,7 +278,7 @@ function ChangeInfos(){
 
         if(!checkLenght(AP_SSID,2)){
             if(!exist("fail_ssid")){
-                const msg2 = createMsg("Le nom du hot spot doit contenir au moins 2 caractères", "fail_ssid", "red");
+                const msg2 = createMsg("The hotspot name must contain at least 2 characters", "fail_ssid", "red");
                 document.getElementById("paramForm").insertBefore(msg2, document.getElementById("enregistrer"));
             }
         }
@@ -289,7 +288,7 @@ function ChangeInfos(){
 
         if(!checkLenght(AP_Pass,8)){
             if(!exist("fail_pass")){
-                const msg3 = createMsg("Le mot de passe doit contenir au moins 8 caractères", "fail_pass", "red");
+                const msg3 = createMsg("The password must contain at least 8 characters", "fail_pass", "red");
                 document.getElementById("paramForm").insertBefore(msg3, document.getElementById("enregistrer"));
             }
         }

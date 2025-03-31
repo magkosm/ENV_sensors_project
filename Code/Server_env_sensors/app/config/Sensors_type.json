@@ -8,52 +8,52 @@
             ],
             "measurements": {
                 "Temp": {
-                    "name": "Temp\u00e9rature",
+                    "name": "Temperature",
                     "unit": "\u00b0C"
                 },
                 "Hum": {
-                    "name": "Humidit\u00e9",
+                    "name": "Humidity",
                     "unit": "%"
                 },
                 "Pres": {
-                    "name": "Pression",
+                    "name": "Pressure",
                     "unit": "Pa"
                 },
                 "Lum": {
-                    "name": "Luminosit\u00e9",
+                    "name": "Luminosity",
                     "unit": "lx"
                 },
                 "FullLum": {
-                    "name": "Luminosit\u00e9 totale",
+                    "name": "Total Luminosity",
                     "unit": "s.s.u"
                 },
                 "Visible": {
-                    "name": "Luminosit\u00e9 visible",
+                    "name": "Visible Luminosity",
                     "unit": "s.s.u"
                 },
                 "IR": {
-                    "name": "Luminosit\u00e9 Infrarouge",
+                    "name": "Infrared Luminosity",
                     "unit": "s.s.u"
                 },
                 "CO2": {
-                    "name": "Concentration CO2",
+                    "name": "CO2 Concentration",
                     "unit": "ppm"
                 },
                 "VOC": {
-                    "name": "Indice VOC",
+                    "name": "VOC Index",
                     "unit": "s.s.u"
                 }
             }
         },
         {
-            "type": "Batterie monitor",
+            "type": "Battery monitor",
             "config": [
                 "ip",
                 "name"
             ],
             "measurements": {
                 "Vbatt": {
-                    "name": "Tension ",
+                    "name": "Voltage",
                     "unit": "V"
                 }
             }

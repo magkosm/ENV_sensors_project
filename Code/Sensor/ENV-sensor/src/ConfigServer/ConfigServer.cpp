@@ -148,7 +148,7 @@ void ConfigServer::handleNewNetwork(AsyncWebServerRequest *request, uint8_t *dat
     bool success = SPIFFSWifi->writeNetworkInfoToSPIFFS(ssid, pass,secu, userName, false);
     
     if(success){
-      request->send(200, "application/json", "{\"status\":\"success\",\"message\":\"Réseau enregistré\"}");
+      request->send(200, "application/json", "{\"status\":\"success\",\"message\":\"Network registered\"}");
     }
     else{
       request->send(503, "application/json", "{\"status\":\"error\",\"message\":\"Echec de l'enregistrement\"}");

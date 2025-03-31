@@ -2,24 +2,23 @@
 #define CONFIGWIFI_H
 
 /*
-Cette classe permet la gestion des réseaux Wifi de l'ESP en stockant les informations dans le gestionnaire de fichier embarqué (SPIFFS).
-Elle permet : 
--Gestion des réseaux Wifi enregistré
--Gestion de la connection au Wifi et gestion des erreurs de connexion
--Gestion des informations sur le capteur (Nom, AP SSID, AP Pass);
+This class allows the management of ESP WiFi networks by storing information in the embedded file manager (SPIFFS).
+It allows:
+-Management of registered WiFi networks
+-Management of WiFi connection and connection error handling
+-Management of sensor information (Name, AP SSID, AP Pass);
 
-Cette classe s'assure qu'il existe toujours un fichier de configuration dans le SPIFFS de l'ESP avant de démarrer afin d'éviter un bloquage du capteur. Les valuers par défauts sont :
--Nom : Capteur
--AP SSID : Capteur
--AP PASS : #MDRS311Sensors!
+This class ensures that there is always a configuration file in the ESP's SPIFFS before starting to avoid blocking the sensor. The default values are:
+-Name: Sensor
+-AP SSID: Sensor
+-AP PASS: #MDRS311Sensors!
 
- /!\ Cette implémentation d'un gestionnaire de mot de passe ne permet pas d'assurer la sécurité totale des informations de connexion (mot de passe) car ceci sont stockés directement dans un fichier .txt dans le SPIFFS
- Une amélioration futur sera d'implémenter un système de cryptage des fichier .txt
+ /!\ This implementation of a password manager cannot ensure total security of connection information (passwords) as they are stored directly in a .txt file in SPIFFS
+ A future improvement will be to implement a system for encrypting .txt files
 
-@Auteur : Robin Gorius
-@Date : 12/24
+@Author: Robin Gorius
+@Date: 12/24
 */
-
 
 #include "SPIFFS.h"
 #include <WiFi.h>
@@ -29,24 +28,24 @@ Cette classe s'assure qu'il existe toujours un fichier de configuration dans le 
 class ConfigWifi {
 
 public:
-    String nomCapteur;//Variables publique pour faciliter l'accès
+    String nomCapteur;//Public variables for easier access
     String ApName;
     String ApPass;
 
     int WifiMode; // 0 disconnected, 1 connected, 2 AP
 
-    bool begin();//initialise le SPIFFS et les variables de la classe
-    bool failToConnect();//Renvoi true si la connection au Wifi a échouée ou si aucune réponse n'est donnée par le routeur en moins de 20s
-    bool writeNetworkInfoToSPIFFS(String ssid, String pass, String secu, String user, bool connected);//Ecrit dans un fichier .txt les informations de connections du réseau. Si celui ci est connecté (connected = true) cette fonction écrit également l'ip statique du capteur, la défaut=lt gateway et le masque de sous réseau
-    bool deleteNetwork(String ssid);//Supprime du SPIFFS le réseau dont le nom est ssid, return true en cas de succès, false sinon
-    JsonDocument loadNetworks();//Renvoie le Json contenant toutes les informations de tout les réseaux stocké dans le SPIFFS
-    int connectFromSPIFFS(String SSID);//Se connecte au réseau WiFi SSID en utilisant les informations dans le SPIFFS et créer également l'instance DNS du capteur sur le réseau en utilisant son nom
-    int initWifiFromSPIFFS();//Compare les réseaux connu par l'ESP et stocké dans le SPIFFS aux réseaux disponible et essai de se connecter au premier réseau qui correspond et utilisant connectFromSPIFFS(SSID)
-    bool writeConfigFile(String SSID, String pass, String name);//Ecrit le fichier de configuration du capteur
-    bool configureAP();//Configure le point d'accès en fonction des informations contenues dans Config.csv dans le SPIFFS
-    bool printSPIFFS();//Affiche le contenue du SPIFFS dans le terminal
-    String getEncryptionType(int encryptionType);//Convertit le code de la bibliothèque WiFi correspondant au type de sécurité d'un réseau en String
-    String wifiStatString(int index); //Convertit le code de la bibliothèque WiFi correspondant au statut du WiFi en String
+    bool begin();//initializes SPIFFS and class variables
+    bool failToConnect();//Returns true if WiFi connection failed or if no response is received from the router in less than 20s
+    bool writeNetworkInfoToSPIFFS(String ssid, String pass, String secu, String user, bool connected);//Writes network connection information to a .txt file. If it is connected (connected = true) this function also writes the static IP of the sensor, the default gateway and the subnet mask
+    bool deleteNetwork(String ssid);//Deletes the network named ssid from SPIFFS, returns true on success, false otherwise
+    JsonDocument loadNetworks();//Returns the Json containing all information of all networks stored in SPIFFS
+    int connectFromSPIFFS(String SSID);//Connects to the SSID WiFi network using information in SPIFFS and also creates the sensor's DNS instance on the network using its name
+    int initWifiFromSPIFFS();//Compares networks known by ESP and stored in SPIFFS to available networks and tries to connect to the first matching network using connectFromSPIFFS(SSID)
+    bool writeConfigFile(String SSID, String pass, String name);//Writes the sensor configuration file
+    bool configureAP();//Configures the access point based on information contained in Config.csv in SPIFFS
+    bool printSPIFFS();//Displays the contents of SPIFFS in the terminal
+    String getEncryptionType(int encryptionType);//Converts the WiFi library code corresponding to a network's security type to String
+    String wifiStatString(int index); //Converts the WiFi library code corresponding to WiFi status to String
 };
 
 #endif

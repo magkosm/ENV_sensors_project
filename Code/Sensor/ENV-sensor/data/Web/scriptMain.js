@@ -1,10 +1,10 @@
 function majSensors() {   
     (async () => {
-        const toSend = { do: "getMesurements" }; // Remplace par les données à envoyer
-        const donnees = await sendRequest('getMesurements', toSend); // Remplace 'endpoint' par le nom de la requête
-        console.log('Réponse traitée:', donnees); // Utilise les données JSON reçues
+        const toSend = { do: "getMesurements" }; // Remplace par the data to send
+        const donnees = await sendRequest('getMesurements', toSend); // Remplace 'endpoint' by the name of the request
+        console.log('Réponse traitée:', donnees); // Utilise the JSON data received
         
-        // Remplir chaque span avec la valeur correspondante
+        // Remplir chaque span with the corresponding value
         document.getElementById("temp").textContent = parseFloat(donnees.Temp.LastVal).toFixed(2);
         document.getElementById("hum").textContent = parseFloat(donnees.Hum.LastVal).toFixed(2);
         document.getElementById("press").textContent = (parseFloat(donnees.Pres.LastVal)/100.0).toFixed(2);
@@ -25,14 +25,14 @@ function deleteNetwork() {
    
     var SSIDToDelete = {};
 
-    // Parcourir chaque élément de la liste
+    // Parcourir chaque element of the list
 
     items.forEach(function(item) {
         const checkBox = item.querySelector(".check");
         const txt = item.querySelector(".netName");
         if (checkBox.checked) {
         
-            const ssid = txt.textContent; // Récupérer l'ID de l'élément
+            const ssid = txt.textContent; // Récupérer l'ID of the element
             SSIDToDelete[ssid] = "true";
         }
     });
@@ -42,7 +42,7 @@ function deleteNetwork() {
         console.log("Sending request");
         (async () => {
             const resp = await sendRequest('deleteNetwork', SSIDToDelete, true); 
-            console.log('Réponse traitée:', resp); // Utilise les données JSON reçues
+            console.log('Réponse traitée:', resp); // Utilise the JSON data received
             
             if(resp.status == "success"){
                 items.forEach(function(item) {
@@ -52,12 +52,12 @@ function deleteNetwork() {
                         item.remove();
                     }
                 });
-                const success = createMsg("Réseaux supprimé", "success_del", "green");
+                const success = createMsg("Networks deleted", "success_del", "green");
                 document.getElementById("delForm").insertBefore(success, document.getElementById("Suppr"));
                 deleteMessage("success_del", 2,3000);
             }
             else{
-                const failure = createMsg("Un problème s'est produit lors de l'enregistrement", "pbs", "red");
+                const failure = createMsg("An error occurred during registration", "pbs", "red");
                 document.getElementById("delForm").insertBefore(failure, document.getElementById("Suppr"));
                 deleteMessage("pbs", 2,3000);
             }
@@ -67,7 +67,7 @@ function deleteNetwork() {
     }
     else{
         if(!exist("fail_del")){
-            const msg = createMsg("Aucun réseau sélectionné", "fail_del", "red");
+            const msg = createMsg("No network selected", "fail_del", "red");
             document.getElementById("delForm").insertBefore(msg, document.getElementById("Suppr"));
             deleteMessage("fail_del", 2,3000);
         }
@@ -93,7 +93,7 @@ async function sendRequest(requestName, data) {
         }
 
         const text = await response.text(); // Récupérer la réponse sous forme de texte
-        console.log('Réponse brute:', text); // Affiche la réponse pour inspection
+        console.log('Réponse brute:', text); // Affiche la réponse for inspection
         
         let jsonData;
 
@@ -101,15 +101,15 @@ async function sendRequest(requestName, data) {
             jsonData = JSON.parse(text); // Tente de parser en JSON
         } catch (error) {
             console.error('Erreur de parsing JSON:', error);
-            return null; // Retourne null si le parsing échoue
+            return null; // Retourne null if the parsing fails
         }
 
-        console.log('Données JSON:', jsonData); // Affiche les données JSON si le parsing réussit
+        console.log('Données JSON:', jsonData); // Affiche les données JSON if the parsing succeeds
         return jsonData; // Retourne les données JSON
     } 
     catch (error) {
         console.error('Erreur lors de la requête :', error);
-        return null; // Retourne null en cas d'erreur
+        return null; // Retourne null in case of error
     }
 }
 
@@ -138,7 +138,7 @@ function createMsg(label, id, color){
 
 function fadeOut(element, duration) {
     var opacity = 0.5; // Opacité initiale pleine
-    const interval = 0.05; // Intervalle de temps en ms entre chaque diminution
+    const interval = 0.05; // Intervalle de temps en ms between each decrease
     const step = opacity/(duration/interval);
 
     const fadeEffect = setInterval(function() {
@@ -146,7 +146,7 @@ function fadeOut(element, duration) {
             opacity -= step; // Réduit l'opacité progressivement
             element.style.opacity = String(opacity);
         } else {
-            clearInterval(fadeEffect); // Arrête l'effet une fois à 0
+            clearInterval(fadeEffect); // Arrête l'effet once to 0
             element.remove();
         }
     }, interval);
@@ -205,8 +205,8 @@ function AddNetwork(){
             toSend.USER = user;
         }
 
-        const resp = await sendRequest('NewNetwork', toSend); // Remplace 'endpoint' par le nom de la requête
-        console.log('Réponse traitée:', resp); // Utilise les données JSON reçues
+        const resp = await sendRequest('NewNetwork', toSend); // Remplace 'endpoint' by the name of the request
+        console.log('Réponse traitée:', resp); // Utilise the JSON data received
         
         if(resp.status == "success"){
             document.getElementById('SSID_input').value = "";
@@ -214,7 +214,7 @@ function AddNetwork(){
             storedNetworks();
         }
         else{
-            const success = createMsg("Un problème s'est produit lors de l'enregistrement", "pbe", "red");
+            const success = createMsg("An error occurred during registration", "pbe", "red");
             document.getElementById("passForm").insertBefore(success, document.getElementById("Connect"));
             deleteMessage("pbe", 2,3000);
         }
@@ -241,8 +241,8 @@ function ChangeInfos(){
                 Name : Name
             };
             console.log(JSON.stringify(toSend));
-            const resp = await sendRequest('NewInfos', toSend); // Remplace 'endpoint' par le nom de la requête
-            console.log('Réponse traitée:', resp); // Utilise les données JSON reçues
+            const resp = await sendRequest('NewInfos', toSend); // Remplace 'endpoint' by the name of the request
+            console.log('Réponse traitée:', resp); // Utilise the JSON data received
         
             if(resp.status == "success"){
                 deleteMessage("fail_name",0,0);
@@ -250,14 +250,14 @@ function ChangeInfos(){
                 deleteMessage("fail_pass",0,0);
                 
                 if(!exist("success_param")){
-                    const msg = createMsg("Changements enregistrés", "success_param", "green");
+                    const msg = createMsg("Changes saved", "success_param", "green");
                     document.getElementById("paramForm").insertBefore(msg, document.getElementById("enregistrer"));
                     deleteMessage("success_param",2, 3000);
                 }
 
             }
             else{
-                const msg = createMsg("Problème d'enregistrement, réessayer", "fail_param", "red");
+                const msg = createMsg("Registration problem, try again", "fail_param", "red");
                 document.getElementById("paramForm").insertBefore(msg, document.getElementById("enregistrer"));
 
                 deleteMessage("fail_param",2, 3000);
@@ -271,7 +271,7 @@ function ChangeInfos(){
 
         if(!checkLenght(Name,2)){
             if(!exist("fail_name")){
-                const msg1 = createMsg("Le nom doit contenir au moins 2 caractères", "fail_name", "red");
+                const msg1 = createMsg("The name must contain at least 2 characters", "fail_name", "red");
                 document.getElementById("paramForm").insertBefore(msg1, document.getElementById("enregistrer"));
             }
         }
@@ -281,7 +281,7 @@ function ChangeInfos(){
 
         if(!checkLenght(AP_SSID,2)){
             if(!exist("fail_ssid")){
-                const msg2 = createMsg("Le nom du hot spot doit contenir au moins 2 caractères", "fail_ssid", "red");
+                const msg2 = createMsg("The hotspot name must contain at least 2 characters", "fail_ssid", "red");
                 document.getElementById("paramForm").insertBefore(msg2, document.getElementById("enregistrer"));
             }
         }
@@ -291,7 +291,7 @@ function ChangeInfos(){
 
         if(!checkLenght(AP_Pass,8)){
             if(!exist("fail_pass")){
-                const msg3 = createMsg("Le mot de passe doit contenir au moins 8 caractères", "fail_pass", "red");
+                const msg3 = createMsg("The password must contain at least 8 characters", "fail_pass", "red");
                 document.getElementById("paramForm").insertBefore(msg3, document.getElementById("enregistrer"));
             }
         }
@@ -310,7 +310,7 @@ function scanNetworks() {
         const networkContainer = document.getElementById("networks");
         networkContainer.innerHTML = "";
 
-        const msg = createMsg("Scan en cours", "scanning", "green");
+        const msg = createMsg("Scan in progress", "scanning", "green");
         document.getElementById("scanBox").insertBefore(msg, document.getElementById("Scanner"));
 
         (async () => {
@@ -331,9 +331,9 @@ function scanNetworks() {
                 while (true) {
                     // Vérifier le délai d'attente (60 secondes max)
                     if (Date.now() - startTime > 60000) {
-                        console.log("Scan trop long, échec du scan après 1 minute");
+                        console.log("Scan too long, scan failed after 1 minute");
                         deleteMessage("scanning", 0, 0);
-                        const msg = createMsg("Temps de scan trop long. Échec.", "fail_scan", "red");
+                        const msg = createMsg("Scan too long. Failure.", "fail_scan", "red");
                         document.getElementById("scanBox").insertBefore(msg, document.getElementById("Scanner"));
                         deleteMessage("fail_scan", 3, 3000);
                         scanInProgress = false;
@@ -342,14 +342,14 @@ function scanNetworks() {
 
                     scanResults = await sendRequest('GetScanResults', {}); // Demander les résultats du scan
                     if (scanResults.s === "in_progress") {
-                        console.log("Scan en cours, réessai dans 1 seconde...");
+                        console.log("Scan in progress, retrying in 1 second...");
                         await new Promise(resolve => setTimeout(resolve, 1000)); // Attendre 1 seconde avant de réessayer
                     } 
                     else if (scanResults.s === "success") {
                         // Le scan est terminé, traiter les résultats
                         const keys = Object.keys(scanResults);
                         keys.forEach(function(SSID) {
-                            if (SSID !== "s") { // Ignorer la clé "s" contenant le message de succès
+                            if (SSID !== "s") { // Ignorer la clé "s" containing the success message
                                 const RSSI = scanResults[SSID]["RSSI"];
                                 const secuType = scanResults[SSID]["SECU_TYPE"];
 
@@ -378,9 +378,9 @@ function scanNetworks() {
                     } 
                     else {
                         // Si un autre état d'erreur est retourné
-                        console.log("Erreur durant le scan:", scanResults.message);
+                        console.log("Scan error:", scanResults.message);
                         deleteMessage("scanning", 0, 0);
-                        const msg = createMsg("Echec du scan", "fail_scan", "red");
+                        const msg = createMsg("Scan failure", "fail_scan", "red");
                         document.getElementById("scanBox").insertBefore(msg, document.getElementById("Scanner"));
                         deleteMessage("fail_scan", 3, 3000);
                         scanInProgress = false;
@@ -390,7 +390,7 @@ function scanNetworks() {
             } 
             else {
                 // Gestion de l'erreur de démarrage du scan
-                const msg = createMsg("Echec du démarrage du scan", "fail_scan", "red");
+                const msg = createMsg("Scan start failure", "fail_scan", "red");
                 document.getElementById("scanBox").insertBefore(msg, document.getElementById("Scanner"));
                 deleteMessage("fail_scan", 3, 3000);
                 scanInProgress = false;
@@ -418,7 +418,7 @@ function generateSignalBars(rssi) {
 
 function showPopup(networkName, security) {
     console.log(security);
-    document.getElementById("popupTitle").innerText = `Connexion à ${networkName}`;
+    document.getElementById("popupTitle").innerText = `Connection to ${networkName}`;
     document.getElementById("User_input").style.display = security === "WPA2_Enterprise" ? "block" : "none";
     document.getElementById("popupOverlay").style.display = "flex";
     document.getElementById("Secu_input").value = security;
@@ -448,7 +448,7 @@ function storedNetworks(){
     netList.innerHTML = "";
     console.log("Deleting old list");
 
-    const msg = createMsg("récupération des réseaux enregitrés en cours", "reading", "green");
+    const msg = createMsg("Retrieving saved networks in progress", "reading", "green");
     document.getElementById("delForm").insertBefore(msg, document.getElementById("Suppr"));
     
     (async () => {
@@ -472,7 +472,7 @@ function storedNetworks(){
                 "s": "success"
               }
             */
-        console.log('Réponse traitée:', networks); // Utilise les données JSON reçues
+        console.log('Réponse traitée:', networks); // Utilise the JSON data received
 
         deleteMessage("reading",0,0);
 
@@ -518,18 +518,18 @@ function storedNetworks(){
                         </div>
                         <div class="network-details" id="${SSID}_Details">
                             <div class="column">
-                                ${Rsecu == "WPA2_Entreprise" ? `<p>Nom d'utilisateur :<br><i>${Ruser}</i></p>` : ""}
-                                <p>Mot de passe :<br><i>
+                                ${Rsecu == "WPA2_Entreprise" ? `<p>User name :<br><i>${Ruser}</i></p>` : ""}
+                                <p>Password :<br><i>
                                 <span class="password-container">
                                     <button class="toggle-password" onclick="togglePassword('${SSID}_Pass', this)">👁️</button>
                                     <span class="password" id="${SSID}_Pass" class="hidden-password" data-password="${Rpass}">••••••••••••</span>
                                 </span>
                                 </i>
                                 </p>
-                                <p>IP du capteur :<br><i> ${RIp}</i></p>
+                                <p>Sensor IP :<br><i> ${RIp}</i></p>
                             </div>
                             <div class="column center-ligne">
-                                <p>Type de sécurité :<br><i>${Rsecu}</i></p>
+                                <p>Security type :<br><i>${Rsecu}</i></p>
                                 <p>Default Gateway :<br><i> ${Rdefgat}</i></p>
                                 <p>Subnet Mask :<br><i> ${Rsubnet}</i></p>
                 
@@ -543,12 +543,12 @@ function storedNetworks(){
             });
         }
         else{//error during the scan
-            const msg = createMsg("Echec du chargement", "fail_load", "red");
+            const msg = createMsg("Loading failure", "fail_load", "red");
             document.getElementById("delForm").insertBefore(msg, document.getElementById("Suppr"));
 
             deleteMessage("fail_load",3, 3000);
         }
-})();
+    })();
 }
 
 function toggleDetails(detailsId, button) {
@@ -556,25 +556,25 @@ function toggleDetails(detailsId, button) {
     
     if (details.style.display === "none" || details.style.display === "") {
     details.style.display = "block";
-    button.textContent = "🔼"; // Change l'icône en flèche vers le haut
+    button.textContent = "🔼"; // Change icon to up arrow
     } else {
     details.style.display = "none";
-    button.textContent = "🔽";// Change l'icône en flèche vers le bas
+    button.textContent = "🔽";// Change icon to down arrow
     }
-} 
-// Fonction pour afficher/masquer le mot de passe
+}
+// Function to show/hide password
 function togglePassword(passwordId, toggleButton) {
     const passwordElement = document.getElementById(passwordId);
         
-    // Vérifier si le mot de passe est masqué ou visible
+    // Check if password is hidden or visible
     if (passwordElement.classList.contains("hidden-password")) {
-    passwordElement.classList.remove("hidden-password"); // Rendre le mot de passe visible
-    passwordElement.textContent = passwordElement.dataset.password; // Afficher le mot de passe complet
-    toggleButton.textContent = "🙈"; // Mettre à jour le bouton pour masquer le mot de passe
+    passwordElement.classList.remove("hidden-password"); // Make password visible
+    passwordElement.textContent = passwordElement.dataset.password; // Show complete password
+    toggleButton.textContent = "🙈"; // Update button to hide password
     } else {
-    passwordElement.classList.add("hidden-password"); // Masquer le mot de passe
-    passwordElement.textContent = "••••••••••••"; // Afficher des points
-    toggleButton.textContent = "👁️"; // Mettre à jour le bouton pour afficher le mot de passe
+    passwordElement.classList.add("hidden-password"); // Hide password
+    passwordElement.textContent = "••••••••••••"; // Show dots
+    toggleButton.textContent = "👁️"; // Update button to show password
     }
 }
   
@@ -582,7 +582,7 @@ function loadConfig(){
 
     console.log("loading config ");
 
-    const msg = createMsg("récupération des informations du module", "Rconfig", "green");
+    const msg = createMsg("Retrieving module information", "Rconfig", "green");
     document.getElementById("paramForm").insertBefore(msg, document.getElementById("enregistrer"));
     
     (async () => {
@@ -590,8 +590,8 @@ function loadConfig(){
             do : "loadInfos"
         };
         console.log("Sending request to server");
-        const infos = await sendRequest('LoadConfig', toSend); // Remplace 'endpoint' par le nom de la requête
-        console.log('Réponse traitée:', infos); // Utilise les données JSON reçues
+        const infos = await sendRequest('LoadConfig', toSend); // Remplace 'endpoint' by the name of the request
+        console.log('Réponse traitée:', infos); // Utilise the JSON data received
 
         deleteMessage("Rconfig",0,0);
 
@@ -603,7 +603,7 @@ function loadConfig(){
 
         }
         else{//error during the scan
-            const msg = createMsg("Echec du chargement", "fail_load", "red");
+            const msg = createMsg("Loading failure", "fail_load", "red");
             document.getElementById("paramForm").insertBefore(msg, document.getElementById("enregistrer"));
 
             deleteMessage("fail_load",3, 3000);
@@ -611,20 +611,20 @@ function loadConfig(){
     })();
 }
 
-// Fonction pour afficher/masquer l'overlay
+// Function to show/hide overlay
 function toggleSensorListOverlay(overlayId) {
     const sensorListOverlay = document.getElementById(overlayId);
     sensorListOverlay.style.display = sensorListOverlay.style.display === "block" ? "none" : "block";
 }
 
-// Fonction pour afficher/masquer le contenu associé à un module
+// Function to show/hide content associated with a module
 function toggleSensor(sensorId, bntId) {
     const sensorDiv = document.getElementById(sensorId);
     const button = document.getElementById(bntId);
     if (sensorDiv) {
         const isHidden = sensorDiv.style.display === "none";
         sensorDiv.style.display = isHidden ? "flex" : "none";
-        button.innerHTML = isHidden ? "🙈" : "👁️";
+        button.innerHTML = isHidden ? "��️" : "👁️";
     }
 }
 
@@ -632,17 +632,17 @@ function hide(id){
     document.getElementById(id).style.display = "none";
 }
 
-document.addEventListener('DOMContentLoaded', function() {//bouton enregistrer
+document.addEventListener('DOMContentLoaded', function() {//save button
     hide("delForm");
     hide("paramForm");
     hide("scanBox");
 });
 
-// Initialiser le mot de passe dans un data attribute pour pouvoir le récupérer
+// Initialize password in a data attribute to be able to retrieve it
 document.querySelectorAll('.password').forEach(password => {
-    password.dataset.password = password.textContent; // Stocker le mot de passe original
-    password.classList.add('hidden-password'); // Par défaut, masquer le mot de passe
-    password.textContent = "••••••••••••"; // Initialiser l'affichage du mot de passe avec des points
+    password.dataset.password = password.textContent; // Store original password
+    password.classList.add('hidden-password'); // Hide password by default
+    password.textContent = "••••••••••••"; // Initialize password display with dots
 });
 
 document.addEventListener('DOMContentLoaded', function() {//bouton supprimer
@@ -653,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function() {//bouton connecter
     document.getElementById('connect').addEventListener('click', AddNetwork);
 });
 
-document.addEventListener('DOMContentLoaded', function() {//bouton enregistrer
+document.addEventListener('DOMContentLoaded', function() {//save button
     document.getElementById('enregistrer').addEventListener('click', ChangeInfos);
 });
 

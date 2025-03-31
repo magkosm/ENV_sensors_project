@@ -21,21 +21,21 @@ async function loadConfig() {
     return { config, sensorTypes };
 }
 
-// Fonction pour vérifier le mot de passe
+// Function to check password
 function checkPassword() {
     console.log("checkPassword");
-    const correctPassword = "Inge>Astro";// Mot de passe correct (à remplacer par votre mot de passe réel)
+    const correctPassword = "Inge>Astro";// Correct password (replace with your actual password)
     const password = document.getElementById('passwordField').value;
     console.log(password);
-    if (password == correctPassword) { // Remplacez "votre_mot_de_passe" par le mot de passe réel
-        console.log("Mot de passe correct.");
+    if (password == correctPassword) { // Replace "your_password" with the actual password
+        console.log("Password correct.");
         enableDeleteButtons();
     } else {
-        alert("Mot de passe incorrect.");
+        alert("Incorrect password.");
     }
 }
 
-// Fonction pour afficher/masquer le mot de passe
+// Function to show/hide password
 function togglePasswordVisibility(passId, bntId) {
     const passwordInput = document.getElementById(passId);
     const toggleButton = document.getElementById(bntId);
@@ -73,7 +73,7 @@ function disableDeleteButtons() {
     });
 }
 
-// Fonction pour afficher ou masquer le champ de saisie du mot de passe
+// Function to show or hide password input field
 function togglePasswordField() {
     const passwordField = document.getElementById('passwordFieldContainer');
     const checkbnt = document.getElementById('checkPasswordBtn');
@@ -349,7 +349,7 @@ function toggleSensorListOverlay(overlayId) {
     }
 }
 
-// Fonction pour afficher ou masquer une grandeur mesurée
+// Function to show or hide a measured value
 function toggleSensor(sensorId, buttonId) {
     const sensorElement = document.getElementById(sensorId);
     const buttonElement = document.getElementById(buttonId);
@@ -452,7 +452,7 @@ function majSensors() {
     })();
 }
 
-// Fonction pour générer un hash à partir d'une chaîne de caractères
+// Function to generate a hash from a string
 function hashString(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {
@@ -595,11 +595,11 @@ function openGraphPage() {
     }
 }
 
-// Surveiller les changements dans localStorage pour revenir à l'onglet principal
+// Monitor localStorage changes to return to main tab
 window.addEventListener('storage', function(event) {
     if (event.key === "returnToMain" && event.newValue === "true") {
-        mainTab.focus();  // Donne le focus à l'onglet principal
-        localStorage.removeItem("returnToMain");  // Réinitialise la clé pour éviter des comportements inattendus
+        mainTab.focus();  // Give focus to main tab
+        localStorage.removeItem("returnToMain");  // Reset key to avoid unexpected behavior
     }
 });
 

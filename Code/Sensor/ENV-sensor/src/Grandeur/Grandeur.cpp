@@ -1,6 +1,6 @@
 #include "Grandeur.h"
 
-// Constructeur
+// Constructor
 Grandeur::Grandeur(String gName, float off) : 
   name(gName), 
   offset(off), 
@@ -14,7 +14,7 @@ Grandeur::Grandeur(String gName, float off) :
 {}
 
 
-// Méthodes d'accès
+// Access methods
 float Grandeur::getMin() const {
     return min;
 }
@@ -39,7 +39,7 @@ float Grandeur::getLastVal() const {
     return lastVal;
 }
 
-// Mise à jour des données du capteur
+// Update sensor data
 void Grandeur::update() {
 
   if(newVal != -1){
@@ -60,7 +60,7 @@ void Grandeur::update() {
   }
 }
 
-// Réinitialisation des données
+// Reset data
 void Grandeur::reset() {
     min = lastVal;
     max = lastVal;
@@ -70,7 +70,7 @@ void Grandeur::reset() {
     moy = lastVal;
 }
 
-// Affichage des données du capteur
+// Display sensor data
 void Grandeur::print(){
     Serial.print(name);
     Serial.print(" -> ");

@@ -5,9 +5,9 @@
 #include <ArduinoJson.h>
 
 /*
-Cette classe permet de réaliser une étude statistique simple (très) sur les mesures issues de capteurs sur un temps données
-@Auteur : Robin Gorius
-@Date : 12/24
+This class allows performing a simple (very) statistical study on sensor measurements over a given time
+@Author: Robin Gorius
+@Date: 12/24
 */
 class Grandeur {
 private:
@@ -22,15 +22,15 @@ private:
     int nv_mes;
     float raw;
 
-    float offset;//étalonnage de la grandeur avec un gain SOUSTRAIT au mesures brutes. Si le capteur lit 25 au lieu de 20 mettre un gain de 5, si  le capteur lit 20 au lieu de 25 mettre un gain de -5!
+    float offset;//calibration of the magnitude with a gain SUBTRACTED from raw measurements. If the sensor reads 25 instead of 20 put a gain of 5, if the sensor reads 20 instead of 25 put a gain of -5!
 
 public:
     float newVal = -1;
 
-    // Constructeur
+    // Constructor
     Grandeur(String gName, float off);
 
-    // Getteurs
+    // Getters
     float getMin() const;
     float getMax() const;
     float getMoy() const;
@@ -38,11 +38,11 @@ public:
     float getRaw() const;
     float getLastVal() const;
 
-    void update();// Mise à jour des données du capteur
-    void reset();// Réinitialisation des données pour éviter les overflow et autres joyeuseries
-    void print();// Affichage des données du capteur
+    void update();// Update sensor data
+    void reset();// Reset data to avoid overflow and other issues
+    void print();// Display sensor data
 
-    JsonDocument toJson(); //Convertit les données stockée en un JSON
+    JsonDocument toJson(); //Convert stored data to JSON
 };
 
 #endif // GRANDEUR_H

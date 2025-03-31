@@ -1,6 +1,6 @@
 import csv
 
-def csv_to_dico(csv_file):#chaque ligne du dico est une ligne du csv, les clefs sont les entêtes de chaque colonne
+def csv_to_dico(csv_file):#each line of the dictionary is a line of the csv, the keys are the headers of each column
     data_dico = []
     with open(csv_file, 'r', newline='') as file:
         reader = csv.DictReader(file)

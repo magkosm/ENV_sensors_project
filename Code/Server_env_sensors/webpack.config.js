@@ -1,19 +1,19 @@
 const path = require('path');
-const TerserPlugin = require('terser-webpack-plugin'); // Importer le plugin Terser
+const TerserPlugin = require('terser-webpack-plugin'); // Import the Terser plugin
 
 module.exports = {
-  entry: './src/scriptGraphsRaw.js', // Le fichier d'entrée pour Webpack
+  entry: './src/scriptGraphsRaw.js', // Input file for Webpack
   output: {
-    filename: 'scriptGraphs.js', // Nom du fichier de sortie (le bundle compilé)
-    path: path.resolve(__dirname, 'app/static/js') // Dossier où le bundle sera généré
+    filename: 'scriptGraphs.js', // Output file name (the compiled bundle)
+    path: path.resolve(__dirname, 'app/static/js') // Directory where the bundle will be generated
   },
-  mode: 'production', // Mode production
+  mode: 'production', // Production mode
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin({
       terserOptions: {
         compress: {
-          drop_console: true, // Supprime les appels console.log
+          drop_console: true, // Remove console.log calls
         },
       },
     })],
@@ -21,12 +21,12 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/,              // Fichier à traiter (tout fichier .js)
-        exclude: /node_modules/,    // Ne pas traiter les fichiers dans node_modules
+        test: /\.js$/,              // Files to process (all .js files)
+        exclude: /node_modules/,    // Don't process files in node_modules
         use: {
-          loader: 'babel-loader',   // Utiliser Babel pour la transpilation
+          loader: 'babel-loader',   // Use Babel for transpilation
           options: {
-            presets: ['@babel/preset-env'] // Utiliser le preset pour la transpilation vers une version compatible des navigateurs
+            presets: ['@babel/preset-env'] // Use the preset for transpilation to a compatible browser version
           }
         }
       }

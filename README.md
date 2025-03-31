@@ -1,5 +1,6 @@
 **Date**: 10/2024 - 01/2025  
 **Author**: Robin GORIUS  
+***Prelimenery Translations*** Michail Magkos
 
 These sensors were initially created to measure environmental variables in the Mars Desert Research Station in Utah for the CoreData set.  
 As they are meant to be used by French students from future MDRS crews, a lot of documentation and code comments are in French.  

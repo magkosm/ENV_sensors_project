@@ -1,68 +1,68 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styleMain.css">
     <script src="scriptMain.js"></script>
-    <title>Gestionnaire réseau</title>
+    <title>Network Manager</title>
 </head>
 <body>
-    <div class = "titre"> Gestionnaire réseaux </div>
+    <div class = "titre"> Network Manager </div>
     <div class="container">
         <div class="box" id = "delForm">
-            <p class = "boxTitle"> Réseaux enregistrés </p>
+            <p class = "boxTitle"> Saved Networks </p>
             <div class="scrollable-list">
                 <ul id = "savednet">
                 </ul>
             </div>
-            <button type='submit' id = "Suppr" class =  "bnt"  > Supprimer </button>
+            <button type='submit' id = "Suppr" class =  "bnt"  > Delete </button>
         </div>
         <div class="box" id = "scanBox">
-            <p class = "boxTitle"> Réseaux disponibles </p>
+            <p class = "boxTitle"> Available Networks </p>
             <div class="scrollable-list">
                 <ul id = "Netlist">
                 </ul>
             </div>
-            <button type='submit' class =  "bnt"  id = "Scanner"> Scanner </button>
+            <button type='submit' class =  "bnt"  id = "Scanner"> Scan </button>
         </div>
         <div class="box" id = "passForm">
-            <p class = "boxTitle"> Connexion </p>
+            <p class = "boxTitle"> Connection </p>
                 <ul >
-                    <li>Nom du réseau:  <input name='ssid' length = 32 required class =   "inputs" id = "SSID_input" title = "SSID need to be at least 2 caracters"></li>
-                    <li>Mot de passe: <input type =   "password"   name='pass' length = 64 required class =   "inputs" id = "Pass_input" title = "Password need to be at least 8 caracters" ></li>
+                    <li>Network name:  <input name='ssid' length = 32 required class =   "inputs" id = "SSID_input" title = "SSID need to be at least 2 characters"></li>
+                    <li>Password: <input type =   "password"   name='pass' length = 64 required class =   "inputs" id = "Pass_input" title = "Password need to be at least 8 characters" ></li>
                         
                 </ul>
-               <button type='submit' class =  "bnt"  id = "Connect">Se connecter </button>
+               <button type='submit' class =  "bnt"  id = "Connect">Connect </button>
             
         </div>
         <div class="box" id = "paramForm">
-            <p class = "boxTitle "> Informations </p>
+            <p class = "boxTitle "> Information </p>
             <ul>
-                <li>Nom du capteur:  <input name='name' minlength="2" required class = "inputs" id = "Name"  ></li>
-                <li>Nom du hot spot: <input   name='hot_spot_ssid' minlength="2" required class =  "inputs" id = "AP_SSID" ></li>
-                <li>Mot de passe: <input type =   "hot_spot_password"   name='pass' minlength="8" required class = "inputs" id = "AP_Pass" ></li>
+                <li>Sensor name:  <input name='name' minlength="2" required class = "inputs" id = "Name"  ></li>
+                <li>Hotspot name: <input   name='hot_spot_ssid' minlength="2" required class =  "inputs" id = "AP_SSID" ></li>
+                <li>Password: <input type =   "hot_spot_password"   name='pass' minlength="8" required class = "inputs" id = "AP_Pass" ></li>
                 
             </ul>
-            <button type='submit' class =  "bnt"  id = "enregistrer"> Enregistrer </button>
+            <button type='submit' class =  "bnt"  id = "enregistrer"> Save </button>
         </div>
         <div class="box">
-            <p class = "boxTitle"> Données des capteurs </p>
+            <p class = "boxTitle"> Sensor Data </p>
             <div class = "sensor-grid">
                 <div class = "sensor">
-                    <p class = "dataType">Température</p>
+                    <p class = "dataType">Temperature</p>
                     <p class="reading"><span id="temp"></span> &deg;C</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Humidité</p>
+                    <p class = "dataType">Humidity</p>
                     <p class="reading"><span id="hum"></span> &percnt;</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Luminosité</p>
+                    <p class = "dataType">Luminosity</p>
                     <p class="reading"><span id="lum"></span> SSU</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Pression</p>
+                    <p class = "dataType">Pressure</p>
                     <p class="reading"><span id="press"></span> hPa</p>
                 </div>
                 <div class = "sensor">
@@ -73,30 +73,30 @@
            <div class = "bottom"></div>
         </div>
         <div class="box">
-            <p class = "boxTitle"> À propos </p>
+            <p class = "boxTitle"> About </p>
             <div class = "sensor-grid">
                 <div class = "sensor">
                     <p class = "dataType">Version</p>
                     <p class="reading"> 2.0 </p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Sortie le</p>
+                    <p class = "dataType">Released on</p>
                     <p class="reading">07/10/2024</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Auteur</p>
+                    <p class = "dataType">Author</p>
                     <p class="reading">Robin Gorius</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Ville</p>
+                    <p class = "dataType">City</p>
                     <p class="reading">Toulouse</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Planète</p>
-                    <p class="reading">Terre</p>
+                    <p class = "dataType">Planet</p>
+                    <p class="reading">Earth</p>
                 </div>
                 <div class = "sensor">
-                    <p class = "dataType">Équipage</p>
+                    <p class = "dataType">Crew</p>
                     <p class="reading">311</p>
                 </div>
             </div>

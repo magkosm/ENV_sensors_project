@@ -634,10 +634,10 @@ String ConfigWifi::getEncryptionType(int encryptionType) {
         case WIFI_AUTH_WPA_PSK: return "WPA_PSK";
         case WIFI_AUTH_WPA2_PSK: return "WPA2_PSK";
         case WIFI_AUTH_WPA_WPA2_PSK: return "WPA_WPA2_PSK";
-        case WIFI_AUTH_WPA2_ENTERPRISE: return "WPA2_Enterprise";//Nom d'utilisateur + mdp
+        case WIFI_AUTH_WPA2_ENTERPRISE: return "WPA2_Enterprise";//Username + password
         case WIFI_AUTH_WPA3_PSK: return "WPA3_PSK";
         case WIFI_AUTH_WPA2_WPA3_PSK: return "WPA2_WPA3_PSK";
-        default: return "Type inconnu";
+        default: return "Unknown type";
     }
 }
 
