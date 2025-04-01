@@ -17,13 +17,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donnees.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Définir les modèles de la base de données
+# Define database models
 class Sensor(db.Model):
     __tablename__ = 'Sensors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     ip = db.Column(db.String(255), nullable=False)
-    active = db.Column(db.Boolean, default=True)  # Nouveau champ pour indiquer si le capteur est actif
+    active = db.Column(db.Boolean, default=True)  # New field to indicate if the sensor is active
 
 class MeasurementType(db.Model):
     __tablename__ = 'MeasurementTypes'
@@ -43,14 +43,14 @@ class Measurement(db.Model):
     timestamp_start = db.Column(db.DateTime, nullable=False)
     timestamp_end = db.Column(db.DateTime, nullable=False)
 
-    # Relation avec MeasurementType
+    # Relationship with MeasurementType
     measurement_type = db.relationship('MeasurementType', backref='measurements')
 
-# Créer une session SQLAlchemy à l'intérieur du contexte de l'application
+# Create a SQLAlchemy session inside the application context
 with app.app_context():
-    db.create_all()  # Crée la base de données et les tables si elles n'existent pas
+    db.create_all()  # Creates the database and tables if they do not exist
 
-    # Création du moteur de gestion d'accès
+    # Creation of the access management engine
     engine = create_engine(
         'sqlite:///donnees.db',
         pool_size=20,
@@ -75,53 +75,53 @@ class SensorThread(threading.Thread):
             'measurements': {},
             'timestamp': None
         }
-        self.latest_data = {}  # Nouveau dictionnaire pour stocker les dernières valeurs
-        self.lock = threading.Lock()  # Verrou pour sécuriser l'accès au dictionnaire
+        self.latest_data = {}  # New dictionary to store the latest values
+        self.lock = threading.Lock()  # Lock to secure access to the dictionary
         self.init = False
 
-        # Event pour signaler l'arrêt du thread
+        # Event to signal thread termination
         self.stop_event = threading.Event()
 
-        # Ajouter le capteur à la base de données lors de l'initialisation
+        # Add the sensor to the database during initialization
         with app.app_context():
             sensor = db.session.query(Sensor).filter_by(name=self.name).first()
             if not sensor:
-                print(f"Initialisation: Capteur {self.name} non trouvé. Ajout du capteur avec IP {self.ip}.")
+                print(f"Initialization: Sensor {self.name} not found. Adding sensor with IP {self.ip}.")
                 sensor = Sensor(name=self.name, ip=self.ip)
                 db.session.add(sensor)
                 db.session.commit()
-                print(f"Initialisation: Capteur {self.name} ajouté avec succès.")
+                print(f"Initialization: Sensor {self.name} added successfully.")
             else:
-                print(f"Initialisation: Capteur {self.name} déjà présent dans la base de données.")
+                print(f"Initialization: Sensor {self.name} already present in the database.")
 
             for measurement_key, measurement_info in self.measurements.items():
                 measurement_type = db.session.query(MeasurementType).filter_by(key=measurement_key).first()
                 if not measurement_type:
-                    print(f"Initialisation: Type de mesure {measurement_info['name']} non trouvé. Ajout du type de mesure.")
+                    print(f"Initialization: Type of measurement {measurement_info['name']} not found. Added measurement type.")
                     measurement_type = MeasurementType(name=measurement_info['name'], unit=measurement_info['unit'], key=measurement_key)
                     db.session.add(measurement_type)
                     db.session.commit()
-                    print(f"Initialisation: Type de mesure {measurement_info['name']} ajouté avec succès.")
+                    print(f"Initialization: Type of measurement {measurement_info['name']} added successfully.")
             
             db.session.close()
 
     def update_data(self, url):
-        """Méthode pour faire une requête HTTP et récupérer les données."""
+        """Method to make an HTTP request and retrieve the data."""
         try:
-            print(f"update_data: Envoi de la requête à {url}")
+            print(f"update_data: Sending the request to {url}")
             response = requests.post(url, json={})
             if response.status_code == 200:
                 data = response.json()
                 data['ip'] = self.ip
 
-                # Mettre à jour les données des capteurs
+                # Update sensor data
                 for key in self.measurements:
                     if self.measurements[key]:
                         self.data['measurements'][key] = data.get(key, None)
 
                 self.data['timestamp'] = datetime.now(timezone.utc).isoformat()
 
-                # Mise à jour du dictionnaire des dernières valeurs
+                # Dictionary update of latest values
                 with self.lock:
                     self.latest_data = {
                         'ip': self.ip,
@@ -129,30 +129,30 @@ class SensorThread(threading.Thread):
                         'timestamp': self.data['timestamp']
                     }
 
-                print(f"update_data: Données reçues pour le capteur {self.name}")
+                print(f"update_data: Data received for the sensor {self.name}")
                 return True
             else:
-                print(f"update_data: Erreur - status code {response.status_code} pour le capteur {self.name}")
+                print(f"update_data: Error - status code {response.status_code} for the sensor {self.name}")
                 return False
         except requests.exceptions.RequestException as e:
-            print(f"update_data: Erreur lors de la récupération des données pour {self.name} : {e}")
+            print(f"update_data: Error retrieving data for {self.name} : {e}")
             return False
 
     def get_latest_data(self):
-        """Récupérer les dernières données stockées."""
+        """Recover the latest stored data."""
         with self.lock:
-            return self.latest_data.copy()  # Renvoie une copie pour éviter les conflits
+            return self.latest_data.copy()  # Returns a copy to avoid conflicts
 
     def writeToDB(self):
         try:
             with app.app_context():
-                print(f"writeToDB: Début pour le capteur {self.name} avec IP {self.ip}")
+                print(f"writeToDB: Start for the sensor {self.name} with IP {self.ip}")
                 TS_end = datetime.now()
                 TS_start = TS_end - timedelta(seconds=30)
 
                 sensor = db.session.query(Sensor).filter_by(name=self.name).first()
                 if not sensor:
-                    raise ValueError(f"Capteur {self.name} non trouvé dans la base de données.")
+                    raise ValueError(f"Sensor {self.name} not found in database.")
 
                 for measurement_key, values in self.data['measurements'].items():
                     measurement_type = db.session.query(MeasurementType).filter_by(key=measurement_key).first()
@@ -177,30 +177,30 @@ class SensorThread(threading.Thread):
         except Exception as e:
             with app.app_context():
                 db.session.rollback()
-            print(f"writeToDB: Erreur lors de l'écriture dans la base de données : {e}")
+            print(f"writeToDB: Error writing to database : {e}")
         finally:
             with app.app_context():
                 db.session.close()
-            print(f"writeToDB: {self.name} : Session fermée")
+            print(f"writeToDB: {self.name} : Session closed")
 
     def run(self):
-        """Méthode exécutée lorsque le thread démarre."""
-        print(f"run: Démarrage du thread pour le capteur {self.name} avec IP {self.ip}")
+        """Method executed when the thread starts."""
+        print(f"run: Starting the thread for the sensor {self.name} with IP {self.ip}")
         while not self.stop_event.is_set():
             url = f'http://{self.ip}/getMesurements'
             if self.update_data(url):
                 self.writeToDB()
             else:
-                print(f"run: Échec de la récupération des mesures pour le capteur {self.name}")
+                print(f"run: Failed to retrieve measurements for sensor {self.name}")
             time.sleep(30)
-        print(f"run: Capteur {self.name} arrêté proprement")
+        print(f"run: Sensor {self.name} stopped properly")
 
     def stop(self):
-        """Méthode pour arrêter le thread proprement."""
-        print(f"stop: Arrêt du thread pour le capteur {self.name}")
+        """Method to stop the thread cleanly."""
+        print(f"stop: Stopping the thread for the sensor {self.name}")
         self.stop_event.set()
 
-# Liste des threads capteurs
+# List of sensor threads
 sensor_threads = []
 """
 def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_factor):
@@ -250,13 +250,13 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
 """
 
 def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_factor):
-    # Récupérer le capteur par son nom
+    # Retrieve the sensor by name
     with app.app_context():
         sensor = db.session.query(Sensor).filter_by(name=sensor_name).first()
         if not sensor:
-            raise ValueError(f"Aucun capteur trouvé avec le nom '{sensor_name}'.")
+            raise ValueError(f"No sensor found with name '{sensor_name}'.")
 
-        # Construire la requête pour récupérer les mesures demandées avec échantillonnage
+        # Build the query to retrieve the requested measurements with sampling
         measurements_query = (
             db.session.query(
                 Measurement.timestamp_start,
@@ -277,7 +277,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             .subquery()
         )
 
-        # Filtrer les lignes en fonction du sampling_factor
+        # Filter rows based on sampling_factor
         sampled_measurements_query = (
             db.session.query(
                 measurements_query.c.timestamp_start,
@@ -289,12 +289,12 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             .all()
         )
 
-        # Préparer les données de sortie
+        # Prepare output data
         data = {"timestamps": []}
         for dt in data_types:
             data[dt] = []
 
-        # Organiser les données par timestamp et par type de mesure
+        # Organize data by timestamp and measurement type
         for measure in sampled_measurements_query:
             timestamp = measure.timestamp_start.strftime('%Y-%m-%d %H:%M:%S')
             if timestamp not in data["timestamps"]:
@@ -309,7 +309,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
 
 @app.route('/')
 def index():
-    """Route principale pour afficher la page web."""
+    """Main route to view the web page."""
     with open('./config/config.json') as config_file:
         sensors = json.load(config_file)['sensors']
     return render_template('dashboardMain.html', sensors=sensors)
@@ -327,10 +327,10 @@ def getConfig():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Route pour récupérer les données de toutes les grandeurs avec filtrage par date
+# Route to retrieve data of all sizes with filtering by date
 @app.route('/getDatagraphs', methods=['POST'])
 def getDatagraphs():
-    # Récupérer les paramètres de la requête
+    # Retrieve query parameters
     
     params = request.get_json()
     print(params)
@@ -338,16 +338,16 @@ def getDatagraphs():
     start_date = datetime.strptime(params.get('start_date'), '%Y-%m-%d %H:%M:%S')
     end_date = datetime.strptime(params.get('end_date'), '%Y-%m-%d %H:%M:%S')
 
-     # Calculer la durée totale en secondes
+     # Calculate the total duration in seconds
     duration_seconds = (end_date - start_date).total_seconds()
 
-    max_points = 1000  # Nombre maximum de points à afficher
-    point_interval_seconds = 30  # Intervalle entre deux points dans la base (30s)
+    max_points = 1000  # Maximum number of points to display
+    point_interval_seconds = 30  # Interval between two points in the base (30s)
 
-    # Calculer le nombre total de points dans la plage de temps
+    # Calculate the total number of points in the time range
     total_points = duration_seconds // point_interval_seconds
 
-    # Calculer dynamiquement le facteur d'échantillonnage
+    # Dynamically calculate the sampling factor
     if total_points > max_points:
         sampling_factor = max(1, total_points // max_points)
     else:
@@ -363,16 +363,16 @@ def getDatagraphs():
         #print(data_types)
         results = getSensorDataFromDB(sensor, start_date, end_date, data_types, sampling_factor )
 
-        # Structurer les données dans un format JSON
+        # Structure data in a JSON format
         data[sensor] = results
         
         #print(data)
-    # Retourner les données sous forme JSON
+    # Return data in JSON form
     return jsonify(data=data)
 
 @app.route('/getSensorTypes', methods=['POST', 'GET'])
 def get_sensor_types():
-    """Route pour envoyer le fichier JSON contenant tous les types de capteurs connus."""
+    """Route to send the JSON file containing all known sensor types."""
     with open('./config/Sensors_type.json', 'r', encoding='utf-8') as sensor_types_file:
         sensor_types = json.load(sensor_types_file)
     return jsonify(sensor_types)
@@ -382,26 +382,26 @@ def add_sensor_type():
     try:
         data = request.get_json()
         if not data or not all(k in data for k in ('type', 'config', 'measurements')):
-            return jsonify({"error": "Données invalides"}), 400
+            return jsonify({"error": "Invalid data"}), 400
 
-        # Charger le fichier des types de capteurs
+        # Load the sensor types file
         with open('./config/Sensors_type.json', 'r+', encoding='utf-8') as sensor_types_file:
             sensor_types = json.load(sensor_types_file)
 
-            # Vérifier si le type de capteur existe déjà
+            # Check if the sensor type already exists
             if any(t['type'] == data['type'] for t in sensor_types['types']):
-                return jsonify({"error": "Type de capteur déjà existant"}), 409
+                return jsonify({"error": "Existing sensor type"}), 409
 
-            # Ajouter le nouveau type de capteur
+            # Add the new sensor type
             sensor_types['types'].append(data)
             sensor_types_file.seek(0)
             json.dump(sensor_types, sensor_types_file, indent=4)
             sensor_types_file.truncate()
 
-        return jsonify({"message": "Type de capteur ajouté avec succès"}), 201
+        return jsonify({"message": "Sensor type added successfully"}), 201
     except Exception as e:
-        print(f"Erreur lors de l'ajout du type de capteur : {e}")
-        return jsonify({"error": "Erreur serveur"}), 500
+        print(f"Error adding sensor type: {e}")
+        return jsonify({"error": "Server error"}), 500
 
 @app.route('/newSensor', methods=['POST', 'GET'])
 def new_sensor():
@@ -410,54 +410,54 @@ def new_sensor():
         data = request.get_json()
         #print(data)
         if not data:
-            return jsonify({"error": "Données invalides"}), 400
+            return jsonify({"error": "Invalid data"}), 400
 
-        # Charger le fichier des types de capteurs
+        # Load the sensor types file
         with open('./config/Sensors_type.json', encoding='utf-8') as sensor_types_file:
             sensor_types = json.load(sensor_types_file)
 
-        # Vérifier que le type de capteur est connu
+        # Check that the sensor type is known
         sensor_type = next((t for t in sensor_types['types'] if t['type'] == data.get('type')), None)
         if not sensor_type:
-            return jsonify({"error": "Type de capteur non trouvé"}), 404
+            return jsonify({"error": "Sensor type not found"}), 404
 
-        # Vérifier que les champs de configuration spécifiques sont présents
+        # Check that the specific configuration fields are present
         required_fields = sensor_type['config']
         #print(required_fields)
         if not all(k in data for k in required_fields):
-            return jsonify({"error": "Données invalides"}), 400
+            return jsonify({"error": "Invalid data"}), 400
 
-        # Construire la configuration du capteur en se basant sur le type de capteur sélectionné
+        # Build the sensor configuration based on the selected sensor type
         sensor_config = {}
 
-        # Ajouter les champs de configuration spécifiques au type de capteur en premier
+        # Add the sensor type specific configuration fields first
         for config_field in sensor_type['config']:
             if config_field in data:
                 sensor_config[config_field] = data[config_field]
             else:
-                return jsonify({"error": f"Champ de configuration manquant: {config_field}"}), 400
+                return jsonify({"error": f"Missing configuration field: {config_field}"}), 400
 
-        # Ajouter les autres champs
+        # Add the other fields
         sensor_config.update({
             "type": data['type'],
             "measurements": sensor_type['measurements']
         })
 
-        # Vérifier si le capteur existe déjà dans la base de données avec le même nom et la même IP
+        # Check if the sensor already exists in the database with the same name and IP
         with app.app_context():
             existing_sensor = Sensor.query.filter_by(name=sensor_config['name'], ip=sensor_config['ip']).first()
             if existing_sensor:
                 if existing_sensor.active:
-                    return jsonify({"error": "Capteur déjà existant et actif"}), 409
+                    return jsonify({"error": "Sensor already existing and active"}), 409
                 else:
-                    # Si le capteur existe mais n'est pas actif, le réactiver
+                    # If the sensor exists but is not active, reactivate it
                     existing_sensor.active = True
                     db.session.commit()
                     reactive = True
 
-                    #return jsonify({"message": "Capteur réactivé avec succès"}), 200
+                    #return jsonify({"message": "Sensor successfully reactivated"}), 200
 
-            # Ajouter le capteur à la base de données
+            # Add the sensor to the database
             if(not reactive):
                 sensor = Sensor(name=sensor_config['name'], ip=sensor_config['ip'], active=True)
                 db.session.add(sensor)
@@ -473,7 +473,7 @@ def new_sensor():
             db.session.close()
 
 
-        # Ajouter le capteur au fichier de configuration
+        # Add the sensor to the configuration file
         with open("./config/config.json", 'r+', encoding='utf-8') as f:
             config = json.load(f)
             config["sensors"].append(sensor_config)
@@ -484,73 +484,73 @@ def new_sensor():
         startThread(sensor_config)
 
         if(reactive):
-            return jsonify({"message": "Capteur réactivé avec succès"}), 200
+            return jsonify({"message": "Sensor successfully reactivated"}), 200
         else:
-            return jsonify({"message": "Capteur ajouté avec succès"}), 201
+            return jsonify({"message": "Sensor added successfully"}), 201
     except Exception as e:
-        print(f"Erreur lors de l'ajout du capteur : {e}")
-        return jsonify({"error": "Erreur serveur"}), 500
+        print(f"Error adding sensor: {e}")
+        return jsonify({"error": "Server error"}), 500
 
 @app.route('/deleteSensor', methods=['DELETE'])
 def delete_sensor():
     try:
         data = request.get_json()
         #print(data)
-        # Vérifier que les données nécessaires sont présentes
+        # Check that the necessary data is present
         if not data or 'name' not in data:
-            return jsonify({"error": "Données invalides"}), 400
+            return jsonify({"error": "Invalid data"}), 400
 
-        # Charger la configuration actuelle des capteurs
+        # Load current sensor configuration
         with open("./config/config.json", 'r', encoding='utf-8') as f:
             config = json.load(f)
 
-        # Chercher le capteur dans la liste des capteurs
+        # Search for the sensor in the sensor list
         sensor_to_delete = None
         for sensor in config["sensors"]:
             if sensor.get('name') == data.get('name') or sensor.get('ip') == data.get('ip'):
                 sensor_to_delete = sensor
                 break
 
-        # Si le capteur n'existe pas, renvoyer une erreur
+        # If the sensor does not exist, return an error
         if not sensor_to_delete:
-            return jsonify({"error": "Capteur non trouvé"}), 404
+            return jsonify({"error": "Sensor not found"}), 404
 
-        # Supprimer le capteur de la liste
+        # Remove sensor from list
         config["sensors"].remove(sensor_to_delete)
 
-        # Réécrire le fichier config.json
+        # Rewrite the config.json file
         with open("./config/config.json", 'w', encoding='utf-8') as f:
             json.dump(config, f, indent=4)
 
         with app.app_context():
             sensor = Sensor.query.filter_by(ip=sensor.get('ip')).first()
             if sensor:
-                sensor.active = False  # Marquer le capteur comme inactif
+                sensor.active = False  # Mark the sensor as inactive
                 db.session.commit()
                 db.session.close()
 
-                return jsonify({"message": "Capteur marqué comme inactif avec succès"}), 200
+                return jsonify({"message": "Sensor successfully marked as inactive"}), 200
             else:
-                return jsonify({"error": "Capteur non trouvé"}), 404
+                return jsonify({"error": "Sensor not found"}), 404
         
-        # Trouver et arrêter le thread associé au capteur
+        # Find and stop the thread associated with the sensor
         global sensor_threads
 
         #print(sensor_threads)
         
         for thread in sensor_threads:
             if (thread.name == data.get('name')) or (thread.ip == data.get('ip')):
-                thread.stop()  # Arrêter le thread
-                sensor_threads.remove(thread)  # Retirer le thread de la liste
-                print(f"Capteur {data.get('name')} arrêté avec succès")
+                thread.stop()  # Stop the thread
+                sensor_threads.remove(thread)  # Remove thread from list
+                print(f"Sensor {data.get('name')} successfully arrested")
                 break
 
-        # Si tout se passe bien, retourner un message de succès
-        return jsonify({"message": "Capteur supprimé avec succès"}), 200
+        # If all goes well, return a success messages
+        return jsonify({"message": "Sensor successfully removed"}), 200
 
     except Exception as e:
-        print(f"Erreur lors de la suppression du capteur : {e}")
-        return jsonify({"error": "Erreur serveur"}), 500
+        print(f"Error deleting sensor: {e}")
+        return jsonify({"error": "Server error"}), 500
     
 
 @app.route('/getData', methods=['POST'])
@@ -559,24 +559,24 @@ def get_data():
         sensor_data = []
         print("getData request received")
         
-        # Parcourir les threads des capteurs actifs pour récupérer les dernières données
-        for sensor_thread in sensor_threads:  # sensor_threads est supposé être une liste globale des threads actifs
+        # Browse active sensor threads to retrieve the latest data
+        for sensor_thread in sensor_threads:  # sensor_threads is assumed to be a global list of active threads
             if sensor_thread.is_alive():
-                # Récupérer les données du dictionnaire `last_values` du thread
+                # Retrieve data from the thread's `last_values` dictionary
                 sensor_info = {
                     'name': sensor_thread.name,
-                    'measurements': sensor_thread.data['measurements'],  # Dernières valeurs de mesure
-                    'timestamp': sensor_thread.data['timestamp']  # Timestamp de la dernière mise à jour
+                    'measurements': sensor_thread.data['measurements'],  # Latest measurement values
+                    'timestamp': sensor_thread.data['timestamp']  # Timestamp of the last update
                 }
                 sensor_data.append(sensor_info)
             else:
-                print(f"Thread pour le capteur {sensor_thread.name} n'est pas actif.")
+                print(f"Thread for the sensor {sensor_thread.name} is not active.")
         
         return jsonify(sensor_data)
     
     except Exception as e:
-        print(f"Erreur lors de la récupération des données des capteurs : {e}")
-        return jsonify({"error": "Erreur serveur"}), 500
+        print(f"Error retrieving sensor data : {e}")
+        return jsonify({"error": "Server error"}), 500
 """
 def get_data1():
     try:
@@ -665,15 +665,15 @@ def get_data():
         return jsonify({"error": "Erreur serveur"}), 500
 """
 def signal_handler(sig, frame):
-    """Gestionnaire de signal pour intercepter Ctrl + C et arrêter les threads."""
-    print("\nSignal d'arrêt reçu, arrêt des threads...")
+    """Signal handler to intercept Ctrl+C and stop threads."""
+    print("\nStop signal received, threads stopped...")
     for thread in sensor_threads:
-        thread.stop()  # Arrêter chaque thread proprement
+        thread.stop()  # Stop each thread cleanly
     
-    sys.exit(0)  # Quitter le programme après l'arrêt des threads
+    sys.exit(0)  # Exit the program after stopping the threads
 
 def start_sensor_threads():
-    """Démarrer les threads pour chaque capteur défini dans le fichier config.json."""
+    """Start threads for each sensor defined in the config.json file."""
     with open('./config/config.json', 'r', encoding='utf-8') as f:
         config = json.load(f)
         #print(config)

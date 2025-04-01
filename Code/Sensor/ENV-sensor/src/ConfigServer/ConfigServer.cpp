@@ -1,11 +1,11 @@
 #include "ConfigServer.h"
 
-bool ConfigServer::scanning = false;  // Initialisation ici
-bool ConfigServer::connecting = false;  // Initialisation ici
+bool ConfigServer::scanning = false;  // Initialization here
+bool ConfigServer::connecting = false;  // Initialization here
 unsigned long ConfigServer::last_send = 0;
 unsigned long ConfigServer::netScanStartTps = 0;
 
-Sensors* ConfigServer::sensors = nullptr;  // Initialisation à nullptr
+Sensors* ConfigServer::sensors = nullptr;  // Initialization to nullptr
 ConfigWifi* ConfigServer::SPIFFSWifi = nullptr;
 
 ConfigServer::ConfigServer(Sensors* snrs, ConfigWifi* SpiffWifi, uint16_t port) {
@@ -47,19 +47,19 @@ void ConfigServer::startConfigServer() {
     server->on("/logo.png", HTTP_GET, ConfigServer::handleLogo);
     
     server->on("/NewNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleNewNetwork);
 
     server->on("/getMesurements", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleGetMesurements);
 
     server->on("/deleteNetwork", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleDeleteNetwork);
 
     server->on("/NewInfos", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleNewInfos);
 
     server->on("/NetScan", HTTP_POST, ConfigServer::handleNetScan);
@@ -67,11 +67,11 @@ void ConfigServer::startConfigServer() {
     server->on("/GetScanResults", HTTP_POST, ConfigServer::handleGetScanResults);
 
     server->on("/NetLoad", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleNetLoad);
 
     server->on("/LoadConfig", HTTP_POST, [](AsyncWebServerRequest *request) {
-        // Rien ici, le corps de la requête sera traité dans onRequestBody
+        // Nothing here, the request body will be processed in onRequestBody
     }, NULL, ConfigServer::handleLoadConfig);
 
     server->begin();
@@ -110,7 +110,7 @@ void ConfigServer::handleLogo(AsyncWebServerRequest *request) {
 }
 
 void ConfigServer::handleNewNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  // Le corps de la requête est reçu ici
+  // The body of the request is received here
   String jsonString = "";
   Serial.print("received string len : ");
   Serial.println(len);
@@ -118,13 +118,13 @@ void ConfigServer::handleNewNetwork(AsyncWebServerRequest *request, uint8_t *dat
     jsonString += (char)data[i];
   }
   Serial.println(jsonString);
-  // Analyse du JSON reçu
+  // Parse the received JSON
   JsonDocument jsonDoc;
   DeserializationError error = deserializeJson(jsonDoc, jsonString);
 
   if (!error) {
-    String ssid = jsonDoc["SSID"];  // Récupère la valeur du champ "SSID"
-    String pass = jsonDoc["pass"];  // Récupère la valeur du champ "pass"
+    String ssid = jsonDoc["SSID"];  // Retrieves the value of the "SSID" field
+    String pass = jsonDoc["pass"];  // Retrieves the value of the "pass" field
     String secu = jsonDoc["SECU_TYPE"];
     String userName = "";
     bool WPA2Entr = false;
@@ -157,7 +157,7 @@ void ConfigServer::handleNewNetwork(AsyncWebServerRequest *request, uint8_t *dat
     Serial.println("Showing done, moving on");
     connecting = true;  //force esp to restart
   } else {
-    // En cas d'erreur dans la réception ou le parsing du JSON
+    // In case of error in receiving or parsing the JSON
     request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"JSON invalide\"}");
   }
 }
@@ -185,13 +185,13 @@ void ConfigServer::handleGetMesurements(AsyncWebServerRequest *request, uint8_t 
 }
 
 void ConfigServer::handleDeleteNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  // Le corps de la requête est reçu ici
+  // The body of the request is received here
   String jsonString = "";
   for (size_t i = 0; i < len; i++) {
     jsonString += (char)data[i];
   }
 
-  // Analyse du JSON reçu
+  // Parsing the received JSON
   JsonDocument jsonDoc;
   DeserializationError error = deserializeJson(jsonDoc, jsonString);
 
@@ -205,7 +205,7 @@ void ConfigServer::handleDeleteNetwork(AsyncWebServerRequest *request, uint8_t *
       Serial.println(SSID + ".txt");
       SPIFFSWifi->deleteNetwork(SSID);
     }
-    // Envoie une réponse JSON au client
+    // Sends a JSON response to the client
     request->send(200, "application/json", "{\"status\":\"success\",\"message\":\"Réseau supprimé\"}");
 
     SPIFFSWifi->printSPIFFS();
@@ -214,19 +214,19 @@ void ConfigServer::handleDeleteNetwork(AsyncWebServerRequest *request, uint8_t *
 
 
   } else {
-    // En cas d'erreur dans la réception ou le parsing du JSON
+    // In case of error in receiving or parsing the JSON
     request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"JSON invalide\"}");
   }
 }
 
 void ConfigServer::handleNewInfos(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
-  // Le corps de la requête est reçu ici
+  // The body of the request is received here
   String jsonString = "";
   for (size_t i = 0; i < len; i++) {
     jsonString += (char)data[i];
   }
 
-  // Analyse du JSON reçu
+  // Parsing the received JSON
   JsonDocument jsonDoc;
   DeserializationError error = deserializeJson(jsonDoc, jsonString);
 
@@ -244,7 +244,7 @@ void ConfigServer::handleNewInfos(AsyncWebServerRequest *request, uint8_t *data,
     Serial.println(name);
 
     if (SPIFFSWifi->writeConfigFile(AP_SSID, AP_Pass, name)) {
-      // Envoie une réponse JSON au client
+      // Sends a JSON response to the client
       Serial.println("Setting changed");
       request->send(200, "application/json", "{\"status\":\"success\",\"message\":\"COnfiguration modifiée\"}");
     }
@@ -253,7 +253,7 @@ void ConfigServer::handleNewInfos(AsyncWebServerRequest *request, uint8_t *data,
 
 
   } else {
-    // En cas d'erreur dans la réception ou le parsing du JSON
+    // In case of error in receiving or parsing the JSON
     request->send(400, "application/json", "{\"status\":\"error\",\"message\":\"JSON invalide\"}");
   }
 }
@@ -263,8 +263,8 @@ void ConfigServer::handleNetScan(AsyncWebServerRequest *request) {
 
   if (!scanning) {
     netScanStartTps = millis();
-    WiFi.scanNetworks(true);  // Démarre un scan non bloquant
-    scanning = true;          // Signaler que le scan est en cours
+    WiFi.scanNetworks(true);  // Starts a non-blocking scan
+    scanning = true;          // Report that scanning is in progress
     request->send(200, "application/json", "{\"s\":\"success\",\"message\":\"Scan started\"}");
   } 
   else {
@@ -282,12 +282,12 @@ void ConfigServer::handleGetScanResults(AsyncWebServerRequest *request) {
   if((scanning) && (millis() -  netScanStartTps > 60000)){
     scanning = false;
     Serial.println("fail to finish scanning in a minute");
-    request->send(200, "application/json", "{\"s\":\"error\",\"message\":\"Scan failled to finish in time\"}");
+    request->send(200, "application/json", "{\"s\":\"error\",\"message\":\"Scan failed to finish in time\"}");
   }
 
   else if (scanning && nbNetworks >= 0) {
-    nbNetworks = WiFi.scanComplete(); // Nombre de réseaux trouvés
-    scanning = false; // Indiquer que le scan est terminé
+    nbNetworks = WiFi.scanComplete(); // Number of networks found
+    scanning = false; // Indicate that the scan is complete
     Serial.println("Scan finished");
   }
 
@@ -303,7 +303,7 @@ void ConfigServer::handleGetScanResults(AsyncWebServerRequest *request) {
   }
   
 
-  // Construire la réponse JSON
+  // Build the JSON response
   if (nbNetworks > 0) {
     for (int i = 0; i < nbNetworks; i++) {
       String ssid = WiFi.SSID(i);
@@ -335,11 +335,11 @@ void ConfigServer::handleGetScanResults(AsyncWebServerRequest *request) {
     jsonResponse["message"] = "No networks found.";
   }
 
-  // Nettoyer les résultats du scan
+  // Clean scan results
   WiFi.scanDelete();
   scanning = false;
 
-  // Sérialiser et envoyer la réponse
+  // Serialize and send the response
   String response = "";
   serializeJson(jsonResponse, response);
   request->send(200, "application/json", response);
@@ -422,7 +422,7 @@ void ConfigServer::handleLoadConfig(AsyncWebServerRequest *request, uint8_t *dat
 
     serializeJson(jsonResponse, response);
 
-    Serial.println("Succès de la lecture des infos");
+    Serial.println("Info has been read successfully");
     request->send(200, "application/json", response);
 
   } else {

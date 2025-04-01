@@ -47,22 +47,22 @@ class ConfigServer {
     static void handleRoot(AsyncWebServerRequest *request);//serves the main html page
     static void handleHotspotDetect(AsyncWebServerRequest *request);//responds to the request sent by IOS to identify a hotspot without internet
     static void handleGenerate204(AsyncWebServerRequest *request);//responds to the request sent by android to identify a hotspot without internet
-    static void handleStyleMain(AsyncWebServerRequest *request);//envoi le CSS
-    static void handleScriptMain(AsyncWebServerRequest *request);//envoi le JavaScript
-    static void handleLogo(AsyncWebServerRequest *request);//envoi le logo
-    static void handleNewNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//gère la reception et le traitement d'une nouvelle demande de connexion à un réseau
-    static void handleGetMesurements(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Envoi les dernières donénes des capteurs
-    static void handleDeleteNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Gère la suppression d'un réseau enregistré
-    static void handleNewInfos(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Gère la reception de nouvelle informations pour le capteurs (nom, Ap ssid, Ap pass)
-    static void handleNetScan(AsyncWebServerRequest *request);//gère la reception d'une demande de scan réseau
-    static void handleGetScanResults(AsyncWebServerRequest *request);//gère la réception d'une demande de résultat de scan réseau
-    static void handleNetLoad(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//gère la demande de partage des réseaux enregistrés
-    static void handleLoadConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//gère la demande de partage des informations du capteur
+    static void handleStyleMain(AsyncWebServerRequest *request);//send the CSS
+    static void handleScriptMain(AsyncWebServerRequest *request);//send the JavaScript
+    static void handleLogo(AsyncWebServerRequest *request);//send the logo
+    static void handleNewNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//manages the reception and processing of a new connection request to a network
+    static void handleGetMesurements(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Sending the latest sensor data
+    static void handleDeleteNetwork(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Manages the deletion of a saved network
+    static void handleNewInfos(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//Manages the reception of new information for the sensors (name, Ap ssid, Ap pass)
+    static void handleNetScan(AsyncWebServerRequest *request);//handles the reception of a network scan request
+    static void handleGetScanResults(AsyncWebServerRequest *request);//handles the receipt of a network scan result request
+    static void handleNetLoad(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//manages the sharing request of registered networks
+    static void handleLoadConfig(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);//manages the request to share sensor information
 
-    bool getScanning();//getteurs
+    bool getScanning();//getters
     bool getConnecting();
     unsigned long getLast_send();
-    void setScanning(bool val);//setteurs
+    void setScanning(bool val);//setters
     void setConnecting(bool val);
     void setLast_send(unsigned long val);
 };

@@ -12,7 +12,7 @@ function mettreAJourSpans() {
     var donnees = Object.parse(sendRequest("getMesurements", toSend));
 
     console.log(donnees);
-    // Remplir chaque span avec la valeur correspondante
+    // Fill each span with the corresponding value
     document.getElementById("temp").textContent = donnees.temp;
     document.getElementById("hum").textContent = donnees.hum;
     document.getElementById("press").textContent = donnees.press;
@@ -21,14 +21,14 @@ function mettreAJourSpans() {
 }
 
 function deleteNetwork() {
-    // Récupérer la liste d'éléments <li>
+    // Retrieve the list of <li> elements
     const liste = document.getElementById('savednet');
 
     const items = liste.querySelectorAll(".li");
    
     const SSIDToDelete = {};
 
-    // Parcourir chaque élément de la liste
+    // Iterate through each item in the list
     var i = 0;
 
     items.forEach(function(item) {
@@ -37,14 +37,14 @@ function deleteNetwork() {
         if (checkBox.checked) {
             i = i + 1;
             checkBox.checked = false;
-            const ssid = txt.textContent; // Récupérer l'ID de l'élément
+            const ssid = txt.textContent; // Retrieve the item ID
             SSIDToDelete[i] = ssid;
             //txt.textContent = "Not registered";
             item.remove();//remove the line from the list
         }
     });
    
-    // Si des éléments ont été cochés, envoyer la requête au serveur
+    // If any items have been checked, send the request to the server
     if (Object.keys(SSIDToDelete).length > 0) {
         console.log("Sending request");
         sendRequest("DeleteNetwork", SSIDToDelete);
@@ -55,21 +55,21 @@ function deleteNetwork() {
 
 function sendRequest(requestName, data) {
    
-    // Envoyer une requête POST au serveur
+    // Send a POST request to the server
     fetch('/' + requestName, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data), // Convertir les données en JSON
+        body: JSON.stringify(data), // Convert data to JSON
     })
     .then(response => response.json())
     .then(data => {
-        console.log('Réponse du serveur :', data);
+        console.log('Server response :', data);
         return data;
     })
     .catch((error) => {
-        console.error('Erreur lors de la requête :', error);
+        console.error('Error during query :', error);
     });
 }
 
@@ -97,16 +97,16 @@ function createMsg(label, id, color){
 }
 
 function fadeOut(element, duration) {
-    var opacity = 0.5; // Opacité initiale pleine
-    const interval = 0.05; // Intervalle de temps en ms entre chaque diminution
+    var opacity = 0.5; // Full initial opacity
+    const interval = 0.05; // Time interval in ms between each decrease
     const step = opacity/(duration/interval);
 
     const fadeEffect = setInterval(function() {
         if (opacity > 0) {
-            opacity -= step; // Réduit l'opacité progressivement
+            opacity -= step; // Reduces opacity gradually
             element.style.opacity = String(opacity);
         } else {
-            clearInterval(fadeEffect); // Arrête l'effet une fois à 0
+            clearInterval(fadeEffect); // Stops the effect once at 0
             element.remove();
         }
     }, interval);
@@ -368,19 +368,19 @@ function scanNetworks(){
 
 }
 
-document.addEventListener('DOMContentLoaded', function() {//bouton supprimer
+document.addEventListener('DOMContentLoaded', function() {//delete button
     document.getElementById('Suppr').addEventListener('click', deleteNetwork);
 });
 
-document.addEventListener('DOMContentLoaded', function() {//bouton connecter
+document.addEventListener('DOMContentLoaded', function() {//connect button
     document.getElementById('Connect').addEventListener('click', AddNetwork);
 });
 
-document.addEventListener('DOMContentLoaded', function() {//bouton enregistrer
+document.addEventListener('DOMContentLoaded', function() {//save button
     document.getElementById('enregistrer').addEventListener('click', ChangeInfos);
 });
 
-document.addEventListener('DOMContentLoaded', function() {//bouton enregistrer
+document.addEventListener('DOMContentLoaded', function() {//save button
     document.getElementById('Scanner').addEventListener('click', scanNetworks);
 });
 

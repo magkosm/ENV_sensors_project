@@ -16,13 +16,13 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///donnees.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-# Définir les modèles de la base de données
+# Define database models
 class Sensor(db.Model):
     __tablename__ = 'Sensors'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     ip = db.Column(db.String(255), nullable=False)
-    active = db.Column(db.Boolean, default=True)  # Nouveau champ pour indiquer si le capteur est actif
+    active = db.Column(db.Boolean, default=True)  # New field to indicate if the sensor is active
 
 class MeasurementType(db.Model):
     __tablename__ = 'MeasurementTypes'
@@ -42,20 +42,20 @@ class Measurement(db.Model):
     timestamp_start = db.Column(db.DateTime, nullable=False)
     timestamp_end = db.Column(db.DateTime, nullable=False)
 
-    # Relation avec MeasurementType
+    # Relationship with MeasurementType
     measurement_type = db.relationship('MeasurementType', backref='measurements')
 
 with app.app_context():
-    db.create_all()  # Crée la base de données et les tables si elles n'existent pas
+    db.create_all()  # Creates the database and tables if they do not exist
 
 def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_factor):
-    # Récupérer le capteur par son nom
+    # Retrieve the sensor by name
     with app.app_context():
         sensor = db.session.query(Sensor).filter_by(name=sensor_name).first()
         if not sensor:
-            raise ValueError(f"Aucun capteur trouvé avec le nom '{sensor_name}'.")
+            raise ValueError(f"No sensor found with name '{sensor_name}'.")
 
-        # Construire la requête pour récupérer les mesures demandées avec échantillonnage
+        # Build the query to retrieve the requested measurements with sampling
         measurements_query = (
             db.session.query(
                 Measurement.timestamp_start,
@@ -76,7 +76,7 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             .subquery()
         )
 
-        # Filtrer les lignes en fonction du sampling_factor
+        # Filter rows based on sampling_factor
         sampled_measurements_query = (
             db.session.query(
                 measurements_query.c.timestamp_start,
@@ -88,12 +88,12 @@ def getSensorDataFromDB(sensor_name, start_date, end_date, data_types, sampling_
             .all()
         )
 
-        # Préparer les données de sortie
+        # Prepare output data
         data = {"timestamps": []}
         for dt in data_types:
             data[dt] = []
 
-        # Organiser les données par timestamp et par type de mesure
+        # Organize data by timestamp and measurement type
         for measure in sampled_measurements_query:
             timestamp = measure.timestamp_start.strftime('%Y-%m-%d %H:%M:%S')
             if timestamp not in data["timestamps"]:
