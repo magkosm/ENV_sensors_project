@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMain.css') }}">
+    <link rel="icon" href="/static/Images/logo1.png">
+    <title>Sensors Dashboard</title>
+    <!-- Import Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Import the script that will handle the interactive elements of the page -->
+    <script src="{{ url_for('static', filename='js/scriptMain.js') }}"></script>
+    <!-- Preload data from JSON and other useful variables -->
+    <script>
+        var mainURL = "/"
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Sensors Dashboard</h1>
+            <nav>
+                <a href="/graphs" class="nav-button">Graphs</a>
+            </nav>
+        </div>
+    </header>
+    <div class="titreContainer" id="titreContainer">
+        <div class="bntContainer">
+            <button id="bnt-details" class="hamburger-btn big" aria-label="Menu" onclick="toggleSensorListOverlay('sensorListOverlay')">
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+                <div class="bar big-bar"></div>
+            </button>
+        </div>
+        <div class="titre" id="titre">
+            Dashboard capteurs
+        </div>
+        <div class="toggleBnt" onclick="openGraphPage()">
+            📈
+        </div>
+    </div>
+
+    <!-- Overlay to display the list of registered sensors -->
+    <div id="sensorListOverlay" class="sensor-list-overlay">
+        <div class="sensorListOverlayContent">
+            <span class="close" onclick="toggleSensorListOverlay()">&times;</span>
+            <span class="sensorListoverlayTitle">Registered Sensors</span>
+            <div id="sensorListContent" class="sensorListContent">
+                <!-- Content will be dynamically added here using JavaScript -->
+            </div>
+            <div class = "center">
+                <div class="bntBox hide-config" id="bntBox" style = "display: none;">
+                    <button type='submit' class="add" id="plus_bnt">
+                        <span class="plus-symbol">+</span>
+                    </button>
+                </div>
+            </div>
+            <div class="password-container">
+                <button id="togglePasswordBtn" onclick="togglePasswordField()">
+                    <span id="lockIcon" class="lock-icon">🔒</span>
+                </button>
+                <div class="password-field-container" id="passwordFieldContainer" style="display: none;">
+                    <input type="password" id="passwordField" name="password" >
+                  <!--  <button type="button" id="togglePassword" onclick="togglePasswordVisibility('passwordField', 'togglePassword')">👁️</button>-->
+                </div>
+                <button class="lock-icon" id="checkPasswordBtn" onclick="checkPassword()" style="display: none;">➡️</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content of the page -->
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h2>Environment Monitoring - Dashboard</h2>
+        </div>
+        <div class="dashboard-content">
+            <div class="dashboard-buttons">
+                <button id="listSensors" class="dashboard-button" onclick="toggleSensorListOverlay()">List of Sensors</button>
+                <button id="addSensor" class="dashboard-button" onclick="toggleAddSensorOverlay()">Add Sensor</button>
+                <button id="delete-button" class="dashboard-button delete-button">Delete Sensors</button>
+                <button id="cancel-delete" class="dashboard-button cancel-button hide">Cancel</button>
+            </div>
+            <!-- Area containing divs for each sensor -->
+            <div id="sensorContainer" class="sensor-container">
+                <!-- Content will be dynamically added here using JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay to add a sensor -->
+    <div id="addSensorOverlay" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close" onclick="toggleAddSensorOverlay()">&times;</span>
+            <h2 class="overlayTitle">Add a sensor</h2>
+            
+            <form id="addSensorForm" onsubmit="return false;">
+                <!-- Sensor type -->
+                <div class="formSection">
+                    <label class="FormsubTitle">Sensor Type:</label>
+                    <div class="select-wrapper">
+                        <select id="sensorType" onchange="updateConfigFields()">
+                            <!-- Options will be added dynamically -->
+                        </select>
+                        <button id="addSensorType" class="add-item-button" type="button" onclick="toggleAddSensorTypeForm()">+</button>
+                    </div>
+                </div>
+                
+                <!-- Add sensor type form (initially hidden) -->
+                <div id="addSensorTypeForm" class="sub-form hide">
+                    <h3>Add New Sensor Type</h3>
+                    <input type="text" id="newSensorTypeName" placeholder="Sensor type name">
+                    <div class="measurements-container" id="measurementsContainer">
+                        <!-- This will be populated dynamically with measurement inputs -->
+                        <div class="measurement-input">
+                            <input type="text" class="measurement-name" placeholder="Measurement name">
+                            <input type="text" class="measurement-unit" placeholder="Unit">
+                            <input type="text" class="measurement-key" placeholder="Key (e.g., temp)">
+                            <button type="button" class="remove-measurement-btn">-</button>
+                        </div>
+                    </div>
+                    <button type="button" id="addMeasurementBtn">+ Add Measurement</button>
+                    <div class="buttons-container">
+                        <button type="button" onclick="saveSensorType()">Save Type</button>
+                        <button type="button" onclick="toggleAddSensorTypeForm()">Cancel</button>
+                    </div>
+                </div>
+                
+                <!-- Configuration for the selected sensor type -->
+                <div id="sensorConfig" class="formSection">
+                    <!-- Will be populated based on selected sensor type -->
+                </div>
+                
+                <div class="buttons-container">
+                    <button type="button" id="saveButton" onclick="saveSensor()">Add</button>
+                    <button type="button" onclick="toggleAddSensorOverlay()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024-2025 - MDRS Environmental Sensors</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleMain.css">
+    <script src="scriptMain.js"></script>
+    <title>Network Manager</title>
+</head>
+<body>
+    <div class = "titre"> Network Manager </div>
+    <div class="container">
+        <div class="box">
+            <p class = "boxTitle"> Saved Networks </p>
+            <div class="scrollable-list">
+                <ul id = "savednet">
+                    <li class = "li scroll" id = "N1"><a class = "netName">Livebox-4B3C</a> <input type =   "checkbox" class =  "check"></li>
+                    <li class = "li scroll" id = "N2"><a class = "netName">ISAE-EDU</a> <input type =   "checkbox" class =  "check"></li>
+                    <li class = "li scroll" id = "N3"><a class = "netName">RG</a> <input type =   "checkbox" class =  "check"></li>
+                    <li class = "li scroll" id = "N4"><a class = "netName">MDRS</a> <input type =   "checkbox" class =  "check" ></li>
+                </ul>
+            </div>
+            <button type='submit' id = "Suppr" class =  "bnt"  > Delete </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> Available Networks </p>
+            <div class="scrollable-list">
+                <ul id = "Netlist">
+                    <li class = "li scroll"><a class = "netName">Livebox-4B3C</a> <a class = "txt">(-45)</a></li>
+                    <li class = "li scroll"><a class = "netName">ISAE-EDU</a> <a class = "txt">(-80)</a></li>
+                    <li class = "li scroll"><a class = "netName">RG</a> <a class = "txt">(-60)</a></li>
+                    <li class = "li scroll"><a class = "netName">MDRS</a> <a class = "txt">(-18)</a></li>
+                    <li class = "li scroll"><a class = "netName">Livebox-7M3C</a> <a class = "txt">(-45)</a></li>
+                    <li class = "li scroll"><a class = "netName">eduroam</a> <a class = "txt">(-12)</a></li>
+                    <li class = "li scroll"><a class = "netName">WifiFirst</a> <a class = "txt">(-4)</a></li>
+                    <li class = "li scroll"><a class = "netName">SoftAP</a> <a class = "txt">(-128)</a></li>
+                </ul>
+            </div>
+            <button type='submit' class =  "bnt"  id = "Scanner"> Scan </button>
+        </div>
+        <div class="box" id = "passForm">
+            <p class = "boxTitle"> Connection </p>
+                <ul >
+                    <li>Network name:  <input name='ssid' length = 32 required class =   "inputs" id = "SSID_input" title = "SSID need to be at least 2 characters"></li>
+                    <li>Password: <input type =   "password"   name='pass' length = 64 required class =   "inputs" id = "Pass_input" title = "Password need to be at least 8 characters" ></li>
+                        
+                </ul>
+               <button type='submit' class =  "bnt"  id = "Connect"> Connect </button>
+            
+        </div>
+        <div class="box" id = "paramForm">
+            <p class = "boxTitle "> Information </p>
+            <ul>
+                <li>Sensor name:  <input name='name' minlength="2" required class = "inputs" id = "Name" value = "Sensor RAM"  ></li>
+                <li>Hotspot SSID: <input   name='hot_spot_ssid' minlength="2" required class =  "inputs" id = "AP_SSID" value = "RAM config" ></li>
+                <li>Hotspot Password: <input type =   "hot_spot_password"   name='pass' minlength="8" required class = "inputs" id = "AP_Pass" value = "#RAM311" ></li>
+                
+            </ul>
+            <button type='submit' class =  "bnt"  id = "enregistrer"> Save </button>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> Sensor Data </p>
+            <div class = "sensor-grid">
+                <div class = "sensor">
+                    <p class = "dataType">Temperature</p>
+                    <p class="reading"><span id="temp"></span> &deg;C</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Humidity</p>
+                    <p class="reading"><span id="hum"></span> &percnt;</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Luminosity</p>
+                    <p class="reading"><span id="lum"></span> SSU</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Pressure</p>
+                    <p class="reading"><span id="press"></span> hPa</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">CO2</p>
+                    <p class="reading"><span id="CO2"></span> ppm</p>
+                </div>
+            </div>
+           <div class = "bottom"></div>
+        </div>
+        <div class="box">
+            <p class = "boxTitle"> About </p>
+            <div class = "sensor-grid">
+                <div class = "sensor">
+                    <p class = "dataType">Version</p>
+                    <p class="reading"> 1.0 </p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Released on</p>
+                    <p class="reading">29/09/2024</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Author</p>
+                    <p class="reading">Robin Gorius</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">City</p>
+                    <p class="reading">Toulouse</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Planet</p>
+                    <p class="reading">Earth</p>
+                </div>
+                <div class = "sensor">
+                    <p class = "dataType">Crew</p>
+                    <p class="reading">311</p>
+                </div>
+            </div>
+            <div class = "bottom"></div>
+        </div>
+    </div>
+    <div class = "bas_page"> </div>
+</body>
+</html>

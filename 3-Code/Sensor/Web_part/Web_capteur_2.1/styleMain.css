@@ -1,0 +1,191 @@
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+.container {
+    position: relative;
+    width: 98%;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    margin-bottom: 50px;
+}
+
+.box {
+   
+    display: flex;
+    flex-direction: column;        
+    justify-content: space-between; 
+    align-items:left; 
+    position: relative; 
+    height : 315px;     
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    border-radius: 20px;
+    overflow-x: auto;
+    white-space: nowrap  
+}
+
+.boxTitle{
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: min(30px, 10px + 2.5vw); /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    margin: auto; 
+    margin-top : 10px;
+    margin-bottom: 0px;
+
+}
+
+.titre{
+    width: 100%;
+    height: auto;
+    text-align: center;          /* Centrer le texte horizontalement */
+    font-size: calc(25px + 2.5vw); 
+    background-color: #005EB8;    /* Couleur de fond */
+    color: white;
+    padding: 5px;
+    margin-bottom: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    font-family: "Roboto", "sans-serif";
+    
+}
+
+.bas_page{
+    width: 100%;
+    height: 30px;
+    position: fixed;
+    bottom: 0;
+    background-color: #005EB8; /*#5ba12b;    /* Couleur de fond */
+    margin-top: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.bnt{ 
+    padding: 10px;           /* Espacement interne du bouton */
+    background-color: #cc5500;    /* Couleur de fond */
+    color: white;                  /* Couleur du texte */
+    border: none;                  /* Pas de bordure */
+    border-radius: 0 0 20px 20px;           /* Coins arrondis */
+    cursor: pointer;               /* Curseur pointer sur hover */
+    text-align: center;            /* Centre le texte */
+    position: relative;
+    width: 100%;
+    font-size: 17px;
+    transition: background-color 0.3s ease;
+}
+
+.bnt:hover {
+    background-color: #f19151; /* Couleur plus foncée lors du survol */
+}
+
+.txt{ 
+    font-size:18px;
+    color: black;
+    margin: 0px;
+}
+
+.check{ 
+    width: 20px; 
+    height: 20px; 
+    margin-left: auto;
+  }
+
+
+li {
+    display: flex;         /* Utilise Flexbox pour l'alignement */
+    justify-content: space-between; /* Espace entre le texte et la checkbox */
+    align-items: center;   /* Centre verticalement le texte et la checkbox */
+    margin-bottom: 5px;   /* Espace entre les éléments */
+    margin-top: 0px;
+    position: relative;
+    width: 90%;           /* Largeur de chaque élément de la liste */
+    font-size:18px;
+    color: black; 
+    font-family: "Roboto", "sans-serif";
+}
+
+.scroll{
+    border-bottom: 1px dotted black;
+}
+.scrollable-list {
+    position: relative;
+    width: 90%;          /* Largeur du conteneur de la liste */
+    height: 50%;         /* Hauteur fixe pour afficher 4 éléments */
+    overflow-y: auto;      /* Activer le défilement vertical */
+    padding: 5%;         /* Padding interne */
+    
+}
+
+.table{ 
+    margin:auto; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.inputs{ 
+    position: relative;
+    width: 60%; 
+    padding: 2px 2px; 
+    margin: 2px 2px; 
+    font-size:18px; 
+    color: black;
+ }
+
+.bottom{
+    background-color: #cc5500;
+    width: 100%;
+    height: 40px;
+    border-radius: 0 0 1vw 1vw;
+}
+
+.sensor-grid{
+    width: 90%;
+    height: 60%;
+    margin: 0 auto;
+    display: grid;
+    grid-gap: 0.8rem;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 110px ));
+    align-items:center; 
+    justify-content: space-between;
+}
+
+.sensor {
+    background-color: white;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    border-radius: .7vw;
+}
+.dataType {
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    color: #034078;
+    margin-top: 5px;
+}
+.reading {
+    text-align: center;
+    font-size: 17px;
+    color: #1282A2;
+}
+
+form{
+    margin-top: 20px;
+}
+
+.error{
+    background-color :"red";
+    width : "auto";
+    padding : "2px";
+    opacity : "0.5";
+    font-size : "16px";
+    color : "white";
+    text-align : "center";
+}
+.fade-out {
+    /*transition: opacity 1s; /* Transition douce sur 1 seconde */
+    opacity: 0;
+}

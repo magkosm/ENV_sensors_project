@@ -1,0 +1,62 @@
+{
+    "types": [
+        {
+            "type": "Env sensor",
+            "config": [
+                "ip",
+                "name"
+            ],
+            "measurements": {
+                "Temp": {
+                    "name": "Temperature",
+                    "unit": "\u00b0C"
+                },
+                "Hum": {
+                    "name": "Humidity",
+                    "unit": "%"
+                },
+                "Pres": {
+                    "name": "Pressure",
+                    "unit": "Pa"
+                },
+                "Lum": {
+                    "name": "Luminosity",
+                    "unit": "lx"
+                },
+                "FullLum": {
+                    "name": "Total Luminosity",
+                    "unit": "s.s.u"
+                },
+                "Visible": {
+                    "name": "Visible Luminosity",
+                    "unit": "s.s.u"
+                },
+                "IR": {
+                    "name": "Infrared Luminosity",
+                    "unit": "s.s.u"
+                },
+                "CO2": {
+                    "name": "CO2 Concentration",
+                    "unit": "ppm"
+                },
+                "VOC": {
+                    "name": "VOC Index",
+                    "unit": "s.s.u"
+                }
+            }
+        },
+        {
+            "type": "Battery monitor",
+            "config": [
+                "ip",
+                "name"
+            ],
+            "measurements": {
+                "Vbatt": {
+                    "name": "Voltage",
+                    "unit": "V"
+                }
+            }
+        }
+    ]
+}

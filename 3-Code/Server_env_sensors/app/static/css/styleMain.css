@@ -1,0 +1,788 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.add{
+    height: 80px;
+    width: 80px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, .5);
+    border-radius: 40%;
+    border: 1px solid white;
+    font-size: 60px;
+    font-weight: bold;
+    color: #034078;
+    background-color: white;
+    transition: background-color 0.3s ease;
+    padding: 0px;
+
+}
+
+.add:hover {
+    background-color: #e6e0dd; /* Darker color on hover */
+    border: 1px solid #e6e0dd;
+    transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.plus-symbol {
+    display: inline-block;
+    position: relative;
+}
+
+/* Firefox-specific styles */
+@-moz-document url-prefix() {
+    .plus-symbol {
+        top: -5px;
+    }
+}
+
+.bntBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px;
+}
+
+.container {
+    position: relative;
+    width: 95%;
+    max-width: 1300px;
+    margin: 0 auto;
+    margin-top: 20px;
+    display: grid;
+    grid-gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
+    margin-bottom: 80px;
+}
+
+.box {
+    display: block;
+    flex-direction: column;        
+    justify-content: space-between; 
+    align-items:center; 
+    min-height : 290px;
+    height:auto;
+    /*border: 2px solid #cc5500;*/
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    border-radius: 20px;
+    position: relative;
+    max-width: 500px;
+}
+
+.titreContainer{
+    display: flex;
+    height: 65px;        
+    justify-content: space-between;
+    background-color: #005EB8;    /* Background color */
+    align-items: center;
+    color: white;
+    padding: 5px;
+    margin-bottom: 30px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.filed{
+    font-size: calc(min(40px, 7vw));
+    margin-right: min(20px, 4vw);
+}
+
+.big{
+    width: calc(min(40px, 7vw)) ;  /* Button width */
+    height: calc(min(35px, 6.8vw)); /* Button height */
+    margin-left: 20px;
+}
+
+.small{
+    width: 20px;  /* Button width */
+    height: 17.5px; /* Button height */
+    margin-left: 0px;
+    position: absolute;
+    left: 25px; /* Place button on the left */
+    top : 25px;
+}
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    align-self: left;
+}
+/* Bar styles */
+.hamburger-btn .bar {
+    width: 100%;
+    border-radius: 2px;
+    transition: background-color 0.3s;
+}
+
+.big-bar{
+    height: 4px; /* Thickness of each bar */
+    /*margin-top: 3px; /* Vertical spacing between bars */
+    background-color: white; /* Bar color */
+}
+
+.small-bar{
+    height: 2px; /* Thickness of each bar */
+    /*margin-top: 3px; /* Vertical spacing between bars */
+    background-color: black; /* Bar color */
+}
+
+.adaptMargin{
+    margin-left: 25px;
+}
+/* Color change on hover */
+.hamburger-btn:hover .bar {
+    scale:1.2;
+}
+
+.toggleBnt{
+    background: none;
+    border: none;
+    font-size: 35px;
+    cursor: pointer;
+    margin-right: 20px;
+}
+
+.toggleBnt:hover {
+    scale:1.2;
+}
+
+.titre{
+    width: auto;
+    height: auto;
+    text-align: center;          /* Center text horizontally */
+    font-size: min(40px, calc(15px + 3vw));
+    font-family: "Roboto", "sans-serif";
+    align-self: center;
+
+}
+
+/* SENSOR DETAILS DISPLAY OVERLAY  */
+.sensorListoverlay {
+    position: absolute; /* Change 'fixed' to 'absolute' for positioning relative to parent */
+    top: 85px; /* Adjust this based on the height of your title bar so it appears just below */
+    left: 10px; /* Positioned on the left side of the page */
+    height: 80%; /* Popup height */
+    width: 330px; /* Fixed width of 350px */
+    background-color: rgba(255, 255, 255, 0.212); /* Semi-transparent background */
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4); 
+    display: none; /* Hide overlay initially */
+    z-index: 1000;
+    border-radius: 10px;
+}
+
+.sensorListoverlay_container {
+    background-color: white;
+    width: calc(100% - 20px); /* Use all available width */
+    height: 100%; /* Use all available height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background */
+    overflow: hidden; /* Hide overflow */
+    border-radius: 10px;
+    padding: 0 10px; /* Add padding to include edges */
+}
+
+.sensorListFormTitle {
+    display: flex;
+    align-items: center; /* Vertically align elements in center */
+    justify-content: space-between;
+    font-size: min(20px, calc(15px + 1.5vw));;
+    font-family: "Roboto", "sans-serif";
+    background-color: #005EB8;
+    width: 100%; /* Width adjusted to include padding */
+    padding: 10px;
+    color: white;
+    border-radius: 10px 10px 0 0;
+    margin: 0 -10px; /* Adjust margin to compensate for container padding */
+}
+
+.sensor-list {
+    flex-grow: 1; /* Allow this div to take all available space */
+    overflow-y: auto; /* Add vertical scrolling if content overflows */
+    padding: 15px;
+    margin: 5px;
+}
+
+.center {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: auto; /* Ensure div takes full height of parent container */
+    width: 100%; /* Ensure div takes full width of parent container */
+    margin: 0 -10px;
+    border:none;
+    background-color: transparent;
+}
+.sensor-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc; /* Gray bottom border */
+}
+
+.close {
+    position: relative;
+    /*top: 5px;
+    right: -25px;*/
+    font-size: 20px;
+    cursor: pointer;
+    color: black;
+    background-color: transparent;
+    border: none;
+
+}
+
+.close:hover {
+    color: #ff0000;
+}
+
+.password-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #f1f1f1;
+    border-radius: 0 0 10px 10px;
+    width:calc(100% + 10px);
+    margin: 0 -10px;
+
+}
+
+.password-container input[type="password"] {
+    flex-grow: 1;
+    padding: 5px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 15px;
+}
+
+.password-container button {
+    padding: 5px;
+    background-color: transparent;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+.password-container button:hover {
+    background-color: #005EB8;
+    color: white;
+}
+
+.lock-icon {
+    font-size: 1em;
+    background-color: transparent; /* Transparent background */
+    border: none;
+    cursor: pointer;
+}
+
+.password-field-container {
+    display: flex;
+    align-items: center;
+    width: 57%;
+    padding: 0px;
+}
+
+.inputs{ 
+    
+    width: 100%; 
+    padding: 2px 2px; 
+    margin-right: 0px;
+    font-style: italic;
+    color: black;
+}
+
+
+/* SENSOR OVERLAY*/
+/* Style for sensor list overlay */
+.sensorMesOverlay {
+    position: absolute; /* Use 'absolute' for positioning relative to parent */
+    top: 55px; /* Position at the top of the box */
+    left: 15px; /* Left alignment */
+    height: auto; /* Dynamic height based on content */
+    width: 180px; /* Fixed width of 300px */
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent background */
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5); /* Shadow for depth */
+    overflow-y: auto; /* Enable vertical scrolling if needed */
+    overflow-x: hidden;
+    z-index: 1000; /* Ensure it's above other elements */
+    display: none; /* Hidden by default */
+    border-radius: 5px;
+}
+
+/* Style for popup title */
+.sensorMesFormTitle {
+    display: flex;
+    align-items: center; /* Vertically align elements in center */
+    justify-content: space-between; /* Space between elements */
+    font-size: 20px; /* Font size */
+    font-family: "Roboto", "sans-serif"; /* Font */
+    background-color: #005fb8b6; /* Background color */
+    width: 100%; /* Take full width of overlay */
+    padding: 10px; /* Inner spacing */
+    color: white; /* Text color */
+    margin-left: 0px;
+    margin-top: 0px;
+}
+
+/* Style for measurement content */
+.sensorMesContent {
+    padding-right: 10px; 
+    padding-left: 10px;
+    padding-bottom: 0px;
+}
+
+/* Style for toggle button */
+.toggle-btn {
+    cursor: pointer; /* Change cursor to pointer */
+    background: none; /* No background */
+    border: none; /* No border */
+    color: #007BFF; /* Text color */
+    font-size: 14px; /* Font size */
+    padding: 5px; /* Inner spacing */
+}
+
+/* Style for close button */
+.sensorMesclose {
+    position: absolute; /* Absolute position to place at top right */
+    top: 10px; /* Distance from top */
+    right: 15px; /* Distance from right */
+    font-size: 24px; /* Font size */
+    font-weight: bold; /* Bold */
+    cursor: pointer; /* Change cursor to pointer */
+    color: white; /* Text color */
+}
+
+/* Color change on hover */
+.sensorMesclose:hover {
+    color: #ff0000; /* Hover color */
+}
+
+/*BOX STYLE*/
+.boxTitle{
+    display: flex;
+    align-items: center;        /* Vertically align elements in center */
+    justify-content: center;     /* Center content horizontally */
+    position: reative;
+    width: 90%;
+    height: auto;
+    padding: 10px;
+    padding-bottom: 0px;
+    text-align: center;          /* Center text horizontally */
+    font-size: min(30px, calc(10px + 2.5vw)); /*clamp(1rem, 5vw, 3rem); /* Adjust text size based on screen */
+    margin: auto; 
+    margin-top : 10px;
+    margin-bottom: 0px;
+
+}
+
+
+.smalladapt{
+    width: 20px;
+    margin-left: 20px;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0px 0px 30px rgba(255, 0, 0, 0.5);
+        
+    }
+    50% {
+        box-shadow: 0px 0px 70px rgba(255, 0, 0, 0.8); /* Larger shadow at midpoint of animation */
+    }
+    100% {
+        box-shadow: 0px 0px 30px rgba(255, 0, 0, 0.5);
+    }
+}
+
+.bas_page{
+    width: 100%;
+    height: auto;
+    position: fixed;
+    bottom: 0;
+    background-color: #005EB8; /*#5ba12b;    /* Background color */
+    margin-top: 70px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+    color : white;
+    text-align: center;
+    padding: 10px;
+    font-family: "Roboto", "sans-serif";
+}
+
+.bnt{ 
+    padding: 10px;           /* Button internal spacing */
+    background-color: #cc5500e5;    /* Background color */
+    color: white;                  /* Text color */
+    border: none;                  /* No border */
+    border-radius: 0 0 20px 20px;           /* Rounded corners */
+    cursor: pointer;               /* Pointer cursor on hover */
+    text-align: center;            /* Center text */
+    /*position: relative;*/
+    width: 100%;
+    font-size: 17px;
+    transition: background-color 0.3s ease;
+    margin-top: auto;
+}
+
+.bnt:hover {
+    background-color:#cc5500ac; /* Darker color on hover */
+}
+
+.txt{ 
+    font-size:18px;
+    color: black;
+    margin: 0px;
+}
+
+.check{ 
+    width: 20px; 
+    height: 20px; 
+    margin-left: auto;
+}
+
+li {
+    display: flex;         /* Use Flexbox for alignment */
+    justify-content: space-between; /* Space between text and checkbox */
+    align-items: center;   /* Vertically center text and checkbox */
+    margin-bottom: 5px;   /* Space between items */
+    margin-top: 0px;
+    position: relative;
+    width: 90%;           /* Width of each list item */
+    font-size:18px;
+    color: black; 
+    font-family: "Roboto", "sans-serif";
+}
+
+.scroll{
+    border-bottom: 1px dotted black;
+}
+.scrollable-list {
+    position: relative;
+    width: 90%;          /* Width of list container */
+    height: 50%;         /* Fixed height to display 4 items */
+    overflow-y: auto;      /* Enable vertical scrolling */
+    padding: 5%;         /* Internal padding */
+    
+}
+
+.table{ 
+    margin:auto; 
+    margin-top: 20px; 
+    margin-bottom: 20px; 
+    text-align: center; 
+}
+
+.inputs{ 
+    position: relative;
+    width: 60%; 
+    padding: 2px 2px; 
+    margin: 2px 2px; 
+    font-size:18px; 
+    color: black;
+ }
+
+.bottom{
+    background-color: #cc5500;
+    width: 100%;
+    height: 40px;
+    border-radius: 0 0 20px 20px;
+}
+
+.sensor-grid{
+    margin-top: 5px;
+    max-width: 100%; /* Prevent width overflow */
+    min-height: 200px;
+    height:auto;
+    align-self: center;
+    padding: 20px;
+    display: grid;
+    grid-gap: 0.8rem;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns of equal size */
+    grid-template-rows: repeat(2, 1fr);    /* 2 rows of equal size */
+    align-items:center; 
+    justify-content: space-between;
+    overflow-x: auto;
+    white-space: nowrap;  
+}
+
+.sensor {
+    display: block;
+    background-color: white;
+    box-shadow: 2px 2px 12px 1px rgba(140,140,140,.5);
+    border-radius: 10px;
+    font-size: clamp(10px, 5vw, 15px); /* Dynamically adjust font size */;
+    overflow-x: auto;
+}
+.dataType {
+    text-align: center;
+    font-weight: bold;
+    color: #034078;
+    margin-top: 5px;
+    
+}
+.reading {
+    text-align: center;
+    font-size: 17px;
+    color: #1282A2;
+}
+
+form{
+    margin-top: 20px;
+}
+
+.error{
+    background-color :"red";
+    width : "auto";
+    padding : "2px";
+    opacity : "0.5";
+    font-size : "16px";
+    color : "white";
+    text-align : "center";
+}
+.fade-out {
+    /*transition: opacity 1s; /* Smooth transition over 1 second */
+    opacity: 0;
+}
+
+
+/* SENSOR ADD OVERLAY*/
+
+#openOverlayBtn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    overflow-x: scroll;
+}
+.overlay_container{
+    background-color: white;
+    border-radius: 10px;
+    width: 350px; /* width adjusted to better fit everything */
+    max-height: 80%;
+    position: fixed;
+    top: 50%;
+    left: 45%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+
+}
+.overlay-content {
+    background-color: white;
+    padding: 20px; /* Add padding to avoid sticking to edges */
+    padding-top: 10px;
+    text-align: left;
+    width: 350px;
+    max-height: 65vh; /* Limit height to 80% of screen height */
+    border-radius: 0 0 10px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    overflow-y: auto; /* Add vertical scrolling if content overflows */
+}
+
+.newSensorTypeForm {
+    position: relative;
+    max-height: 100%;
+}
+
+.form-group {
+    margin-bottom: 0px;
+}
+
+.form-group label {
+    display: block;
+}
+
+.FormTitle{
+    background-color: #005EB8;
+    text-align: center;
+    width: 370px;
+    height: auto;
+    border-radius: 10px 10px 0 0;
+    padding: 10px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+    font-family: "Roboto", "sans-serif";
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.croix {
+    font-size: min(30px, 10px + 2.5vw);
+    cursor: pointer;
+    color: white;
+    background-color: transparent;
+    border: none;
+}
+
+.croix:hover {
+    color: #ff0000;
+}
+
+.overlayTitle{
+    font-size: min(30px, 10px + 2.5vw);
+    color : white;
+}
+
+.FormsubTitle{
+    font-size: 18px;
+    font-weight: bold;
+    color: black; /*#034078;*/
+    margin-bottom: 5px;
+    margin-top: 10px;
+
+}
+input[type="text"], textarea {
+    width: 100%;
+    padding: 10px; /* Add padding inside inputs */
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box; /* Ensure padding doesn't exceed input width */
+}
+
+input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+/* Grid for checkboxes */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    justify-items: start;
+    margin-bottom: 15px;
+}
+
+
+.bnt_pop_up {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.save {
+    background-color: #005EB8;
+    color: white;
+    width: auto;
+    margin-left: 0px;
+    margin-top: 15px;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
+}
+
+.save:hover {
+    background-color: #004494; /* Darker background color on hover */
+    transform: scale(1.05); /* Slight size increase on hover */
+}
+
+.save:active {
+    background-color: #003366; /* Even darker background color when clicked */
+    transform: scale(1); /* Reset size when clicked */
+}
+
+.inline-group {
+    display: flex;
+    align-items: center;
+}
+
+.inline-group .configField {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.inline-group .remove-btn {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.remove-btn {
+    background: none;
+    border: none;
+    color: black;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.remove-btn:hover{
+    color:red;
+}
+
+.measurement-group {
+    position: relative;
+    padding-top: 15px;
+}
+
+.measurement-group .remove-btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.measurement-group .measurementKey,
+.measurement-group .measurementName,
+.measurement-group .measurementUnit {
+    display: block;
+    width: calc(100% - 20px); /* Adjust width to account for padding */
+    margin-bottom: 10px;
+}
+
+select {
+    background-color: white;
+    color: black; /* Optional: ensure text is readable */
+    border: 1px solid #ccc; /* Optional: add a border */
+    padding: 5px; /* Optional: add padding */
+    border-radius: 4px; /* Optional: round corners */
+}
+
+/* Styles for add buttons */
+.add-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #005EB8; /* Background color */
+    color: white; /* Text color */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Transition for hover */
+    margin-top: 10px; /* Spacing above button */
+}
+
+.add-btn:hover {
+    background-color: #004494; /* Darker background color on hover */
+    transform: scale(1.05); /* Slight size increase on hover */
+}
+
+.add-btn:active {
+    background-color: #003366; /* Even darker background color when clicked */
+    transform: scale(1); /* Reset size when clicked */
+}
