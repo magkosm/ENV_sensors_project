@@ -1,4 +1,4 @@
-// Fonction pour envoyer une requête au serveur
+// Function to send a request to the server
 async function sendRequest(endpoint, data, method = 'POST') {
     const response = await fetch(endpoint, {
         method: method,
@@ -10,7 +10,7 @@ async function sendRequest(endpoint, data, method = 'POST') {
     return response.json();
 }
 
-// Fonction pour charger les fichiers de configuration
+// Function to load configuration files
 async function loadConfig() {
     const configResponse = await fetch('/getConfig');
     const config = await configResponse.json();
@@ -49,7 +49,7 @@ function togglePasswordVisibility(passId, bntId) {
     }
 }
 
-// Fonction pour activer les boutons de suppression
+// Function to enable delete buttons
 function enableDeleteButtons() {
     const deleteButtons = document.querySelectorAll('.hide-config');
     const lockIcon = document.getElementById('lockIcon');
@@ -61,7 +61,7 @@ function enableDeleteButtons() {
     });
 }
 
-// Fonction pour desactiver les boutons de suppression
+// Function to disable delete buttons
 function disableDeleteButtons() {
     const deleteButtons = document.querySelectorAll('.hide-config');
     const lockIcon = document.getElementById('lockIcon');
@@ -88,7 +88,7 @@ function togglePasswordField() {
     checkbnt.style.display = (checkbnt.style.display === 'none' || checkbnt.style.display === '') ? 'block' : 'none';  
 }
 
-// Fonction pour masquer le formulaire de nouveau type de capteur
+// Function to hide the new sensor type form
 function hideNewSensorTypeForm() {
     const newSensorTypeForm = document.getElementById('newSensorTypeForm');
     const saveBtn = document.getElementById('saveBtn');
@@ -100,7 +100,7 @@ function hideNewSensorTypeForm() {
     }
 }
 
-// Fonction pour ajouter un champ de mesure
+// Function to add a measurement field
 function addMeasurementField() {
     const newSensorMeasurements = document.getElementById('newSensorMeasurements');
     const measurementFieldHtml = `
@@ -114,7 +114,7 @@ function addMeasurementField() {
     newSensorMeasurements.insertAdjacentHTML('beforeend', measurementFieldHtml);
 }
 
-// Fonction pour ajouter un champ de configuration
+// Function to add a configuration field
 function addConfigField() {
     const newSensorConfig = document.getElementById('newSensorConfig');
     const configFieldHtml = `
@@ -126,12 +126,12 @@ function addConfigField() {
     newSensorConfig.insertAdjacentHTML('beforeend', configFieldHtml);
 }
 
-// Fonction pour supprimer un champ de saisie
+// Function to delete an input field
 function removeField(button) {
     button.parentElement.remove();
 }
 
-// Fonction pour enregistrer le nouveau type de capteur
+// Function to save the new sensor type
 async function saveNewSensorType() {
     const newSensorTypeName = document.getElementById('newSensorTypeName').value;
     const measurementKeys = document.querySelectorAll('.measurementKey');
@@ -140,7 +140,7 @@ async function saveNewSensorType() {
     const configFields = document.querySelectorAll('.configField');
 
     if (!newSensorTypeName) {
-        alert('Le champ "Nom" est obligatoire.');
+        alert('The "Name" field is required.');
         return;
     }
 
@@ -150,7 +150,7 @@ async function saveNewSensorType() {
         const nameField = measurementNames[index];
         const unitField = measurementUnits[index];
         if (keyField.value.includes(' ')) {
-            alert('La clé de la mesure ne doit pas contenir d\'espace.');
+            alert('The key of the measure must not contain d\'espace.');
             console.log(keyField.value);
             valid = false;
             return;
@@ -163,7 +163,7 @@ async function saveNewSensorType() {
 
     if (!valid) return;
 
-    const config = []; // Ajouter 'name' au début de la liste de configuration
+    const config = []; // Add 'name' to the beginning of the configuration list
     configFields.forEach(field => {
         config.push(field.value);
     });
@@ -179,14 +179,14 @@ async function saveNewSensorType() {
     const response = await sendRequest('/addSensorType', newSensorType, 'POST');
     if (response.message) {
         console.log(response.message);
-        await reloadConfig(); // Recharger les configurations après l'ajout
+        await reloadConfig(); // Reload configurations after adding
         await generateHTML();
     } else {
         console.error(response.error);
     }
 }
 
-// Fonction pour afficher le formulaire de nouveau type de capteur
+// Function to display the new sensor type form
 function showNewSensorTypeForm() {
     const newSensorTypeForm = document.getElementById('newSensorTypeForm');
     const saveBtn = document.getElementById('saveBtn');
@@ -223,7 +223,7 @@ function showNewSensorTypeForm() {
     }
 }
 
-// Fonction pour masquer le formulaire de nouveau type de capteur
+// Function to hide the new sensor type form
 function hideNewSensorTypeForm() {
     const newSensorTypeForm = document.getElementById('newSensorTypeForm');
     const saveBtn = document.getElementById('saveBtn');
@@ -235,7 +235,7 @@ function hideNewSensorTypeForm() {
     }
 }
 
-// Fonction pour mettre à jour les champs de configuration dynamiques
+// Function to update dynamic configuration fields
 function updateConfigFields() {
     const sensorTypeSelect = document.getElementById('sensorType');
     const selectedType = sensorTypeSelect.value;
@@ -264,28 +264,28 @@ function updateConfigFields() {
     }
 }
 
-// Fonction pour fermer l'overlay
+// Function to close the overlay
 function closeOverlay() {
     document.getElementById('overlay').style.display = 'none';
 }
 
-// Fonction pour enregistrer un capteur et fermer l'overlay
+// Function to register a sensor and close the overlay
 async function saveSensor() {
     await addSensor();
     closeOverlay();
 }
 
-// Fonction pour ajouter un capteur
+// Function to add a sensor
 async function addSensor() {
     const sensorTypeSelect = document.getElementById('sensorType');
     const selectedType = sensorTypeSelect.value;
 
-    // Charger les types de capteurs depuis le localStorage
+    // Load sensor types from localStorage
     const sensorTypes = JSON.parse(localStorage.getItem('sensorTypes'));
     const selectedSensorType = sensorTypes.types.find(type => type.type === selectedType);
 
     if (!selectedSensorType) {
-        console.error("Type de capteur non trouvé");
+        console.error("Sensor type not found");
         return;
     }
 
@@ -295,7 +295,7 @@ async function addSensor() {
         configData[field.id] = field.value;
     });
 
-    // Construire l'objet toSend en utilisant les champs de configuration spécifiques au type de capteur
+    // Construct the to Send object using the sensor type-specific configuration fields
     const toSend = {
         type: selectedType
     };
@@ -304,7 +304,7 @@ async function addSensor() {
         if (configData[configField]) {
             toSend[configField] = configData[configField];
         } else {
-            console.error(`Champ de configuration manquant: ${configField}`);
+            console.error(`Missing configuration field: ${configField}`);
         }
     });
 
@@ -318,14 +318,14 @@ async function addSensor() {
     }
 }
 
-// Fonction pour recharger les configurations depuis le serveur
+// Function to reload configurations from the server
 async function reloadConfig() {
     const { sensorTypes } = await loadConfig();
     localStorage.setItem('sensorTypes', JSON.stringify(sensorTypes));
     updateConfigFields();
 }
 
-// Fonction pour supprimer un capteur
+// Function to delete a sensor
 async function deleteSensor(sensorName, sensorIp) {
     const toSend = {
         name: sensorName,
@@ -341,7 +341,7 @@ async function deleteSensor(sensorName, sensorIp) {
     }
 }
 
-// Fonction pour afficher ou masquer l'overlay des capteurs
+// Function to show or hide the sensor overlay
 function toggleSensorListOverlay(overlayId) {
     const overlay = document.getElementById(overlayId);
     if (overlay) {
@@ -366,7 +366,7 @@ function toggleSensor(sensorId, buttonId) {
     }
 }
 
-// Fonction pour restaurer l'état des capteurs et des grandeurs mesurées
+// Function to restore the state of sensors and measured quantities
 function restoreSensorState() {
     const sensorElements = document.querySelectorAll('.sensor');
     sensorElements.forEach(sensorElement => {
@@ -408,12 +408,12 @@ function restoreSensorState() {
     });
 }
 
-// Fonction pour mettre à jour les capteurs
+// Function to update sensors
 function majSensors() {
     (async () => {
         const toSend = { do: "getData" };
         const data_capts = await sendRequest('getData', toSend);
-        console.log('Réponse traitée:', data_capts);
+        console.log('Response processed:', data_capts);
 
         if (data_capts != null) {
             const titreContainer = document.getElementById("titreContainer");
@@ -429,7 +429,7 @@ function majSensors() {
                 const dt = Math.abs(timeStamp - receivedTS);
                 const sensorHash = `sensor_${hashString(donnees.name)}`;
 
-                // Remplir chaque span avec la valeur correspondante
+                // Fill each span with the corresponding value
                 Object.keys(donnees.measurements).forEach(measurementKey => {
                     console.log(measurementKey);
                     const element = document.getElementById(`${measurementKey.toLowerCase()}_${sensorHash}`);
@@ -463,7 +463,7 @@ function hashString(str) {
     return hash;
 }
 
-// Fonction pour générer dynamiquement le contenu HTML
+// Function to dynamically generate HTML content
 async function generateHTML() {
     const { config, sensorTypes } = await loadConfig();
 
@@ -473,7 +473,7 @@ async function generateHTML() {
     const sensorListContent = document.getElementById('sensorListContent');
     sensorListContent.innerHTML = '';
 
-    // Remplir le champ de sélection des types de capteurs
+    // Fill in the sensor type selection field
     const sensorTypeSelect = document.getElementById('sensorType');
     sensorTypeSelect.innerHTML = '';
 
@@ -484,13 +484,13 @@ async function generateHTML() {
         sensorTypeSelect.appendChild(option);
     });
 
-    // Ajouter l'option "Autre"
+    // Add the "Other" option
     const otherOption = document.createElement('option');
     otherOption.value = 'Autre';
     otherOption.textContent = 'Autre';
     sensorTypeSelect.appendChild(otherOption);
 
-    // Ajouter un événement pour gérer l'option "Autre"
+    // Add an event to manage the "Other" option
     sensorTypeSelect.addEventListener('change', function() {
         if (this.value === 'Autre') {
             showNewSensorTypeForm();
@@ -503,7 +503,7 @@ async function generateHTML() {
     config.sensors.forEach(sensor => {
         const sensorHash = `sensor_${hashString(sensor.name)}`;
 
-        // Générer le contenu principal des capteurs
+        // Generate the main content of the sensors
         const box = document.createElement('div');
         box.className = 'box';
         box.id = sensorHash;
@@ -559,7 +559,7 @@ async function generateHTML() {
 
         container.appendChild(box);
 
-        // Générer le contenu de l'overlay de la liste des capteurs
+        // Generate the content of the sensor list overlay
         const sensorItem = document.createElement('div');
         sensorItem.className = 'sensor-item';
         sensorItem.innerHTML = `
@@ -573,25 +573,25 @@ async function generateHTML() {
     });
 }
 
-// Fonction pour générer la page en fonction des états enregistré dans le local storage 
+// Function to generate the page based on the states saved in local storage 
 async function createPage(){
-    await reloadConfig(); // Recharger les configurations lors du chargement initial de la page
+    await reloadConfig(); // Reload settings on initial page load
     await generateHTML();
     majSensors();
     updateConfigFields();
-    restoreSensorState(); // Restaurer l'état des capteurs et des grandeurs mesurées
+    restoreSensorState(); // Restore the state of sensors and measured quantities
 }
 
-let GraphsTab = null;  // Référence de l'onglet graphs
-let mainTab = window;  // Enregistrez la référence à l'onglet principal (celui qui ouvre `/Graphs`)
+let GraphsTab = null;  // Graphs tab reference
+let mainTab = window;  // Save the reference to the main tab (the one that opens `/Graphs`)
 
 function openGraphPage() {
-    window.mainTab = window;  // Stockez la référence de l'onglet principal
-    localStorage.setItem("returnToMain", "false");  // Initialisation pour dire qu'on n'est pas encore dans l'onglet principal
+    window.mainTab = window;  // Store the main tab reference
+    localStorage.setItem("returnToMain", "false");  // Initialization to say that we are not yet in the main tab
     if (GraphsTab) {
-        GraphsTab.focus();  // Passe à l'onglet principal
+        GraphsTab.focus();  // Switch to the main tab
     } else {
-        GraphsTab = window.open('/Graphs', '_blank');  // Ouvre la page graphs dans un nouvel onglet et enregistre la référence
+        GraphsTab = window.open('/Graphs', '_blank');  // Open the graphs page in a new tab and save the reference
     }
 }
 
@@ -603,13 +603,13 @@ window.addEventListener('storage', function(event) {
     }
 });
 
-// Initialisation de la page
+// Initializing the page
 document.addEventListener('DOMContentLoaded', async () => {
     await createPage();
-    setInterval(majSensors, 30000); // Mettre à jour les capteurs toutes les 30 secondes
+    setInterval(majSensors, 30000); // Update sensors every 30 seconds
 });
 
-// Gestion des événements
+// Event management
 document.getElementById('plus_bnt').addEventListener('click', function () {
     document.getElementById('overlay').style.display = 'flex';
 });

@@ -5,27 +5,27 @@ from flask import jsonify
 import paho.mqtt.client as mqtt
 
 
-# Configuration du serveur HTTP
+# HTTP Server Configuration
 HTTP_SERVER = "http://127.0.0.1:5000"
 
-# Configuration du broker MQTT
-MQTT_BROKER = "192.168.0.10"  # Remplacez par l'adresse IP de votre broker MQTT
-MQTT_PORT = 1883               # Port MQTT par défaut (1883 pour non sécurisé)
-MQTT_USERNAME = "spaceship"  # Remplacez par votre nom d'utilisateur MQTT
-MQTT_PASSWORD = "Space$h!p"  # Remplacez par votre mot de passe MQTT
-DISCOVERY_PREFIX = "homeassistant"  # Préfixe utilisé par Home Assistant pour la découverte
+# MQTT Broker Configuration
+MQTT_BROKER = "192.168.0.10"  # Replace with the IP address of your MQTT broker
+MQTT_PORT = 1883               # Default MQTT port (1883 for insecure)
+MQTT_USERNAME = "spaceship"  # Replace with your MQTT username
+MQTT_PASSWORD = "Space$h!p"  # Replace with your MQTT password
+DISCOVERY_PREFIX = "homeassistant"  # Prefix used by Home Assistant for discovery
 
-# Configuration de l'appareil
+# Device configuration
 DEVICE_MANUFACTURER = "RG corp"
 DEVICE_MODEL = "Server Sensor Bridge"
 
-# Créer le client MQTT
+# Create the MQTT client
 mqtt_client = mqtt.Client()
 
-# Configurer les identifiants MQTT
+# Configure MQTT credentials
 mqtt_client.username_pw_set(MQTT_USERNAME, MQTT_PASSWORD)
 
-# Connecter le client MQTT au broker
+# Connect the MQTT client to the broker
 mqtt_client.connect(MQTT_BROKER, MQTT_PORT, 60)
 
 
@@ -54,7 +54,7 @@ def fetch_config():
 
 def publish_discovery(config):
     
-   # Publie les messages de découverte MQTT pour chaque capteur.
+   # Publishes MQTT discovery messages for each sensor.
     
     for sensor in config["sensors"]:
         sensor_id = sensor["name"].replace(" ", "_")
@@ -75,9 +75,9 @@ def publish_discovery(config):
                 "device": device_info
             }
 
-            # Publier le message de découverte
+            # Publish the discovery message
             mqtt_client.publish(discovery_topic, json.dumps(discovery_message), retain=True)
-            print(f"Découverte publiée pour {sensor['name']} - {key}")
+            print(f"Discovery published for {sensor['name']} - {key}")
 
 """"
 def fetch_data():
@@ -93,7 +93,7 @@ def fetch_data():
 """
 def publish_data(data):
     
-    #Publie les données des capteurs sur MQTT.
+    #Publishes sensor data to MQTT.
 
     for sensor in data:
         sensor_id = sensor["name"].replace(" ", "_")
@@ -103,31 +103,31 @@ def publish_data(data):
             value = 311 
             if value is not None:
                 mqtt_client.publish(state_topic, value)
-                print(f"Données publiées pour {sensor['name']} - {key}: {value}")
+                print(f"Data published for {sensor['name']} - {key}: {value}")
 
 def main():
-    # Étape 1 : Récupérer la configuration
+    # Step 1: Retrieve the configuration
     config = fetch_config()
 
     if not config:
         return
     
-    # Étape 2 : Publier les messages de découverte
+    # Step 2: Publish Discovery Messages
     publish_discovery(config)
 
-    # Étape 3 : Boucle principale pour récupérer et publier les données
+    # Step 3: Main loop to fetch and publish data
     while True:
         try:
-            # Récupérer les données
+            # Recover data
             publish_data(config)
 
-            # Attendre 30 secondes avant la prochaine récupération
+            # Wait 30 seconds before the next recovery
             time.sleep(30)
         except KeyboardInterrupt:
-            print("Arrêt du script.")
+            print("Stop the script.")
             break
         except Exception as e:
-            print(f"Erreur inattendue : {e}")
+            print(f"Unexpected error : {e}")
 
 
 if __name__ == "__main__":

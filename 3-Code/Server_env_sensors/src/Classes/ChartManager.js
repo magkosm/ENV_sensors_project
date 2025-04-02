@@ -12,7 +12,7 @@ class ChartManager {
         this.ts_end = ts_end;
         this.live = live;
         this.chart = null;
-        this.sensorData = {};//stock les infos sur les capteurs et les mesures affichées
+        this.sensorData = {};//Stores sensor information and displayed measurements
     }
     
 
@@ -79,8 +79,8 @@ class ChartManager {
                             family: "Roboto, sans-serif"
                         },
                         padding: {
-                            top: 0,  // Espace au-dessus du titre
-                            bottom: 15 // Espace en dessous du titre
+                            top: 0,  // Space above the title
+                            bottom: 15 // Space below the title
                         }
                     },
                     legend: {

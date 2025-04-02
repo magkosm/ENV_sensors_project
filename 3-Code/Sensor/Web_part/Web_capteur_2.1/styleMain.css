@@ -32,8 +32,8 @@ body {
 }
 
 .boxTitle{
-    text-align: center;          /* Centrer le texte horizontalement */
-    font-size: min(30px, 10px + 2.5vw); /*clamp(1rem, 5vw, 3rem); /* Ajuster la taille du texte selon l'écran */
+    text-align: center;          /* Center text horizontally */
+    font-size: min(30px, 10px + 2.5vw); /*clamp(1rem, 5vw, 3rem); /* Adjust text size to fit screen */
     margin: auto; 
     margin-top : 10px;
     margin-bottom: 0px;
@@ -43,9 +43,9 @@ body {
 .titre{
     width: 100%;
     height: auto;
-    text-align: center;          /* Centrer le texte horizontalement */
+    text-align: center;          /* Center text horizontally */
     font-size: calc(25px + 2.5vw); 
-    background-color: #005EB8;    /* Couleur de fond */
+    background-color: #005EB8;    /* Background color */
     color: white;
     padding: 5px;
     margin-bottom: 30px;
@@ -59,19 +59,19 @@ body {
     height: 30px;
     position: fixed;
     bottom: 0;
-    background-color: #005EB8; /*#5ba12b;    /* Couleur de fond */
+    background-color: #005EB8; /*#5ba12b;    /* Background color */
     margin-top: 30px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.5); 
 }
 
 .bnt{ 
-    padding: 10px;           /* Espacement interne du bouton */
-    background-color: #cc5500;    /* Couleur de fond */
-    color: white;                  /* Couleur du texte */
-    border: none;                  /* Pas de bordure */
-    border-radius: 0 0 20px 20px;           /* Coins arrondis */
-    cursor: pointer;               /* Curseur pointer sur hover */
-    text-align: center;            /* Centre le texte */
+    padding: 10px;           /* Internal button spacing */
+    background-color: #cc5500;    /* Background color */
+    color: white;                  /* Text color */
+    border: none;                  /* No border */
+    border-radius: 0 0 20px 20px;           /* Rounded corners */
+    cursor: pointer;               /* Cursor point to hover */
+    text-align: center;            /* Center the text */
     position: relative;
     width: 100%;
     font-size: 17px;
@@ -79,7 +79,7 @@ body {
 }
 
 .bnt:hover {
-    background-color: #f19151; /* Couleur plus foncée lors du survol */
+    background-color: #f19151; /* Darker color on hover */
 }
 
 .txt{ 
@@ -96,13 +96,13 @@ body {
 
 
 li {
-    display: flex;         /* Utilise Flexbox pour l'alignement */
-    justify-content: space-between; /* Espace entre le texte et la checkbox */
-    align-items: center;   /* Centre verticalement le texte et la checkbox */
-    margin-bottom: 5px;   /* Espace entre les éléments */
+    display: flex;         /* Use Flexbox for alignment */
+    justify-content: space-between; /* Space between text and checkbox */
+    align-items: center;   /* Vertically centers the text and checkbox */
+    margin-bottom: 5px;   /* Space between elements */
     margin-top: 0px;
     position: relative;
-    width: 90%;           /* Largeur de chaque élément de la liste */
+    width: 90%;           /* Width of each item in the list */
     font-size:18px;
     color: black; 
     font-family: "Roboto", "sans-serif";
@@ -113,10 +113,10 @@ li {
 }
 .scrollable-list {
     position: relative;
-    width: 90%;          /* Largeur du conteneur de la liste */
-    height: 50%;         /* Hauteur fixe pour afficher 4 éléments */
-    overflow-y: auto;      /* Activer le défilement vertical */
-    padding: 5%;         /* Padding interne */
+    width: 90%;          /* List container width */
+    height: 50%;         /* Fixed height to display 4 items */
+    overflow-y: auto;      /* Enable vertical scrolling */
+    padding: 5%;         /* Internal padding */
     
 }
 
@@ -186,6 +186,6 @@ form{
     text-align : "center";
 }
 .fade-out {
-    /*transition: opacity 1s; /* Transition douce sur 1 seconde */
+    /*transition: opacity 1s; /* Smooth transition over 1 second */
     opacity: 0;
 }

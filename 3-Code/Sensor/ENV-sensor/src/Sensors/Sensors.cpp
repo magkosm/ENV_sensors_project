@@ -218,26 +218,26 @@ void Sensors::afficheGrandeur(String grandeur, float valeur, String unite, int s
     display->setTextSize(2);
     display->setTextColor(SSD1306_WHITE);
 
-    // Afficher la grandeur avec troncature si nécessaire
+    // Display size with truncation if necessary
     display->drawTruncatedText(grandeur, 128, 0, 0);
 
-    // Calcul de la position pour la valeur
+    // Calculating position for value
     int x = 0;
     display->setCursor(x, 17);
     display->print(valeur, 2);
 
-    // Obtenir les dimensions de la valeur affichée
+    // Get the dimensions of the displayed value
     int16_t x1, y1;
     uint16_t textWidth, textHeight;
     display->getTextBounds(String(valeur).c_str(), x, 17, &x1, &y1, &textWidth, &textHeight);
 
-    // Position de l'unité avec espacement
+    // Unit position with spacing
     x += textWidth + space;
 
-    // Afficher l'unité avec troncature si nécessaire
+    // Display unit with truncation if necessary
     display->drawTruncatedText(unite, 128, x, 17);
 
-    // Afficher l'écran
+    // Show screen
     display->display();
 }
 

@@ -2,7 +2,7 @@ import ChartManager from './Classes/ChartManager.js';
 
 function formatData(measurements, timestamps) {
     if (!measurements || !timestamps || measurements.length !== timestamps.length) {
-        console.error('Données ou timestamps manquants ou non correspondants dans formatData');
+        console.error('Missing or non-matching data or timestamps in formatData');
         return [];
     }
 
@@ -63,21 +63,21 @@ function getToday() {
 function getYesterday() {
     const yesterday = new Date();
 
-    // Soustraire un jour pour obtenir hier
+    // Subtract one day to get yesterday
     yesterday.setDate(yesterday.getDate() - 1);
 
-    // Mettre les secondes et millisecondes à zéro
+    // Set seconds and milliseconds to zero
     yesterday.setSeconds(0);
     yesterday.setMilliseconds(0);
 
-    // Récupérer l'année, mois, jour, heure, minute et formater en fonction de la machine locale
+    // Retrieve year, month, day, hour, minute and format according to local machine
     const year = yesterday.getFullYear();
-    const month = String(yesterday.getMonth() + 1).padStart(2, '0');  // Mois de 01 à 12
-    const day = String(yesterday.getDate()).padStart(2, '0');  // Jour du mois
+    const month = String(yesterday.getMonth() + 1).padStart(2, '0');  // Months from 01 to 12
+    const day = String(yesterday.getDate()).padStart(2, '0');  // Day of the month
     const hours = String(yesterday.getHours()).padStart(2, '0');
     const minutes = String(yesterday.getMinutes()).padStart(2, '0');
 
-    // Créer la chaîne sans secondes ni millisecondes, au format local
+    // Create the string without seconds or milliseconds, in local format
     const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}:00`;
 
     return formattedDate;
@@ -100,11 +100,11 @@ window.toggleSensorListOverlay = function(overlayId) {
 
 window.openMainPage = function(){
     console.log("change window clicked");
-    localStorage.setItem("returnToMain", "true");  // Signaler que l'on souhaite revenir à l'onglet principal
-    window.focus();  // Optionnel, pour rester actif dans l'onglet /Graphs
+    localStorage.setItem("returnToMain", "true");  // Signal that you want to return to the main tab
+    window.focus();  // Optional, to stay active in the /Graphs tab
 }
 
-// Appeler la fonction pour initialiser les champs de date lorsque le document est prêt
+// Call the function to initialize the date fields when the document is ready
 document.addEventListener('DOMContentLoaded', () => {
     initializeDateFields();
 });
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     let grandeurColors = {};
     let cdr = {};
 
-    // Charger l'état des checkboxes depuis le local storage
+    // Load checkbox state from local storage
     Object.keys(configData).forEach(sensor => loadCheckboxState(sensor));
 
     async function updateChart(chartId = null, full = false) {
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         for (const id in chartsToUpdate) {
             const chartManager = chartsToUpdate[id];
-            const sensorData = chartManager.sensorData; // info sur les capteurs et les grandeurs sous la forme {sensor: [measurement1, measurement2, ...]}
+            const sensorData = chartManager.sensorData; // information about sensors and quantities in the form {sensor: [measurement1, measurement2, ...]}
 
             let startDate, endDate;
 
@@ -173,11 +173,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                 continue;
             }
 
-            // Comparer les dates et demander uniquement les données nécessaires
+            // Compare dates and request only the necessary data
             
             let data = await getData(startDate, endDate, sensorData);
 
-            // Vérifier que data n'est pas vide
+            // Check that data is not empty
             if (!data || Object.keys(data).length === 0) {
                 console.log(`No new data for chart: ${id}`);
                 continue;
@@ -190,7 +190,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     continue;
                 }
 
-                let dicoConfig = configData.sensors[cdr[sensor]].measurements;//dico pour accéder aux nom et unités des grandeurs
+                let dicoConfig = configData.sensors[cdr[sensor]].measurements;//dictionary to access the names and units of quantities
                 console.log(dicoConfig);
 
                 const raw_dataset = data[sensor];
@@ -221,23 +221,23 @@ document.addEventListener('DOMContentLoaded', async () => {
                         const newData = formatData(raw_dataset[key], timestamp);
                         const existingDatasetIndex = datasets.findIndex(ds => ds.label === dicoConfig[key].name + " " + sensor);
 
-                        // Déterminer la couleur en fonction du type de grandeur et du capteur
+                        // Determine the color based on the type of quantity and the sensor
                         let backgroundColor, borderColor;
                         if (datasets.some(ds => ds.label.includes(dicoConfig[key].name))) {
-                            // Si la grandeur est déjà présente dans le graphique, utiliser la couleur du capteur
+                            // If the quantity is already present in the graph, use the sensor color
                             backgroundColor = sensorColors[sensor]?.backgroundColor || 'rgba(0, 0, 0, 0.6)';
                             borderColor = sensorColors[sensor]?.borderColor || 'rgba(0, 0, 0, 1)';
                         } else {
-                            // Sinon, utiliser la couleur de la grandeur
+                            // Otherwise, use the color of the size
                             backgroundColor = grandeurColors[key]?.backgroundColor || 'rgba(0, 0, 0, 0.6)';
                             borderColor = grandeurColors[key]?.borderColor || 'rgba(0, 0, 0, 1)';
                         }
 
                         if (existingDatasetIndex !== -1) {
-                            // Ajouter les nouveaux points au dataset existant
+                            // Add the new points to the existing dataset
                             datasets[existingDatasetIndex].data.push(...newData);
                         } else {
-                            // Créer un nouveau dataset si nécessaire
+                            // Create a new dataset if necessary
                             datasets.push({
                                 label: `${dicoConfig[key].name + " " + sensor}`,
                                 data: newData,
@@ -254,7 +254,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     }
                 }
 
-                // Forcer l'affichage de l'échelle verticale
+                // Force vertical scale display
                 chartManager.chart.options.scales = {
                     'x': {
                         type: 'time',
@@ -269,9 +269,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             text: 'Temps'
                         },
                         grid: {
-                            color: 'rgba(200, 200, 200, 0.2)', // Couleur plus claire pour la grille
-                            borderColor: 'rgba(200, 200, 200, 0.5)', // Bordure plus claire
-                            lineWidth: 1, // Largeur de ligne plus fine
+                            color: 'rgba(200, 200, 200, 0.2)', // Lighter color for the grid
+                            borderColor: 'rgba(200, 200, 200, 0.5)', // Lighter border
+                            lineWidth: 1, // Thinner line width
                             drawOnChartArea: true
                         }
                     },
@@ -283,9 +283,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             text: yAxis1Title
                         },
                         grid: {
-                            color: 'rgba(200, 200, 200, 0.2)', // Couleur plus claire pour la grille
-                            borderColor: 'rgba(200, 200, 200, 0.5)', // Bordure plus claire
-                            lineWidth: 1, // Largeur de ligne plus fine
+                            color: 'rgba(200, 200, 200, 0.2)', // Lighter color for the grid
+                            borderColor: 'rgba(200, 200, 200, 0.5)', // Lighter border
+                            lineWidth: 1, // Thinner line width
                             drawOnChartArea: true // This will draw the grid lines for y-axis-1
                         }
                     }
@@ -302,9 +302,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                             text: yAxis2Title
                         },
                         grid: {
-                            color: 'rgba(200, 200, 200, 0.2)', // Couleur plus claire pour la grille
-                            borderColor: 'rgba(200, 200, 200, 0.5)', // Bordure plus claire
-                            lineWidth: 1, // Largeur de ligne plus fine
+                            color: 'rgba(200, 200, 200, 0.2)', // Lighter color for the grid
+                            borderColor: 'rgba(200, 200, 200, 0.5)', // Lighter border
+                            lineWidth: 1, // Thinner line width
                             drawOnChartArea: false // This will not draw the grid lines for y-axis-2
                         }
                     };
@@ -314,11 +314,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
                 chartManager.chart.update();
 
-                // Mettre à jour la date de la dernière mise à jour
+                // Update the date of the last update
                 lastUpdate[sensor] = new Date();
             }
 
-            // Mettre à jour les dates de début et de fin du graphique
+            // Update the chart start and end dates
             chartManager.ts_end = endDate;
         }
     }
@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function loadAllCharts() {
         const chartConfigs = [];
-        let maxGraphId = 0; // Variable pour suivre le plus grand ID de graphique
+        let maxGraphId = 0; // Variable to track the largest chart ID
     
         for (let i = 0; i < localStorage.length; i++) {
             const key = localStorage.key(i);
@@ -353,25 +353,25 @@ document.addEventListener('DOMContentLoaded', async () => {
                     chartConfigs.push({ chartId, chartConfig });
                     const graphId = parseInt(chartId.split('-')[1]);
                     if (graphId > maxGraphId) {
-                        maxGraphId = graphId; // Mettre à jour le plus grand ID de graphique
+                        maxGraphId = graphId; // Update largest chart ID
                     }
                 }
             }
         }
     
-        // Trier les configurations de graphiques par leur identifiant
+        // Sort chart configurations by their ID
         chartConfigs.sort((a, b) => {
             const idA = parseInt(a.chartId.split('-')[1]);
             const idB = parseInt(b.chartId.split('-')[1]);
             return idA - idB;
         });
     
-        // Créer les graphiques dans l'ordre trié
+        // Create the charts in sorted order
         chartConfigs.forEach(({ chartId, chartConfig }) => {
             createChartFromConfig(chartId, chartConfig);
         });
     
-        // Initialiser graphCounter avec le plus grand ID de graphique + 1
+        // Initialize graphCounter with the largest graph ID + 1
         graphCounter = maxGraphId + 1;
     }
 
@@ -397,10 +397,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         chartManager.sensorData = chartConfig.sensorData;
         charts[chartId] = chartManager;
     
-        // Initialiser le graphique avec des données vides et sensorData
+        // Initialize the graph with empty data and sensorData
         chartManager.initChart([], chartConfig.sensorData);
     
-        // Mettre à jour le graphique nouvellement créé
+        // Update the newly created chart
         updateChart(chartId, true);
     }
 
@@ -451,19 +451,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         const chartManager = new ChartManager(ctx, title, 'Echelle 1', "", startDate, endDate, live);
         charts[`chart-${graphCounter}`] = chartManager;
     
-        // Initialiser le graphique avec des données vides et sensorData
+        // Initialize the graph with empty data and sensorData
         await chartManager.initChart([], sensorData);
     
-        // Mettre à jour le graphique nouvellement créé
+        // Update the newly created chart
         await updateChart(`chart-${graphCounter}`, true);
     
-        // Sauvegarder la configuration du graphique dans le localStorage
+        // Save the chart configuration to localStorage
         saveChartConfig(chartManager, `chart-${graphCounter}`);
     
         graphCounter++;
     });
 
-    // Fonction pour supprimer un graphique
+    // Function to delete a chart
     window.removeChart = function(chartContainerId) {
         const chartContainer = document.getElementById(chartContainerId);
         console.log(chartContainerId);
@@ -476,13 +476,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     };
 
-    // Fonction pour recréer un graphique avec les nouvelles configurations
+    // Function to recreate a graph with the new configurations
     async function recreateChart(chartId, title, startDate, endDate, sensorData) {
         const canvas = document.getElementById(chartId);
         const ctx = canvas.getContext('2d');
         console.log('Chart ID:', chartId);
 
-        // Supprimer l'ancien graphique
+        // Delete the old chart
         if (charts[chartId]) {
             charts[chartId].chart.destroy();
             delete charts[chartId];
@@ -492,64 +492,64 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const live = document.getElementById('configLive').checked;
 
-        // Créer un nouveau ChartManager avec les nouvelles configurations
+        // Create a new ChartManager with the new configurations
         const chartManager = new ChartManager(ctx, title, 'Echelle 1', "", startDate, endDate, live);
         charts[chartId] = chartManager;
 
-        // Initialiser le graphique avec des données vides et sensorData
+        // Initialize the graph with empty data and sensorData
         await chartManager.initChart([], sensorData);
 
-        // Mettre à jour le graphique nouvellement créé
+        // Update the newly created chart
         await updateChart(chartId, true);
 
-        // Sauvegarder la configuration du graphique dans le localStorage
+        // Save the chart configuration to localStorage
         saveChartConfig(chartManager, chartId);
     }
 
-    // Fonction pour ouvrir la fenêtre modale de configuration
+    // Function to open the configuration modal window
     window.openConfigModal = function(chartContainerId) {
         const chartContainer = document.getElementById(chartContainerId);
         const chartId = chartContainer.querySelector('canvas').id;
         const chartManager = charts[chartId];
 
-        // Pré-remplir les champs de la fenêtre modale avec les valeurs actuelles
+        // Pre-populate modal window fields with current values
         document.getElementById('configChartId').value = chartId;
         document.getElementById('configTitle').value = chartManager.title;
         document.getElementById('configStartDate').value = chartManager.ts_start;
         document.getElementById('configEndDate').value = chartManager.ts_end;
         document.getElementById('configLive').checked = chartManager.live;
 
-        // Cocher les cases correspondant aux grandeurs actuelles
+        // Check the boxes corresponding to the current sizes
         const checkboxes = document.querySelectorAll('#configGrandeursContainer input[type="checkbox"]');
         checkboxes.forEach(checkbox => {
             checkbox.checked = chartManager.sensorData[checkbox.value.split('_')[0]]?.includes(checkbox.value.split('_')[1]) || false;
         });
 
-        // Afficher la fenêtre modale
+        // Show modal window
         document.getElementById('configModal').style.display = 'block';
     };
 
     window.downloadCanvasImage = function(canvasId, fileName) {
-        // Obtenez l'élément canvas
+        // Get the canvas element
         const canvas = document.getElementById(canvasId);
         if (!canvas) {
             console.error("Canvas not found!");
             return;
         }
     
-        // Convertir le canvas en URL de données (base64)
+        // Convert canvas to data URL (base64)
         const dataURL = canvas.toDataURL("image/png");
     
-        // Créer un élément lien pour le téléchargement
+        // Create a link element for download
         const link = document.createElement("a");
         link.href = dataURL;
         link.download = fileName || "canvas-image.png";
     
-        // Déclencher le téléchargement
+        // Trigger the download
         link.click();
     }
 
-    // Fonction pour appliquer les modifications de configuration
+    // Function to apply configuration changes
     document.getElementById('configForm').addEventListener('submit', async (event) => {
         event.preventDefault();
 
@@ -578,19 +578,19 @@ document.addEventListener('DOMContentLoaded', async () => {
             sensorData[sensor].push(measurement);
         });
 
-        // Recréer le graphique avec les nouvelles configurations
+        // Recreate the chart with the new configurations
         await recreateChart(chartId, title, startDate, endDate, sensorData);
 
-        // Fermer la fenêtre modale
+        // Close the modal window
         closeConfigModal();
     });
 
-    // Récupérer la configuration et générer dynamiquement les checkboxes
+    // Retrieve configuration and dynamically generate checkboxes
     async function fetchConfig() {
         try {
             const response = await fetch('/getConfig');
             const config = await response.json();
-            configData = config; // Stocker la configuration pour une utilisation ultérieure
+            configData = config; // Store the configuration for later use
             const grandeursContainer = document.getElementById('grandeursContainer');
             const configGrandeursContainer = document.getElementById('configGrandeursContainer');
     
@@ -598,9 +598,9 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             let index = 0;
 
-            // Créer un conteneur pour chaque capteur
+            // Create a container for each sensor
             config.sensors.forEach(sensor => {
-                // Assigner une couleur au capteur
+                // Assign a color to the sensor
                 sensorColors[sensor.name] = {
                     backgroundColor: colors[colorIndex % colors.length],
                     borderColor: borderColors[colorIndex % borderColors.length]
@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 cdr[sensor.name] = index;
                 index++;
     
-                // Créer une colonne pour chaque capteur
+                // Create a column for each sensor
                 const sensorColumn = document.createElement('div');
                 sensorColumn.className = 'sensor-column';
                 const sensorTitle = document.createElement('div');
@@ -619,8 +619,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sensorColumn.appendChild(sensorTitle);
     
                 Object.keys(sensor.measurements).forEach(measurement => {
-                    // Assigner une couleur à chaque grandeur si elle n'a pas déjà une couleur
-                    let dicoConfig = sensor.measurements[measurement];//dico pour accéder aux nom et unités des grandeurs
+                    // Assign a color to each quantity if it does not already have a color
+                    let dicoConfig = sensor.measurements[measurement];//dictionary to access the names and units of quantities
                     if (!grandeurColors[measurement]) {
                         grandeurColors[measurement] = {
                             backgroundColor: colors[colorIndex % colors.length],
@@ -642,15 +642,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                     sensorColumn.appendChild(document.createElement('br'));
                 });
     
-                // Ajouter la colonne du capteur au conteneur principal
+                // Add the sensor column to the main container
                 grandeursContainer.appendChild(sensorColumn);
     
-                // Cloner la colonne pour la fenêtre modale de configuration
+                // Clone column for configuration modal window
                 const configSensorColumn = sensorColumn.cloneNode(true);
                 configGrandeursContainer.appendChild(configSensorColumn);
             });
     
-            // Décocher toutes les checkboxes
+            // Uncheck all checkboxes
             const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
             allCheckboxes.forEach(checkbox => {
                 checkbox.checked = false;
@@ -666,8 +666,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     initializeDateFields()
     fetchConfig();
-    loadAllCharts();// Charger tous les graphiques depuis le localStorage
+    loadAllCharts();// Load all charts from localStorage
 
-    // Fonction de mise à jour automatique des graphiques toutes les 30 secondes
-    setInterval(() => { updateChart(); }, 30000); // Mise à jour toutes les 30 secondes
+    // Automatic chart update function every 30 seconds
+    setInterval(() => { updateChart(); }, 30000); // Updated every 30 seconds
 });

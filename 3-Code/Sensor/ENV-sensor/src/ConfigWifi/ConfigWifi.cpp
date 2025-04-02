@@ -10,17 +10,17 @@ bool ConfigWifi::begin(){
   Serial.println("setting Wifi Mode to 0 in configWifi begin");
 
   if (!SPIFFS.begin(true)) {
-    Serial.println("Erreur lors du montage du SPIFFS");
+    Serial.println("Error mounting SPIFFS");
     return false;
   }
   else{
-    // Vérifie si le fichier existe
+    // Check if the file exists
     if (SPIFFS.exists("/Config/Config.csv")) {
       Serial.println("Config file exist");
     } 
     else {
-      Serial.println("Config file n'existe pas, création");
-      writeConfigFile("Capteur", "#MDRS311sensors!", "Capteur");//ssid, mdp, nom par defaut
+      Serial.println("Config file does not exist, creating");
+      writeConfigFile("Sensor", "#MDRS311sensors!", "Sensor");//ssid, mdp, default name
     }
 
   }
@@ -30,7 +30,7 @@ bool ConfigWifi::begin(){
 
 bool ConfigWifi::failToConnect() {
   unsigned long start = millis();
-  while (WiFi.status() != WL_CONNECTED) {//fonctionnement non bloquant car l'esp à 2 cores
+  while (WiFi.status() != WL_CONNECTED) {//non-blocking operation because the ESP has 2 cores
     delay(500);
     Serial.print(".");
 
@@ -171,7 +171,7 @@ JsonDocument ConfigWifi::loadNetworks(){
   String fname;
 
   while (file) {
-    yield();  // Permettre au WDT de se réinitialiser
+    yield();  // Allow WDT to reset
 
     fname = file.name();
     if (fname.endsWith(".txt")) {
@@ -181,7 +181,7 @@ JsonDocument ConfigWifi::loadNetworks(){
 
       Rsecu.remove(Rsecu.length() - 1);  //remove /n
 
-      if (Rsecu == "WPA2_Entreprise") {  //si on a besoin d'un identifiant
+      if (Rsecu == "WPA2_Entreprise") {  //if we need an identifier
         Ruser = file.readStringUntil('\n');
       }
 
@@ -193,7 +193,7 @@ JsonDocument ConfigWifi::loadNetworks(){
       Rssid.remove(Rssid.length() - 1);
       Rpass.remove(Rpass.length() - 1);
       Ruser.remove(Ruser.length() - 1);
-      RIp.remove(RIp.length() - 1);  //remove \n caracter
+      RIp.remove(RIp.length() - 1);  //remove \n character
       RdefaultGateway.remove(RdefaultGateway.length() - 1);
       RmaskSubnet.remove(RmaskSubnet.length() - 1);
 
@@ -201,7 +201,7 @@ JsonDocument ConfigWifi::loadNetworks(){
       networkInfo["Pass"] = Rpass;
       networkInfo["SECU_TYPE"] = Rsecu;
 
-      if (Rsecu == "WPA2_Entreprise") {  //si on a besoin d'un identifiant
+      if (Rsecu == "WPA2_Entreprise") {  //if we need an identifier
         networkInfo["USER"] = Ruser;
       }
 
@@ -224,10 +224,10 @@ JsonDocument ConfigWifi::loadNetworks(){
               }
             */
 
-      //jsonResponse[fname.substring(0, fname.length() - 4)] = true;  // Supprime ".txt" de l'affichage
+      //jsonResponse[fname.substring(0, fname.length() - 4)] = true;  // Removes ".txt" from display
     }
 
-    file = root.openNextFile();  // Passe au fichier suivant
+    file = root.openNextFile();  // Move to the next file
   }
 
   file.close();
@@ -302,7 +302,7 @@ int ConfigWifi::connectFromSPIFFS(String SSID) {
 
   Rsecu.remove(Rsecu.length() -1);//remove /n
 
-  if(Rsecu == "WPA2_Enterprise"){//si on a besoin d'un identifiant
+  if(Rsecu == "WPA2_Enterprise"){//if we need an identifier
     Ruser = filer.readStringUntil('\n');
   }
 
@@ -347,7 +347,7 @@ int ConfigWifi::connectFromSPIFFS(String SSID) {
     WiFi.setHostname(nom.c_str());
     fail_count = "0";
     
-    if(Rsecu == "WPA2_Enterprise"){//réseau d'entreprise
+    if(Rsecu == "WPA2_Enterprise"){//corporate network
     
       WiFi.disconnect(true);  //disconnect form wifi to set new wifi connection
       WiFi.mode(WIFI_STA);    //init wifi mode
@@ -377,7 +377,7 @@ int ConfigWifi::connectFromSPIFFS(String SSID) {
         Serial.println(Rpass);
         WiFi.setHostname(nom.c_str());
 
-        if(Rsecu == "WPA2_Enterprise"){//réseau d'entreprise
+        if(Rsecu == "WPA2_Enterprise"){//corporate network
     
           WiFi.disconnect(true);  //disconnect form wifi to set new wifi connection
           WiFi.mode(WIFI_STA);    //init wifi mode
@@ -451,7 +451,7 @@ int ConfigWifi::initWifiFromSPIFFS() {
   int n = 0;
   int nbNetworks = 0;
 
-  //Serial.println("Liste des fichiers texte dans le répertoire: /Networks/");
+  //Serial.println("List of text files in the directory: /Networks/");
 
   if (!SPIFFS.begin(true)) {
     Serial.println("An Error has occurred while mounting SPIFFS");
@@ -461,7 +461,7 @@ int ConfigWifi::initWifiFromSPIFFS() {
   File root = SPIFFS.open("/Networks");
 
   if (!root) {
-    Serial.println("Erreur d'ouverture du répertoire");
+    Serial.println("Error opening directory");
     return -1;
   }
 
@@ -471,33 +471,33 @@ int ConfigWifi::initWifiFromSPIFFS() {
     if (!file.isDirectory()) {
       String filename = String(file.name());
 
-      // Vérifie si le fichier a l'extension ".txt"
+      // check if the file has the extension ".txt"
       if (filename.endsWith(".txt")) {
-        // Supprime l'extension ".txt" du nom du fichier
+        // Removes the ".txt" extension from the file name
         storedSSID[n] = filename.substring(0, filename.lastIndexOf('.'));
         Serial.println("Fichier texte : " + storedSSID[n]);
         n++;
-        // Affiche le nom du fichier sans l'extension
+        // Displays the file name without the extension
       }
     }
-    file = root.openNextFile();  // Passe au fichier suivant
+    file = root.openNextFile();  // Move to the next file
   }
 
   //Wifi part
 
   nbNetworks = WiFi.scanNetworks();
 
-  // Si aucun réseau n'est trouvé
+  // If no network is found
   if (nbNetworks == 0) {
     Serial.println("Aucun réseau trouvé.");
   } 
   else {
 
-    // Affichage du nombre de réseaux trouvés
+    // Displaying the number of networks found
     Serial.print(nbNetworks);
     Serial.println(" réseaux trouvés:");
 
-    for (int i = 0; i < nbNetworks; ++i) {  //comparaison réseau capté réseaux enregistrés
+    for (int i = 0; i < nbNetworks; ++i) {  //comparison of captured networks and recorded networks
       for (int j = 0; j < n; j++) {
         if (WiFi.SSID(i) == storedSSID[j]) {
           int nb_fail = connectFromSPIFFS(storedSSID[j]);
@@ -619,7 +619,7 @@ bool ConfigWifi::printSPIFFS() {
       String filename = String(file.name());
       Serial.println("-"+filename);
     }
-    file = root.openNextFile();  // Passe au fichier suivant
+    file = root.openNextFile();  // Move to the next file
   }
   file.close();
   root.close();
