@@ -9,6 +9,8 @@ The main issue is the electrical assembly, which should be reduced to PCB solder
 Another improvement for easier use would be to shift the data exchange protocol from HTTP to MQTT and make the sensors go to sleep when not measuring.  
 This change could enable the sensors to run on a battery for easier installation and integration with Home Assistant.  
 
+![sensor render](./5-Com/Sensor_render.png)
+
 The sensors are equipped with 5 sensors and are able to measure the following variables:  
 
 ```
