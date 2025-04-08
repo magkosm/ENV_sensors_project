@@ -1,6 +1,7 @@
 **Date**: 10/2024 - 01/2025  
 **Author**: Robin GORIUS  
 ***Prelimenery Translations*** Michail Magkos
+***PCB desing*** Enrique Hernando
 
 These sensors were initially created to measure environmental variables in the Mars Desert Research Station in Utah for the CoreData set.  
 As they are meant to be used by French students from future MDRS crews, a lot of documentation and code comments are in French.  
@@ -35,4 +36,7 @@ For further information on the use of the sensors, please check the user manual 
 
 Check out the CAD files in the [CAD folder](Mechanical_design/CAD/). Please note that the design was made with Fusion 360, and the `.step` file may present unwanted defects.  
 
-The build information is briefly described in the [Build instructions](Electronics/Build_instructions.txt). The document is quite short but provides guidelines on how the assembly was designed.  
+The build information is briefly described in the [Build instructions](Electronics/Build_instructions.txt). The document is quite short but provides guidelines on how the assembly was designed. 
+
+**Possible Future Implementations**:
+- Add a Bluetooth scan to count nearby devices.
